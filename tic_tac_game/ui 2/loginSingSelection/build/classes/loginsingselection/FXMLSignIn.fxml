@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" fx:id="AnchorPaneSingIn" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="loginsingselection.FXMLSignInController">
+   <children>
+      <Pane fx:id="Pane1SingIN" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Pane fx:id="pane2SignIn" prefHeight="400.0" prefWidth="600.0">
+               <children>
+                  <Text fx:id="textSignIn" layoutX="191.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SIGN IN " textAlignment="CENTER" wrappingWidth="190.90185546875" />
+                  <TextField fx:id="EmailSignIn" layoutX="164.0" layoutY="115.0" prefHeight="31.0" prefWidth="244.0" promptText="EMAIL" />
+                  <TextField fx:id="PasswordSIgnIn" layoutX="164.0" layoutY="185.0" prefHeight="31.0" prefWidth="244.0" promptText="PASSWORD" />
+                  <Button fx:id="ButtonConSingIn" layoutX="310.0" layoutY="258.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="91.0" text="CONFIRM" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
