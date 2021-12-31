@@ -251,5 +251,4 @@ public class RequestPage extends BorderPane {
         anchorPane.getChildren().add(listAvailablePlayers);
 
     }
-
 }
