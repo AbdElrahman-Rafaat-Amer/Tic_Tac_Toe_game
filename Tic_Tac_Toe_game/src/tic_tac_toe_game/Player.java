@@ -29,45 +29,34 @@ public class Player {
         this.totalScoore = TotalScoore;
    }
    
-   
     //setter and getter 
-    int getId() {
-       return id;
-      }
+    int getId() 
+    {return id;}
     
-     String getUserName(){
-       return username;
-      }
+     String getUserName()
+     {return username;}
     
-    String getEmail(){
-       return email;
-      }
+    String getEmail()
+    {return email;}
     
-    String getPassword(){
-       return password;
-      }
+    String getPassword()
+    {return password;}
     
-    int getTootalScoore() {
-       return totalScoore;
-      }
+    int getTootalScoore() 
+    {return totalScoore;}
     
-    void  setId( int id ) {
-       this.id= id;
-      }
+    void  setId( int id ) 
+    {this.id= id;}
     
-     void setUserName( String username){
-       this.username= username;
-      }
+     void setUserName( String username)
+     {this.username= username;}
     
-    void  setEmail( String email){
-       this.email= email;
-      }
+    void  setEmail( String email)
+    {this.email= email;}
     
-    void setPassword( String password){
-       this.password=password;
-      }
+    void setPassword( String password)
+    {this.password=password;}
     
-    void  SetTotalScoore( int TotalScoore ) {
-       this.totalScoore= totalScoore;
-      }
+    void  SetTotalScoore( int TotalScoore ) 
+    {this.totalScoore= totalScoore;}
 }

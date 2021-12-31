@@ -5,6 +5,9 @@
  */
 package tic_tac_toe_game;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,6 +22,10 @@ public class Tic_Tac_Toe_game extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+    public void stop()
+    {
+        Player.con.close();
     }
 
 
