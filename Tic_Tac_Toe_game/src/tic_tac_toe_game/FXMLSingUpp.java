@@ -118,7 +118,7 @@ public class FXMLSingUpp extends AnchorPane {
             {
                 if(!(UsernameInput.getText().isEmpty())&& !(EmailInput.getText().isEmpty())&& !(passwordInput.getText().isEmpty())&& !(confirmpassInput.getText().isEmpty()))
                 {
-                    DAO.startConnection();
+                    
                     //set values of DTO "player" 
                     if(UsernameInput.getText().length()>2)
                     {

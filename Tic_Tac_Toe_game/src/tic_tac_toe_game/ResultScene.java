@@ -27,7 +27,7 @@ public class ResultScene extends BorderPane {
         borderPane0 = new BorderPane();
         skipButton = new Button();
         
-        File mediaFile = new File("src/tic_tac_toe_game");
+        File mediaFile = new File("src\\vedios_media\\waiting vedio.mp4");
         Media  media = new Media(mediaFile.toURI().toURL().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         videoView = new MediaView(mediaPlayer);

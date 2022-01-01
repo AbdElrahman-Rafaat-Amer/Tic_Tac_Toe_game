@@ -14,6 +14,7 @@ import org.apache.derby.jdbc.ClientDriver;
 public class DAO {
 
     static Connection con;
+    static int id;
 
     public DAO() {
         try {
@@ -24,7 +25,7 @@ public class DAO {
         }
     }
 
-    static void startConnection() {
+    static{
         try {
             DriverManager.registerDriver(new ClientDriver());
             con = DriverManager.getConnection("jdbc:derby://localhost:1527/Database_tic_tack", "database", "1234");
@@ -49,7 +50,8 @@ public class DAO {
             if (realPassword.equals(password)) {
                 resault = true;
             }
-
+            pst.close();
+            
         } catch (SQLException ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -67,6 +69,7 @@ public class DAO {
                 player.setUserName(rs.getString(1));
                 player.SetTotalScoore(Integer.parseInt(rs.getString(2)));
             }
+            ps.close();
 
         } catch (SQLException ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,6 +81,7 @@ public class DAO {
     // to insert player un player table .. return 1 if insertion done and 0 if insertion undone
         static int SignUp(Player dto)
         {
+            //DAO.startConnection();
             //Compare email with existing emails to make sure it's not duplicated
             Statement statement;
             int flag=1;
@@ -94,9 +98,15 @@ public class DAO {
                                 System.err.println("sorry, this email already exists");
                             }
                         }
+                        String QueryString1 = new String("select max(id) from Player"); 
+                        ResultSet resultSet1 = statement.executeQuery(QueryString1);
+                        while(resultSet1.next())
+                        { 
+                            id  = resultSet1.getInt(1);
+                        }
                         statement.close();
                         PreparedStatement ps = con.prepareStatement("insert into Player values (?,?,?,?,?)");
-                        ps.setInt(1,dto.getId());
+                        ps.setInt(1,++id);
                         ps.setString(2, dto.getUserName());
                         ps.setString(3,dto.getEmail());
                         ps.setString(4, dto.getPassword());
