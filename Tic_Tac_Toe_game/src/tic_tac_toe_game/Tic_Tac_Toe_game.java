@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tic_tac_toe_game;
 
 import java.sql.SQLException;
@@ -17,7 +12,7 @@ public class Tic_Tac_Toe_game extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = new FXMLSelection(stage);
+        Parent root = new Start(stage);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

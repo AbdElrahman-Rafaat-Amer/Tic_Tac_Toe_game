@@ -1,4 +1,4 @@
-package gamexo;
+package tic_tac_toe_game;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,13 +8,13 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public  class FXMLDocumentBase2 extends AnchorPane {
+public  class SelectPlayersNo extends AnchorPane {
 
     protected final Button oneplayer;
     protected final Button twoplayer;
      private Stage mystage;
-    public FXMLDocumentBase2( Stage stage ) {
-      mystage=stage;
+    public SelectPlayersNo( Stage stage ) {
+        mystage=stage;
         oneplayer = new Button();
         twoplayer = new Button();
 
@@ -37,18 +37,25 @@ public  class FXMLDocumentBase2 extends AnchorPane {
         twoplayer.setText("Two Player");
         getChildren().add(oneplayer);
         getChildren().add(twoplayer);
+        
+        
+        oneplayer.setOnAction((Action)->{
+            Parent root2 = new LevelPage(stage);
+            Scene scene2 = new Scene(root2);
+            stage.setScene(scene2);
+            stage.show();
+        });
+        
        //button ytl3 3la select x or o
         twoplayer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
         public void handle(ActionEvent event) {
-          Parent root = new FXMLDocumentBase3(stage);
+          Parent root = new XorOSelection(stage);
           Scene scene = new Scene(root);
           stage.setScene(scene);
           stage.show();   
          }
-        });
-       
-        
+        });   
     }
 
    

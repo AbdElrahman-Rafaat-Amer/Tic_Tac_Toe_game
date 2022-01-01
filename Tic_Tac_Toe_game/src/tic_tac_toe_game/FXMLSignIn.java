@@ -73,7 +73,7 @@ public class FXMLSignIn extends AnchorPane {
             String email = emailSignIn.getText().trim();
             String password = passwordSIgnIn.getText().trim();
             if (!email.isEmpty() && !password.isEmpty()) {
-                DAO.connection();
+                DAO.startConnection();
                 boolean resualt = DAO.checkLogin(email, password);
                 if (resualt) {
                     RequestPage.email = email;

@@ -1,7 +1,7 @@
-Fri Dec 31 18:15:24 EET 2021 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
+Sat Jan 01 08:59:21 EET 2022 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Fri Dec 31 18:15:28 EET 2021:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-017e-1146-4189-ffff8bb5611f 
+Sat Jan 01 08:59:21 EET 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-017e-146f-87c1-ffff8bb5611f 
 on database directory C:\Users\Wind\OneDrive\Desktop\Tic_Tac_Toe_game\Tic_Tac_Toe_game\Database_tic_tack with class loader sun.misc.Launcher$AppClassLoader@6f94fa3e 
 Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_112/db/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -12,9 +12,3 @@ os.arch=amd64
 os.version=10.0
 derby.system.home=C:\Users\Wind\OneDrive\Desktop\Tic_Tac_Toe_game\Tic_Tac_Toe_game
 Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-Fri Dec 31 18:25:57 EET 2021: Shutting down Derby engine
-----------------------------------------------------------------
-Fri Dec 31 18:25:57 EET 2021:
-Shutting down instance a816c00e-017e-1146-4189-ffff8bb5611f on database directory C:\Users\Wind\OneDrive\Desktop\Tic_Tac_Toe_game\Tic_Tac_Toe_game\Database_tic_tack with class loader sun.misc.Launcher$AppClassLoader@6f94fa3e 
-----------------------------------------------------------------

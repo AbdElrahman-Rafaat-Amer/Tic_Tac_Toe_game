@@ -1,4 +1,4 @@
-package gamexo;
+package tic_tac_toe_game;
 
 import com.sun.org.apache.bcel.internal.generic.INEG;
 import javafx.event.ActionEvent;
@@ -9,17 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 //import javafx.scene.gamexo.FXMLDocumentBase2;
-public  class FXMLDocumentBase1 extends Pane {
-   
-
+public  class Start extends Pane {
     protected final Button online;
     protected final Button offline;
     protected final Button exit;
-
     private Stage mystage;
     
         
-    public FXMLDocumentBase1( Stage stage) {
+    public Start( Stage stage) {
           mystage = stage;
         online = new Button();
         offline = new Button();
@@ -57,20 +54,18 @@ public  class FXMLDocumentBase1 extends Pane {
         getChildren().add(offline);
         getChildren().add(exit);
         //button offline hytl3 3la 2 players
-         offline.setOnAction((Action) -> {
-           Parent root2 = new FXMLDocumentBase2(stage);
+        offline.setOnAction((Action) -> {
+           Parent root2 = new SelectPlayersNo(stage);
           Scene scene2 = new Scene(root2);
           stage.setScene(scene2);
           stage.show();  
         });
-      /* offline.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-        public void handle(ActionEvent event) {
-          Parent root2 = new FXMLDocumentBase2(stage);
+        
+        online.setOnAction((Action) -> {
+           Parent root2 = new FXMLSelection(stage);
           Scene scene2 = new Scene(root2);
           stage.setScene(scene2);
-          stage.show();   
-         }
-        });*/
+          stage.show();  
+        });
 }
 }

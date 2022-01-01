@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,7 @@ public class DAO {
         }
     }
 
-    static void connection() {
+    static void startConnection() {
         try {
             DriverManager.registerDriver(new ClientDriver());
             con = DriverManager.getConnection("jdbc:derby://localhost:1527/Database_tic_tack", "database", "1234");
@@ -72,5 +73,41 @@ public class DAO {
         }
         return player;
     }
+    
+    
+    
+        static int SignUp(Player dto)
+        {
+            DAO.startConnection();
+            //Compare email with existing emails to make sure it's not duplicated
+            Statement statement;
+            int flag=1;
+            Player selectedData = new Player();
+            try {
+                statement = con.createStatement();
+                 String QueryString = new String("select email from Player"); 
+                        ResultSet resultSet = statement.executeQuery(QueryString);
+                        while(resultSet.next())
+                        { 
+                            if(resultSet.getString(1).compareTo(dto.getEmail())==0)
+                            {
+                                flag = 0;
+                                System.err.println("sorry, this email already exists");
+                            }
+                        }
+                        statement.close();
+                        PreparedStatement ps = con.prepareStatement("insert into Player values (?,?,?,?,?)");
+                        ps.setInt(1,dto.getId());
+                        ps.setString(2, dto.getUserName());
+                        ps.setString(3,dto.getEmail());
+                        ps.setString(4, dto.getPassword());
+                        ps.setInt(5,dto.getTootalScoore());
+                        ps.executeUpdate();
+                        ps.close();
+                } catch (SQLException ex) {
+                Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex); 
+            }
+            return flag;
+        }
 
 }

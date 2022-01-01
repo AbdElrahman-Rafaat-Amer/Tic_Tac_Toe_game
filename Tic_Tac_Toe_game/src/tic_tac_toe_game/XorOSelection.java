@@ -1,5 +1,7 @@
-package gamexo;
+package tic_tac_toe_game;
 
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -7,9 +9,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-public  class FXMLDocumentBase3 extends AnchorPane {
-  private Stage mystage;
-    protected final Button oneplayer;
+public  class XorOSelection extends AnchorPane {
+    private Stage mystage;
+    protected final Button continueButton;
     protected final MenuButton select;
     protected final MenuItem selectx;
     protected final MenuItem selecto;
@@ -17,10 +19,9 @@ public  class FXMLDocumentBase3 extends AnchorPane {
     protected final Text player2;
     protected final TextField player2textfield;
 
-    public FXMLDocumentBase3(Stage stage) {
+    public XorOSelection(Stage stage) {
         mystage =stage;
-        oneplayer = new Button();
-   
+        continueButton = new Button();
         select = new MenuButton();
         selectx = new MenuItem();
         selecto = new MenuItem();
@@ -32,12 +33,12 @@ public  class FXMLDocumentBase3 extends AnchorPane {
         setPrefHeight(400.0);
         setPrefWidth(600.0);
 
-        oneplayer.setLayoutX(252.0);
-        oneplayer.setLayoutY(288.0);
-        oneplayer.setMnemonicParsing(false);
-        oneplayer.setPrefHeight(38.0);
-        oneplayer.setPrefWidth(96.0);
-        oneplayer.setText("Continue");
+        continueButton.setLayoutX(252.0);
+        continueButton.setLayoutY(288.0);
+        continueButton.setMnemonicParsing(false);
+        continueButton.setPrefHeight(38.0);
+        continueButton.setPrefWidth(96.0);
+        continueButton.setText("Continue");
 
         select.setLayoutX(293.0);
         select.setLayoutY(143.0);
@@ -72,12 +73,19 @@ public  class FXMLDocumentBase3 extends AnchorPane {
         player2textfield.setPrefHeight(25.0);
         player2textfield.setPrefWidth(69.0);
 
-        getChildren().add(oneplayer);
+        getChildren().add(continueButton);
         select.getItems().add(selectx);
         select.getItems().add(selecto);
         getChildren().add(select);
         getChildren().add(player1);
         getChildren().add(player2);
         getChildren().add(player2textfield);
+        
+        continueButton.setOnAction((Action)->{
+            Parent root2 = new GameScene(stage);
+            Scene scene2 = new Scene(root2);
+            stage.setScene(scene2);
+            stage.show();
+        });
     }
 }

@@ -11,7 +11,7 @@
       <FlowPane alignment="CENTER" orientation="VERTICAL" prefHeight="334.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Custom level" textAlignment="CENTER" />
-            <Button fx:id="easyButton" alignment="CENTER" mnemonicParsing="false" prefHeight="38.0" prefWidth="96.0" text="Easy" />
+            <Button alignment="CENTER" mnemonicParsing="false" prefHeight="38.0" prefWidth="96.0" text="Easy" />
             <Button fx:id="mediumButton" alignment="CENTER" mnemonicParsing="false" prefHeight="38.0" prefWidth="96.0" text="Medium" />
             <Button fx:id="hardButton" alignment="CENTER" mnemonicParsing="false" prefHeight="38.0" prefWidth="95.0" text="Hard" />
          </children>

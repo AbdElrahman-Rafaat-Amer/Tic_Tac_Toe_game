@@ -1,5 +1,7 @@
 package tic_tac_toe_game;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -21,6 +23,8 @@ public class FXMLSingUpp extends AnchorPane {
     protected final Button confirmButton;
     protected final Text signUpText;
     protected final Button backButton;
+    Player player = new Player();
+    protected static int id = 0;
 
     public FXMLSingUpp( Stage stage) {
 
@@ -33,7 +37,7 @@ public class FXMLSingUpp extends AnchorPane {
         confirmButton = new Button();
         backButton = new Button();
         signUpText = new Text();
-
+        
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -100,13 +104,13 @@ public class FXMLSingUpp extends AnchorPane {
         getChildren().add(pane1);
         
         confirmButton.setOnAction(event->{
-         try {
+          try {
              
-             Parent root2 = new FXMLSignIn( stage);
-             Scene scene2 = new Scene(root2);
-             stage.setScene(scene2);
-             stage.show();
-            }catch(Exception e) {e.printStackTrace();}
+            Parent root2 = new FXMLSignIn( stage);
+            Scene scene2 = new Scene(root2);
+            stage.setScene(scene2);
+            stage.show();
+           }catch(Exception e) {e.printStackTrace();}
         });
         
         backButton.setOnAction((Action)->{
@@ -115,6 +119,48 @@ public class FXMLSingUpp extends AnchorPane {
             stage.setScene(scene2);
             stage.show();
         });
+        
+        
+        confirmButton.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) 
+            {
+                if(!(UsernameInput.getText().isEmpty())&& !(EmailInput.getText().isEmpty())&& !(passwordInput.getText().isEmpty())&& !(confirmpassInput.getText().isEmpty()))
+                
+                {
+                    //set values of DTO "player" 
+                    if(UsernameInput.getText().length()>2)
+                    {
+                        player.setUserName(UsernameInput.getText());
+                        if(EmailInput.getText().indexOf('@') != -1)
+                        {
+                            player.setEmail(EmailInput.getText());
+                            if(passwordInput.getText().compareTo(confirmpassInput.getText())==0 )
+                            {
+                                player.setPassword(passwordInput.getText());
+                                player.setId(++id);
+                                player.SetTotalScoore(0);
+                                if(DAO.SignUp(player)==1)
+                                    {System.err.println("Succusseful signup");}
+                                else
+                                    {System.err.println("UnSuccusseful signup");}
 
+                                player = null;
+                            }
+                            else
+                                {System.err.println("password and confirm password didn't match");}
+                        }
+                         else
+                            {System.err.println("Please enter valid email");}
+                    }
+                    else
+                        {System.err.println("Please enter more than 2 char");}
+                }
+                else
+                {
+                    System.err.println("fill all fields, please");
+                }  
+            }
+        }); 
     }
 }
