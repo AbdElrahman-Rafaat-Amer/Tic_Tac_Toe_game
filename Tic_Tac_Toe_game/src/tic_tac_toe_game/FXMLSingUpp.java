@@ -103,15 +103,6 @@ public class FXMLSingUpp extends AnchorPane {
         pane1.getChildren().add(pane2);
         getChildren().add(pane1);
         
-        confirmButton.setOnAction(event->{
-          try {
-             
-            Parent root2 = new FXMLSignIn( stage);
-            Scene scene2 = new Scene(root2);
-            stage.setScene(scene2);
-            stage.show();
-           }catch(Exception e) {e.printStackTrace();}
-        });
         
         backButton.setOnAction((Action)->{
             Parent root2 = new FXMLSelection(stage);
@@ -126,8 +117,8 @@ public class FXMLSingUpp extends AnchorPane {
             public void handle(ActionEvent event) 
             {
                 if(!(UsernameInput.getText().isEmpty())&& !(EmailInput.getText().isEmpty())&& !(passwordInput.getText().isEmpty())&& !(confirmpassInput.getText().isEmpty()))
-                
                 {
+                    DAO.startConnection();
                     //set values of DTO "player" 
                     if(UsernameInput.getText().length()>2)
                     {
@@ -141,11 +132,17 @@ public class FXMLSingUpp extends AnchorPane {
                                 player.setId(++id);
                                 player.SetTotalScoore(0);
                                 if(DAO.SignUp(player)==1)
-                                    {System.err.println("Succusseful signup");}
+                                    {
+                                        System.err.println("Succusseful signup");
+                                         try {
+                                            Parent root2 = new FXMLSignIn( stage);
+                                            Scene scene2 = new Scene(root2);
+                                            stage.setScene(scene2);
+                                            stage.show();
+                                           }catch(Exception e) {e.printStackTrace();}
+                                    }
                                 else
                                     {System.err.println("UnSuccusseful signup");}
-
-                                player = null;
                             }
                             else
                                 {System.err.println("password and confirm password didn't match");}

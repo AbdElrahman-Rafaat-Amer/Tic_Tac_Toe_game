@@ -78,7 +78,6 @@ public class DAO {
     
         static int SignUp(Player dto)
         {
-            DAO.startConnection();
             //Compare email with existing emails to make sure it's not duplicated
             Statement statement;
             int flag=1;
