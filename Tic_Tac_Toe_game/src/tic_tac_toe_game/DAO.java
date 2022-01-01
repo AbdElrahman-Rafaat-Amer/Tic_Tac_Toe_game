@@ -75,7 +75,7 @@ public class DAO {
     }
     
     
-    
+    // to insert player un player table .. return 1 if insertion done and 0 if insertion undone
         static int SignUp(Player dto)
         {
             //Compare email with existing emails to make sure it's not duplicated
