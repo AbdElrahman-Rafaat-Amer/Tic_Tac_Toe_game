@@ -1,5 +1,7 @@
 package tic_tac_toe_game;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,8 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 public  class XorOSelection extends AnchorPane {
-    private Stage mystage;
+
     protected final Button continueButton;
     protected final MenuButton select;
     protected final MenuItem selectx;
@@ -18,9 +21,13 @@ public  class XorOSelection extends AnchorPane {
     protected final Text player1;
     protected final Text player2;
     protected final TextField player2textfield;
+    protected final Button backButton;
+    private Stage mystage;
+    public static String playerOne;
+    public static String playerTwo;
+    
+    public XorOSelection( Stage stage) {
 
-    public XorOSelection(Stage stage) {
-        mystage =stage;
         continueButton = new Button();
         select = new MenuButton();
         selectx = new MenuItem();
@@ -28,6 +35,7 @@ public  class XorOSelection extends AnchorPane {
         player1 = new Text();
         player2 = new Text();
         player2textfield = new TextField();
+        backButton = new Button();
 
         setId("AnchorPane");
         setPrefHeight(400.0);
@@ -73,6 +81,9 @@ public  class XorOSelection extends AnchorPane {
         player2textfield.setPrefHeight(25.0);
         player2textfield.setPrefWidth(69.0);
 
+        backButton.setMnemonicParsing(false);
+        backButton.setText("Back");
+
         getChildren().add(continueButton);
         select.getItems().add(selectx);
         select.getItems().add(selecto);
@@ -80,12 +91,48 @@ public  class XorOSelection extends AnchorPane {
         getChildren().add(player1);
         getChildren().add(player2);
         getChildren().add(player2textfield);
+        getChildren().add(backButton);
         
-        continueButton.setOnAction((Action)->{
+             
+        
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+        public void handle(ActionEvent event) {
+                Parent root = new SelectPlayersNo(stage);
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();   
+        }
+        });
+        
+       selectx.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+        public void handle(ActionEvent event) {
+               select.setText("X");
+               playerOne="X";
+               player2textfield.setText("O");
+        }
+        });
+       selecto.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+        public void handle(ActionEvent event) {
+               select.setText("O");
+               playerOne="O";
+               player2textfield.setText("X");
+        }
+        });
+       
+      continueButton.setOnAction((Action)->{
+           if( (select.getText()=="X") || ( select.getText()=="O")){
             Parent root2 = new GameScene(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
-        });
-    }
+           }
+           else{
+               System.err.println(" You Must Chooese X or Y  ");
+           }
+        }); 
 }
+}
+
