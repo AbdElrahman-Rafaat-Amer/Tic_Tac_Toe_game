@@ -1,9 +1,11 @@
 package tic_tac_toe_game;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
@@ -14,7 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class GameScene extends BorderPane {
+public  class GameScene extends BorderPane {
 
     protected final BorderPane borderPane;
     protected final FlowPane flowPane;
@@ -42,7 +44,19 @@ public class GameScene extends BorderPane {
     protected final Line VLine2;
     protected final Line HLine2;
     protected final Line VLine1;
-
+    protected final Label label6;
+    protected final Label label1;
+    protected final Label label2;
+    protected final Label label3;
+    protected final Label label4;
+    protected final Label label5;
+    protected final Label label7;
+    protected final Label label8;
+    protected final Label label9;
+    
+    private int playerTurn=0;
+    ArrayList<Label> labels;
+    
     public GameScene(Stage stage) {
 
         borderPane = new BorderPane();
@@ -71,7 +85,26 @@ public class GameScene extends BorderPane {
         VLine2 = new Line();
         HLine2 = new Line();
         VLine1 = new Line();
-
+        label6 = new Label();
+        label1 = new Label();
+        label2 = new Label();
+        label3 = new Label();
+        label4 = new Label();
+        label5 = new Label();
+        label7 = new Label();
+        label8 = new Label();
+        label9 = new Label();
+         
+        labels = new ArrayList <>(Arrays.asList(label1,label2,label3,label4,label5,label6,label7,label8,label9));
+         
+        labels.forEach(label->
+        {
+             setUpLabels(label);
+          label.setFocusTraversable(false);
+        } 
+        );
+       
+        
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -225,6 +258,63 @@ public class GameScene extends BorderPane {
         VLine1.setLayoutY(118.0);
         VLine1.setStartX(-17.0);
         VLine1.setStartY(-91.0);
+
+        label6.setLayoutX(345.0);
+        label6.setLayoutY(79.0);
+        label6.setPrefHeight(53.0);
+        label6.setPrefWidth(86.0);
+        //label6.setPrefSize(73.0, 84.0);
+
+        
+        label1.setLayoutX(158.0);
+        label1.setLayoutY(27.0);
+        label1.setPrefHeight(40.0);
+        label1.setPrefWidth(81.0);
+       // label1.setPrefSize(73.0, 84.0);
+
+        label2.setLayoutX(258.0);
+        label2.setLayoutY(22.0);
+        label2.setPrefHeight(44.0);
+        label2.setPrefWidth(74.0);
+       // label2.setPrefSize(73.0, 84.0);
+        
+        label3.setLayoutX(352.0);
+        label3.setLayoutY(32.0);
+        label3.setPrefHeight(37.0);
+        label3.setPrefWidth(73.0);
+        //label3.setPrefSize(73.0, 84.0);
+        
+        label4.setLayoutX(157.0);
+        label4.setLayoutY(82.0);
+        label4.setPrefHeight(48.0);
+        label4.setPrefWidth(82.0);
+       // label4.setPrefSize(73.0, 84.0);
+        
+        label5.setLayoutX(255.0);
+        label5.setLayoutY(77.0);
+        label5.setPrefHeight(54.0);
+       label5.setPrefWidth(79.0);
+        //label5.setPrefSize(73.0, 84.0);
+        
+        
+        label7.setLayoutX(158.0);
+        label7.setLayoutY(142.0);
+        label7.setPrefHeight(45.0);
+        label7.setPrefWidth(84.0);
+       // label7.setPrefSize(73.0, 84.0);
+        
+        label8.setLayoutX(256.0);
+        label8.setLayoutY(141.0);
+        label8.setPrefHeight(49.0);
+        label8.setPrefWidth(77.0);
+        //label8.setPrefSize(73.0, 84.0);
+        
+        
+        label9.setLayoutX(347.0);
+        label9.setLayoutY(144.0);
+        label9.setPrefHeight(45.0);
+        label9.setPrefWidth(80.0);
+        //label9.setPrefSize(73.0, 84.0);
         setCenter(anchorPane);
 
         flowPane0.getChildren().add(Player1Text);
@@ -240,8 +330,17 @@ public class GameScene extends BorderPane {
         anchorPane.getChildren().add(VLine2);
         anchorPane.getChildren().add(HLine2);
         anchorPane.getChildren().add(VLine1);
-        
-        homeButton.setOnAction((Action)->{
+        anchorPane.getChildren().add(label6);
+        anchorPane.getChildren().add(label1);
+        anchorPane.getChildren().add(label2);
+        anchorPane.getChildren().add(label3);
+        anchorPane.getChildren().add(label4);
+        anchorPane.getChildren().add(label5);
+        anchorPane.getChildren().add(label7);
+        anchorPane.getChildren().add(label8);
+        anchorPane.getChildren().add(label9);
+       
+         homeButton.setOnAction((Action)->{
             Parent root2 = new Start(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
@@ -254,5 +353,92 @@ public class GameScene extends BorderPane {
             stage.setScene(scene2);
             stage.show();
         });
+        
     }
+     public void restartGame(ActionEvent event){
+          labels.forEach(this::resetLabels);
+      }
+    
+    
+    
+      public void resetLabels(Label label){
+          label.setDisable(false);
+          label.setText("");
+          
+       }
+       
+      private void setUpLabels(Label label){
+          
+         label.setOnMouseClicked( mouseEvent ->{
+             setPlayerSymbol(label);
+             label.setDisable(true);
+            // checkGameIsOver();
+         
+         });
+         
+      }
+      
+      public void setPlayerSymbol (Label label){
+          if (playerTurn %2==0){
+             label.setText("x");
+             playerTurn = 1;
+          }
+          else {
+             label.setText("0");
+             playerTurn =0;
+          }
+      }
+       public void checkGameIsOver(){
+          
+         for (int a =0 ; a<8; a++){
+             
+         String line="" ;
+                        
+         switch(a){
+             
+             case 0 :
+                 line = label1.getText()+label2.getText()+label3.getText();
+                  break;
+                  
+             case 1 :
+                 line = label4.getText()+label5.getText()+label6.getText();
+                 break;
+                 
+             case 2 :
+                 line = label7.getText()+label8.getText()+label9.getText();
+                 break;
+                 
+             case 3 :
+                 line = label3.getText()+label5.getText()+label7.getText();
+                 break;
+                 
+             case 4 :
+                 line = label1.getText()+label4.getText()+label6.getText();
+                 break;
+                 
+             case 5 :
+                 line = label2.getText()+label5.getText()+label8.getText();
+                 break;
+                 
+             case 6 :
+                 
+                 line = label3.getText()+label6.getText()+label9.getText(); 
+                 break;
+              
+             default : line="";    
+                 
+         }
+         if (line.equals("xxx")){
+           Score1Text.setText("1");
+         
+         }
+         else if( line.equals("000")){
+          Score1Text.setText("0");
+         } 
+         
+         }
+        
+      }
+
+    
 }

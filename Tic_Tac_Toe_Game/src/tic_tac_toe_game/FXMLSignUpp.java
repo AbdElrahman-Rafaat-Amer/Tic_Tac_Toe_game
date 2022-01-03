@@ -2,17 +2,19 @@ package tic_tac_toe_game;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+//import static tic_tac_toe_game.FXMLSingUpp.id;
+//import static tic_tac_toe_game.FXMLSingUpp.id;
 
-public class FXMLSingUpp extends AnchorPane {
+public  class FXMLSignUpp extends AnchorPane {
 
     protected final Pane pane1;
     protected final Pane pane2;
@@ -21,12 +23,12 @@ public class FXMLSingUpp extends AnchorPane {
     protected final TextField passwordInput;
     protected final TextField confirmpassInput;
     protected final Button confirmButton;
-    protected final Text signUpText;
     protected final Button backButton;
-    Player player = new Player();
+    protected final Text textSignUp;
+     Player player = new Player();
     protected static int id = 0;
-
-    public FXMLSingUpp( Stage stage) {
+    
+    public FXMLSignUpp( Stage stage) {
 
         pane1 = new Pane();
         pane2 = new Pane();
@@ -36,75 +38,67 @@ public class FXMLSingUpp extends AnchorPane {
         confirmpassInput = new TextField();
         confirmButton = new Button();
         backButton = new Button();
-        signUpText = new Text();
-        
-        setMaxHeight(USE_PREF_SIZE);
-        setMaxWidth(USE_PREF_SIZE);
-        setMinHeight(USE_PREF_SIZE);
-        setMinWidth(USE_PREF_SIZE);
+        textSignUp = new Text();
+
+        setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
 
-        pane1.setLayoutY(3.0);
-        pane1.setPrefHeight(394.0);
+        pane1.setLayoutY(1.0);
+        pane1.setPrefHeight(400.0);
         pane1.setPrefWidth(600.0);
 
-        pane2.setLayoutY(-14.0);
-        pane2.setPrefHeight(422.0);
+        pane2.setPrefHeight(401.0);
         pane2.setPrefWidth(600.0);
 
-        UsernameInput.setLayoutX(170.0);
-        UsernameInput.setLayoutY(124.0);
-        UsernameInput.setPrefHeight(11.0);
-        UsernameInput.setPrefWidth(235.0);
-        UsernameInput.setPromptText("USERNAME");
+        UsernameInput.setLayoutX(207.0);
+        UsernameInput.setLayoutY(86.0);
+        UsernameInput.setPromptText("UERSNAME");
 
-        EmailInput.setLayoutX(167.0);
-        EmailInput.setLayoutY(177.0);
-        EmailInput.setPrefHeight(26.0);
-        EmailInput.setPrefWidth(241.0);
+        EmailInput.setLayoutX(207.0);
+        EmailInput.setLayoutY(139.0);
         EmailInput.setPromptText("EMAIL");
 
-        passwordInput.setLayoutX(167.0);
-        passwordInput.setLayoutY(236.0);
-        passwordInput.setPrefHeight(0.0);
-        passwordInput.setPrefWidth(241.0);
+        passwordInput.setLayoutX(207.0);
+        passwordInput.setLayoutY(185.0);
         passwordInput.setPromptText("PASSWORD");
 
-        confirmpassInput.setLayoutX(167.0);
-        confirmpassInput.setLayoutY(294.0);
-        confirmpassInput.setPrefHeight(18.0);
-        confirmpassInput.setPrefWidth(241.0);
+        confirmpassInput.setLayoutX(207.0);
+        confirmpassInput.setLayoutY(237.0);
         confirmpassInput.setPromptText("CONFIRM PASSWORD");
 
-        confirmButton.setLayoutX(349.0);
-        confirmButton.setLayoutY(357.0);
+        confirmButton.setLayoutX(320.0);
+        confirmButton.setLayoutY(312.0);
         confirmButton.setMnemonicParsing(false);
+        confirmButton.setPrefHeight(31.0);
+        confirmButton.setPrefWidth(106.0);
         confirmButton.setText("CONFIRM");
-        
+
+        backButton.setLayoutX(14.0);
+        backButton.setLayoutY(14.0);
         backButton.setMnemonicParsing(false);
-        backButton.setText("Back");
-        
-        signUpText.setLayoutX(229.0);
-        signUpText.setLayoutY(75.0);
-        signUpText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-        signUpText.setStrokeWidth(0.0);
-        signUpText.setText("SIGN UP");
-        signUpText.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        signUpText.setWrappingWidth(117.48176574707031);
+        backButton.setText("BACK");
+
+        textSignUp.setLayoutX(227.0);
+        textSignUp.setLayoutY(51.0);
+        textSignUp.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        textSignUp.setStrokeWidth(0.0);
+        textSignUp.setText("SIGN UP");
+        textSignUp.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        textSignUp.setWrappingWidth(146.99999502301216);
+        textSignUp.setFont(new Font(18.0));
 
         pane2.getChildren().add(UsernameInput);
         pane2.getChildren().add(EmailInput);
         pane2.getChildren().add(passwordInput);
         pane2.getChildren().add(confirmpassInput);
         pane2.getChildren().add(confirmButton);
-        pane2.getChildren().add(signUpText);
         pane2.getChildren().add(backButton);
+        pane2.getChildren().add(textSignUp);
         pane1.getChildren().add(pane2);
         getChildren().add(pane1);
-        
-        
-        backButton.setOnAction((Action)->{
+
+         backButton.setOnAction((Action)->{
             Parent root2 = new FXMLSelection(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
@@ -158,6 +152,7 @@ public class FXMLSingUpp extends AnchorPane {
                     System.err.println("fill all fields, please");
                 }  
             }
-        }); 
+        });  
+        
     }
 }

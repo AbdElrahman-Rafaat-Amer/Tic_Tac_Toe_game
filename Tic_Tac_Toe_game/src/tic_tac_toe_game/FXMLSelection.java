@@ -59,7 +59,7 @@ public class FXMLSelection extends AnchorPane {
         getChildren().add(Pane1Selc);
 
         signUpButton.setOnAction((Action)->{
-            Parent root2 = new FXMLSingUpp(stage);
+            Parent root2 = new FXMLSignUpp(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();

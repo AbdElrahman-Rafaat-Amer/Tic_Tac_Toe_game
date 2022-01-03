@@ -20,7 +20,8 @@ public class Tic_Tac_Toe_game extends Application {
 
     @Override
     public void stop() {
-        try {
+       try {
+		if(DAO.con != null)
             DAO.con.close();
         } catch (SQLException ex) {
             Logger.getLogger(Tic_Tac_Toe_game.class.getName()).log(Level.SEVERE, null, ex);
