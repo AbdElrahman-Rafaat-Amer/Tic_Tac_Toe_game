@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -122,7 +124,7 @@ public  class XorOSelection extends AnchorPane {
         }
         });
        
-      continueButton.setOnAction((Action)->{
+           continueButton.setOnAction((Action)->{
            if( (select.getText()=="X") || ( select.getText()=="O")){
             Parent root2 = new GameScene(stage);
             Scene scene2 = new Scene(root2);
@@ -130,9 +132,15 @@ public  class XorOSelection extends AnchorPane {
             stage.show();
            }
            else{
-               System.err.println(" You Must Chooese X or Y  ");
+               
+            Alert a = new Alert(AlertType.NONE);
+            
+            a.setAlertType(AlertType.ERROR);
+       
+            a.setContentText("You Must Choose X or O ");
+           
+                a.show();
            }
         }); 
 }
 }
-
