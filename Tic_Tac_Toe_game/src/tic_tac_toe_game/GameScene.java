@@ -169,7 +169,7 @@ public class GameScene extends BorderPane {
         BorderPane.setAlignment(ONotationText, javafx.geometry.Pos.CENTER);
         ONotationText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         ONotationText.setStrokeWidth(0.0);
-        
+        ONotationText.setText("O");
         borderPane0.setTop(ONotationText);
         borderPane.setLeft(flowPane);
 
@@ -210,6 +210,7 @@ public class GameScene extends BorderPane {
         BorderPane.setAlignment(XNotationText, javafx.geometry.Pos.CENTER);
         XNotationText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         XNotationText.setStrokeWidth(0.0);
+        XNotationText.setText("X");
         borderPane1.setTop(XNotationText);
         borderPane.setRight(flowPane1);
         setBottom(borderPane);
