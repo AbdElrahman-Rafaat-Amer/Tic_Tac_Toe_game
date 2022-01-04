@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
@@ -71,11 +73,11 @@ public class ResultScene extends BorderPane {
         
         mediaPlayer.play();
         
-        skipButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            //go to home again..
-            }
+        skipButton.setOnAction((Action)->{
+            Parent root2 = new Start(stage);
+            Scene scene2 = new Scene(root2);
+            stage.setScene(scene2);
+            stage.show();
         });
     }
 }

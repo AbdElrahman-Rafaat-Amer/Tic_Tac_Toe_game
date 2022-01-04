@@ -110,7 +110,7 @@ public  class FXMLSignUpp extends AnchorPane {
             @Override
             public void handle(ActionEvent event) 
             {
-                if(!(UsernameInput.getText().isEmpty())&& !(EmailInput.getText().isEmpty())&& !(passwordInput.getText().isEmpty())&& !(confirmpassInput.getText().isEmpty()))
+                if(!(UsernameInput.getText().trim().isEmpty())&& !(EmailInput.getText().trim().isEmpty())&& !(passwordInput.getText().trim().isEmpty())&& !(confirmpassInput.getText().trim().isEmpty()))
                 {
                     
                     //set values of DTO "player" 

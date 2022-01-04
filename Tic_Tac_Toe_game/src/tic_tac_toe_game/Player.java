@@ -1,14 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tic_tac_toe_game;
 
-/**
- *
- * @author ayaab
- */
 public class Player {
 
     private int id;
@@ -17,10 +8,7 @@ public class Player {
     private String password;
     private int totalScoore;
 
-    public Player() {
-    }
-
-    ;
+    public Player() {};
    
    public Player(int id, String userName, String email, String password, int TotalScoore) {
         this.id = id;

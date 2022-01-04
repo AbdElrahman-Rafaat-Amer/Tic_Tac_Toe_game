@@ -1,8 +1,11 @@
 package tic_tac_toe_game;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import javafx.event.ActionEvent;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -11,12 +14,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public  class GameScene extends BorderPane {
+public class GameScene extends BorderPane {
 
     protected final BorderPane borderPane;
     protected final FlowPane flowPane;
@@ -44,18 +48,28 @@ public  class GameScene extends BorderPane {
     protected final Line VLine2;
     protected final Line HLine2;
     protected final Line VLine1;
-    protected final Label label6;
-    protected final Label label1;
-    protected final Label label2;
-    protected final Label label3;
-    protected final Label label4;
-    protected final Label label5;
-    protected final Label label7;
-    protected final Label label8;
-    protected final Label label9;
-    
-    private int playerTurn=0;
-    ArrayList<Label> labels;
+    protected final Pane pane1;
+    protected final Label labelPane1;
+    protected final Pane pane2;
+    protected final Label labelPane2;
+    protected final Pane pane3;
+    protected final Label labelPane3;
+    protected final Pane pane4;
+    protected final Label labelPane4;
+    protected final Pane pane5;
+    protected final Label labelPane5;
+    protected final Pane pane6;
+    protected final Label labelPane6;
+    protected final Pane pane7;
+    protected final Label labelPane7;
+    protected final Pane pane8;
+    protected final Label labelPane8;
+    protected final Pane pane9;
+    protected final Label labelPane9;
+    protected static String text ;
+    protected String[] values = new String[9];
+    static int i=0;
+    protected static String winner;
     
     public GameScene(Stage stage) {
 
@@ -85,26 +99,27 @@ public  class GameScene extends BorderPane {
         VLine2 = new Line();
         HLine2 = new Line();
         VLine1 = new Line();
-        label6 = new Label();
-        label1 = new Label();
-        label2 = new Label();
-        label3 = new Label();
-        label4 = new Label();
-        label5 = new Label();
-        label7 = new Label();
-        label8 = new Label();
-        label9 = new Label();
-         
-        labels = new ArrayList <>(Arrays.asList(label1,label2,label3,label4,label5,label6,label7,label8,label9));
-         
-        labels.forEach(label->
-        {
-             setUpLabels(label);
-          label.setFocusTraversable(false);
-        } 
-        );
-       
+        pane1 = new Pane();
+        labelPane1 = new Label();
+        pane2 = new Pane();
+        labelPane2 = new Label();
+        pane3 = new Pane();
+        labelPane3 = new Label();
+        pane4 = new Pane();
+        labelPane4 = new Label();
+        pane5 = new Pane();
+        labelPane5 = new Label();
+        pane6 = new Pane();
+        labelPane6 = new Label();
+        pane7 = new Pane();
+        labelPane7 = new Label();
+        pane8 = new Pane();
+        labelPane8 = new Label();
+        pane9 = new Pane();
+        labelPane9 = new Label();
         
+        
+
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -154,7 +169,7 @@ public  class GameScene extends BorderPane {
         BorderPane.setAlignment(ONotationText, javafx.geometry.Pos.CENTER);
         ONotationText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         ONotationText.setStrokeWidth(0.0);
-        ONotationText.setText("O");
+        
         borderPane0.setTop(ONotationText);
         borderPane.setLeft(flowPane);
 
@@ -163,7 +178,6 @@ public  class GameScene extends BorderPane {
         flowPane1.setOrientation(javafx.geometry.Orientation.VERTICAL);
         flowPane1.setPrefHeight(200.0);
         flowPane1.setPrefWidth(200.0);
-
         borderPane1.setPrefHeight(45.0);
         borderPane1.setPrefWidth(200.0);
 
@@ -196,7 +210,6 @@ public  class GameScene extends BorderPane {
         BorderPane.setAlignment(XNotationText, javafx.geometry.Pos.CENTER);
         XNotationText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         XNotationText.setStrokeWidth(0.0);
-        XNotationText.setText("X");
         borderPane1.setTop(XNotationText);
         borderPane.setRight(flowPane1);
         setBottom(borderPane);
@@ -259,62 +272,89 @@ public  class GameScene extends BorderPane {
         VLine1.setStartX(-17.0);
         VLine1.setStartY(-91.0);
 
-        label6.setLayoutX(345.0);
-        label6.setLayoutY(79.0);
-        label6.setPrefHeight(53.0);
-        label6.setPrefWidth(86.0);
-        //label6.setPrefSize(73.0, 84.0);
+        pane1.setLayoutX(157.0);
+        pane1.setLayoutY(26.0);
+        pane1.setPrefHeight(52.0);
+        pane1.setPrefWidth(91.0);
 
-        
-        label1.setLayoutX(158.0);
-        label1.setLayoutY(27.0);
-        label1.setPrefHeight(40.0);
-        label1.setPrefWidth(81.0);
-       // label1.setPrefSize(73.0, 84.0);
+        labelPane1.setLayoutX(-2.0);
+        labelPane1.setLayoutY(1.0);
+        labelPane1.setPrefHeight(46.0);
+        labelPane1.setPrefWidth(94.0);
 
-        label2.setLayoutX(258.0);
-        label2.setLayoutY(22.0);
-        label2.setPrefHeight(44.0);
-        label2.setPrefWidth(74.0);
-       // label2.setPrefSize(73.0, 84.0);
-        
-        label3.setLayoutX(352.0);
-        label3.setLayoutY(32.0);
-        label3.setPrefHeight(37.0);
-        label3.setPrefWidth(73.0);
-        //label3.setPrefSize(73.0, 84.0);
-        
-        label4.setLayoutX(157.0);
-        label4.setLayoutY(82.0);
-        label4.setPrefHeight(48.0);
-        label4.setPrefWidth(82.0);
-       // label4.setPrefSize(73.0, 84.0);
-        
-        label5.setLayoutX(255.0);
-        label5.setLayoutY(77.0);
-        label5.setPrefHeight(54.0);
-       label5.setPrefWidth(79.0);
-        //label5.setPrefSize(73.0, 84.0);
-        
-        
-        label7.setLayoutX(158.0);
-        label7.setLayoutY(142.0);
-        label7.setPrefHeight(45.0);
-        label7.setPrefWidth(84.0);
-       // label7.setPrefSize(73.0, 84.0);
-        
-        label8.setLayoutX(256.0);
-        label8.setLayoutY(141.0);
-        label8.setPrefHeight(49.0);
-        label8.setPrefWidth(77.0);
-        //label8.setPrefSize(73.0, 84.0);
-        
-        
-        label9.setLayoutX(347.0);
-        label9.setLayoutY(144.0);
-        label9.setPrefHeight(45.0);
-        label9.setPrefWidth(80.0);
-        //label9.setPrefSize(73.0, 84.0);
+        pane2.setLayoutX(250.0);
+        pane2.setLayoutY(23.0);
+        pane2.setPrefHeight(51.0);
+        pane2.setPrefWidth(93.0);
+
+        labelPane2.setPrefHeight(54.0);
+        labelPane2.setPrefWidth(94.0);
+
+        pane3.setLayoutX(343.0);
+        pane3.setLayoutY(24.0);
+        pane3.setPrefHeight(53.0);
+        pane3.setPrefWidth(85.0);
+
+        labelPane3.setLayoutY(-2.0);
+        labelPane3.setPrefHeight(53.0);
+        labelPane3.setPrefWidth(89.0);
+
+        pane4.setLayoutX(159.0);
+        pane4.setLayoutY(76.0);
+        pane4.setPrefHeight(62.0);
+        pane4.setPrefWidth(88.0);
+
+        labelPane4.setLayoutX(-1.0);
+        labelPane4.setPrefHeight(61.0);
+        labelPane4.setPrefWidth(89.0);
+
+        pane5.setLayoutX(250.0);
+        pane5.setLayoutY(78.0);
+        pane5.setPrefHeight(57.0);
+        pane5.setPrefWidth(91.0);
+
+        labelPane5.setLayoutX(-1.0);
+        labelPane5.setLayoutY(1.0);
+        labelPane5.setPrefHeight(56.0);
+        labelPane5.setPrefWidth(94.0);
+
+        pane6.setLayoutX(343.0);
+        pane6.setLayoutY(78.0);
+        pane6.setPrefHeight(58.0);
+        pane6.setPrefWidth(92.0);
+
+        labelPane6.setLayoutY(-2.0);
+        labelPane6.setPrefHeight(61.0);
+        labelPane6.setPrefWidth(87.0);
+
+        pane7.setLayoutX(157.0);
+        pane7.setLayoutY(138.0);
+        pane7.setPrefHeight(62.0);
+        pane7.setPrefWidth(93.0);
+
+        labelPane7.setLayoutY(-1.0);
+        labelPane7.setPrefHeight(62.0);
+        labelPane7.setPrefWidth(91.0);
+
+        pane8.setLayoutX(252.0);
+        pane8.setLayoutY(135.0);
+        pane8.setPrefHeight(61.0);
+        pane8.setPrefWidth(90.0);
+
+        labelPane8.setLayoutX(-2.0);
+        labelPane8.setLayoutY(3.0);
+        labelPane8.setPrefHeight(59.0);
+        labelPane8.setPrefWidth(93.0);
+
+        pane9.setLayoutX(343.0);
+        pane9.setLayoutY(140.0);
+        pane9.setPrefHeight(56.0);
+        pane9.setPrefWidth(92.0);
+
+        labelPane9.setLayoutX(-2.0);
+        labelPane9.setLayoutY(-3.0);
+        labelPane9.setPrefHeight(60.0);
+        labelPane9.setPrefWidth(93.0);
         setCenter(anchorPane);
 
         flowPane0.getChildren().add(Player1Text);
@@ -330,17 +370,26 @@ public  class GameScene extends BorderPane {
         anchorPane.getChildren().add(VLine2);
         anchorPane.getChildren().add(HLine2);
         anchorPane.getChildren().add(VLine1);
-        anchorPane.getChildren().add(label6);
-        anchorPane.getChildren().add(label1);
-        anchorPane.getChildren().add(label2);
-        anchorPane.getChildren().add(label3);
-        anchorPane.getChildren().add(label4);
-        anchorPane.getChildren().add(label5);
-        anchorPane.getChildren().add(label7);
-        anchorPane.getChildren().add(label8);
-        anchorPane.getChildren().add(label9);
-       
-         homeButton.setOnAction((Action)->{
+        pane1.getChildren().add(labelPane1);
+        anchorPane.getChildren().add(pane1);
+        pane2.getChildren().add(labelPane2);
+        anchorPane.getChildren().add(pane2);
+        pane3.getChildren().add(labelPane3);
+        anchorPane.getChildren().add(pane3);
+        pane4.getChildren().add(labelPane4);
+        anchorPane.getChildren().add(pane4);
+        pane5.getChildren().add(labelPane5);
+        anchorPane.getChildren().add(pane5);
+        pane6.getChildren().add(labelPane6);
+        anchorPane.getChildren().add(pane6);
+        pane7.getChildren().add(labelPane7);
+        anchorPane.getChildren().add(pane7);
+        pane8.getChildren().add(labelPane8);
+        anchorPane.getChildren().add(pane8);
+        pane9.getChildren().add(labelPane9);
+        anchorPane.getChildren().add(pane9);
+
+        homeButton.setOnAction((Action)->{
             Parent root2 = new Start(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
@@ -354,91 +403,315 @@ public  class GameScene extends BorderPane {
             stage.show();
         });
         
-    }
-     public void restartGame(ActionEvent event){
-          labels.forEach(this::resetLabels);
-      }
-    
-    
-    
-      public void resetLabels(Label label){
-          label.setDisable(false);
-          label.setText("");
-          
-       }
-       
-      private void setUpLabels(Label label){
-          
-         label.setOnMouseClicked( mouseEvent ->{
-             setPlayerSymbol(label);
-             label.setDisable(true);
-            // checkGameIsOver();
-         
-         });
-         
-      }
-      
-      public void setPlayerSymbol (Label label){
-          if (playerTurn %2==0){
-             label.setText("x");
-             playerTurn = 1;
-          }
-          else {
-             label.setText("0");
-             playerTurn =0;
-          }
-      }
-       public void checkGameIsOver(){
-          
-         for (int a =0 ; a<8; a++){
-             
-         String line="" ;
-                        
-         switch(a){
-             
-             case 0 :
-                 line = label1.getText()+label2.getText()+label3.getText();
-                  break;
-                  
-             case 1 :
-                 line = label4.getText()+label5.getText()+label6.getText();
-                 break;
-                 
-             case 2 :
-                 line = label7.getText()+label8.getText()+label9.getText();
-                 break;
-                 
-             case 3 :
-                 line = label3.getText()+label5.getText()+label7.getText();
-                 break;
-                 
-             case 4 :
-                 line = label1.getText()+label4.getText()+label6.getText();
-                 break;
-                 
-             case 5 :
-                 line = label2.getText()+label5.getText()+label8.getText();
-                 break;
-                 
-             case 6 :
-                 
-                 line = label3.getText()+label6.getText()+label9.getText(); 
-                 break;
-              
-             default : line="";    
-                 
-         }
-         if (line.equals("xxx")){
-           Score1Text.setText("1");
-         
-         }
-         else if( line.equals("000")){
-          Score1Text.setText("0");
-         } 
-         
-         }
-        
-      }
+        //to set X and O fro each player
+        ONotationText.setText(XorOSelection.playerOne);
+        if(XorOSelection.playerOne=="X")
+        {
+            XNotationText.setText("O");
+        }
+          else{
+                ONotationText.setText("O");
 
-    
+        }
+        text = XNotationText.getText();
+
+        //to set labels text in the center 
+        labelPane1.setAlignment(Pos.CENTER);
+        labelPane2.setAlignment(Pos.CENTER);
+        labelPane3.setAlignment(Pos.CENTER); 
+        labelPane4.setAlignment(Pos.CENTER);
+        labelPane5.setAlignment(Pos.CENTER);
+        labelPane6.setAlignment(Pos.CENTER);
+        labelPane7.setAlignment(Pos.CENTER);
+        labelPane8.setAlignment(Pos.CENTER);
+        labelPane9.setAlignment(Pos.CENTER);
+        
+        pane1.setOnMouseClicked((MouseEvent)->{
+            //to make label text uneditable
+            if(values[0]==null)
+            {
+                swapXO();
+                labelPane1.setText(text);
+                values[0]= text;
+                i++;
+                checkWinner(i);
+                if(winner != null)
+                {
+                    winner = null;
+                    values = null;
+                    Parent root2;
+                    try {
+                        root2 = new ResultScene(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        
+        pane2.setOnMouseClicked((MouseEvent)->{
+            //to make label text uneditable
+            if(values[1]==null)
+            {
+                swapXO();
+                labelPane2.setText(text);
+                //fill the array with label text
+                values[1]= text;
+                // collect number of labels text 
+                i++;
+                checkWinner(i);
+                if(winner != null)
+                {
+                    winner = null;
+                    values = null;
+                    Parent root2;
+                    try {
+                        root2 = new ResultScene(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        pane3.setOnMousePressed((MouseEvent)->{
+            //to make label text uneditable
+            if(values[2]==null)
+            {
+                swapXO();
+                labelPane3.setText(text);
+                values[2]= text;
+                i++;
+                checkWinner(i);
+                if(winner != null)
+                {
+                    winner = null;
+                    values = null;
+                    Parent root2;
+                    try {
+                        root2 = new ResultScene(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        pane4.setOnMouseClicked((MouseEvent)->{
+            //to make label text uneditable
+            if(values[3]==null)
+            {
+                swapXO();
+                labelPane4.setText(text);
+                values[3]= text;
+                i++;
+                checkWinner(i);
+                if(winner != null)
+                {
+                    winner = null;
+                    values = null;
+                    Parent root2;
+                    try {
+                        root2 = new ResultScene(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        pane5.setOnMouseClicked((MouseEvent)->{
+            //to make label text uneditable
+            if(values[4]==null)
+            {
+                swapXO();
+                labelPane5.setText(text);
+                values[4]= text;
+                i++;
+                checkWinner(i);
+                if(winner != null)
+                {
+                    winner = null;
+                    values = null;
+                    Parent root2;
+                    try {
+                        root2 = new ResultScene(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        pane6.setOnMouseClicked((MouseEvent)->{
+            //to make label text uneditable
+            if(values[5]==null)
+            {
+                swapXO();
+                labelPane6.setText(text);
+                values[5]= text;
+                i++;
+                checkWinner(i);
+                if(winner != null)
+                {
+                    winner = null;
+                    values = null;
+                    Parent root2;
+                    try {
+                        root2 = new ResultScene(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        pane7.setOnMouseClicked((MouseEvent)->{
+            //to make label text uneditable
+            if(values[6]==null)
+            {
+                swapXO();
+                labelPane7.setText(text);
+                values[6]= text;
+                i++;
+                checkWinner(i);
+                if(winner != null)
+                {
+                    winner = null;
+                    values = null;
+                    Parent root2;
+                    try {
+                        root2 = new ResultScene(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        pane8.setOnMouseClicked((MouseEvent)->{
+            //to make label text uneditable
+            if(values[7]==null)
+            {
+                swapXO();
+                labelPane8.setText(text);
+                values[7]= text;
+                i++;
+                checkWinner(i);
+                if(winner != null)
+                {
+                    winner = null;
+                    values = null;
+                    Parent root2;
+                    try {
+                        root2 = new ResultScene(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        pane9.setOnMouseClicked((MouseEvent)->{
+            //to make label text uneditable
+            if(values[8]==null)
+            {
+                swapXO();
+                labelPane9.setText(text);
+                values[8]= text;
+                i++;
+                checkWinner(i);
+                if(winner != null)
+                {
+                    Parent root2;
+                    try {
+                        winner = null;
+                        values = null;
+                        root2 = new ResultScene(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        
+        
+    }
+    protected void swapXO()
+        {
+            if(text.compareTo("O")==0)
+            {
+                text = "X";
+            }
+            else
+            {
+                text ="O";
+            }
+        }
+    protected void CheckWinner(int x, int y , int z)
+    {
+        if((values[x]!=null)&&(values[y]!=null)&&(values[z]!=null))
+        {
+            if((values[x].compareTo("O")==0)&&(values[y].compareTo("O")==0)&&(values[z].compareTo("O")==0))
+            {
+                winner = "Player 1 Wins";
+            }
+            else
+            {
+                if((values[x].compareTo("X")==0)&&(values[y].compareTo("X")==0)&&(values[z].compareTo("X")==0))
+                {
+                    winner = "Player 2 Wins";
+                }
+            }
+        }
+    }
+    protected void checkWinner(int x)
+    {
+        if(x>=5)
+        {
+            //check row 1
+            CheckWinner(0,1,2);
+            
+            //check row 2
+            CheckWinner(3,4,5);
+            
+            //check row 3
+            CheckWinner(6,7,8);
+            
+            //check column 1
+            CheckWinner(0,3,6);
+            
+            //check column 2
+            CheckWinner(1,4,7);
+            
+            //check column 3
+            CheckWinner(2,5,8);
+            
+            //check Hypotenuos 1
+            CheckWinner(0,4,8);
+            
+            //check Hypotenus 2
+            CheckWinner(2,4,6);
+        }   
+    }
 }
