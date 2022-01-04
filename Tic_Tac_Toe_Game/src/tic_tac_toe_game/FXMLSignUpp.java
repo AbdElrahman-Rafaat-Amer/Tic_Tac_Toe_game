@@ -1,15 +1,20 @@
 package tic_tac_toe_game;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 //import static tic_tac_toe_game.FXMLSingUpp.id;
 //import static tic_tac_toe_game.FXMLSingUpp.id;
@@ -25,8 +30,9 @@ public  class FXMLSignUpp extends AnchorPane {
     protected final Button confirmButton;
     protected final Button backButton;
     protected final Text textSignUp;
-     Player player = new Player();
+    Player player = new Player();
     protected static int id = 0;
+    protected static String message;
     
     public FXMLSignUpp( Stage stage) {
 
@@ -98,7 +104,7 @@ public  class FXMLSignUpp extends AnchorPane {
         pane1.getChildren().add(pane2);
         getChildren().add(pane1);
 
-         backButton.setOnAction((Action)->{
+        backButton.setOnAction((Action)->{
             Parent root2 = new FXMLSelection(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
@@ -110,9 +116,9 @@ public  class FXMLSignUpp extends AnchorPane {
             @Override
             public void handle(ActionEvent event) 
             {
+                try {
                 if(!(UsernameInput.getText().trim().isEmpty())&& !(EmailInput.getText().trim().isEmpty())&& !(passwordInput.getText().trim().isEmpty())&& !(confirmpassInput.getText().trim().isEmpty()))
                 {
-                    
                     //set values of DTO "player" 
                     if(UsernameInput.getText().length()>2)
                     {
@@ -126,33 +132,36 @@ public  class FXMLSignUpp extends AnchorPane {
                                 player.setId(++id);
                                 player.SetTotalScoore(0);
                                 if(DAO.SignUp(player)==1)
-                                    {
-                                        System.err.println("Succusseful signup");
-                                         try {
-                                            Parent root2 = new FXMLSignIn( stage);
-                                            Scene scene2 = new Scene(root2);
-                                            stage.setScene(scene2);
-                                            stage.show();
-                                           }catch(Exception e) {e.printStackTrace();}
-                                    }
+                                {
+                                    new Alert(Alert.AlertType.ERROR, "Succusseful signup").show();
+                                }
                                 else
-                                    {System.err.println("UnSuccusseful signup");}
+                                {
+                                    new Alert(Alert.AlertType.ERROR, "UnSuccusseful signup").show();
+                                }    
                             }
                             else
-                                {System.err.println("password and confirm password didn't match");}
+                                {
+                                    new Alert(Alert.AlertType.ERROR, "Password and confirm password didn't match").show();
+                                }
                         }
                          else
-                            {System.err.println("Please enter valid email");}
+                            {
+                                new Alert(Alert.AlertType.ERROR, "Please enter valid email").show();
+                            }
                     }
                     else
-                        {System.err.println("Please enter more than 2 char");}
-                }
+                        {
+                            new Alert(Alert.AlertType.ERROR, "Please enter more than 2 char").show();
+                        }
+                    }
                 else
                 {
-                    System.err.println("fill all fields, please");
-                }  
-            }
+                    new Alert(Alert.AlertType.ERROR, "Fill all fields, please").show();
+                }
+                } catch (SQLException ex) {
+                    new Alert(Alert.AlertType.ERROR, message).show();}
+            }                    
         });  
-        
     }
 }

@@ -1,6 +1,9 @@
 package tic_tac_toe_game;
 
 import com.sun.javafx.charts.ChartLayoutAnimator;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -72,21 +75,23 @@ public class FXMLSignIn extends AnchorPane {
         buttonConSingIn.setOnAction((ActionEvent event) -> {
             String email = emailSignIn.getText().trim();
             String password = passwordSIgnIn.getText().trim();
+            try {
             if (!email.isEmpty() && !password.isEmpty()) {
-                //DAO.startConnection();
-                boolean resualt = DAO.checkLogin(email, password);
-                if (resualt) {
-                    RequestPage.email = email;
-                    Parent root2 = new RequestPage(stage);
-                    Scene scene2 = new Scene(root2);
-                    stage.setScene(scene2);
-                    stage.show();
-                } else {
-                    new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
-                }
+                    //DAO.startConnection();
+                    boolean resualt = DAO.checkLogin(email, password);
+                    if (resualt) {
+                        RequestPage.email = email;
+                        Parent root2 = new RequestPage(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } else {
+                        new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
+                    }
             } else {
                 new Alert(Alert.AlertType.ERROR, "email or passwprd can not be empty").show();
             }
+            } catch (SQLException ex) {}
         });
         backButton.setMnemonicParsing(false);
         backButton.setText("Back");
