@@ -18,6 +18,7 @@ public class LevelPage extends BorderPane {
     protected final Button mediumButton;
     protected final Button hardButton;
     protected final Button backButton;
+    protected static String level;
 
     public LevelPage(Stage stage) {
 
@@ -76,33 +77,35 @@ public class LevelPage extends BorderPane {
         flowPane.getChildren().add(mediumButton);
         flowPane.getChildren().add(hardButton);
 
-        
-        easyButton.setOnAction((Action)->{
+        easyButton.setOnAction((Action) -> {
+            level = "easy";
             Parent root2 = new GameScene(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
         });
-        
-        mediumButton.setOnAction((Action)->{
+
+        mediumButton.setOnAction((Action) -> {
+            level = "medium";
             Parent root2 = new GameScene(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
         });
-        
-        hardButton.setOnAction((Action)->{
+
+        hardButton.setOnAction((Action) -> {
+            level = "hard";
             Parent root2 = new GameScene(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
         });
-        
-        backButton.setOnAction((Action)->{
+
+        backButton.setOnAction((Action) -> {
             Parent root2 = new SelectPlayersNo(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
         });
-    } 
+    }
 }

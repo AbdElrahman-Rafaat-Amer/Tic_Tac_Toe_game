@@ -8,16 +8,17 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public  class SelectPlayersNo extends AnchorPane {
+public class SelectPlayersNo extends AnchorPane {
 
     protected final Button oneplayer;
     protected final Button twoplayer;
     protected final Button backButton;
-     private Stage mystage;
-
+    private Stage mystage;
+    static boolean isSingle;
 
     public SelectPlayersNo(Stage stage) {
 
+        System.err.println("in SelectPlayersNo");
         oneplayer = new Button();
         twoplayer = new Button();
         backButton = new Button();
@@ -42,40 +43,42 @@ public  class SelectPlayersNo extends AnchorPane {
 
         backButton.setMnemonicParsing(false);
         backButton.setPrefHeight(25.0);
-        backButton.setPrefWidth(43.0);
+        backButton.setPrefWidth(60.0);
         backButton.setText("Back");
 
         getChildren().add(oneplayer);
         getChildren().add(twoplayer);
         getChildren().add(backButton);
 
-            oneplayer.setOnAction((Action)->{
-                Parent root2 = new LevelPage(stage);
-                Scene scene2 = new Scene(root2);
-                stage.setScene(scene2);
-                stage.show();
-            });
-        
-       //button ytl3 3la select x or o
+        oneplayer.setOnAction((Action) -> {
+            isSingle = true;
+            Parent root2 = new LevelPage(stage);
+            Scene scene2 = new Scene(root2);
+            stage.setScene(scene2);
+            stage.show();
+        });
+
+        //button ytl3 3la select x or o
         twoplayer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-        public void handle(ActionEvent event) {
+            public void handle(ActionEvent event) {
+                isSingle = false;
                 Parent root = new XorOSelection(stage);
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
-                stage.show();   
-        }
+                stage.show();
+            }
         });
         //button back
         backButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-        public void handle(ActionEvent event) {
+            public void handle(ActionEvent event) {
                 Parent root = new Start(stage);
                 Scene scene = new Scene(root);
                 stage.setScene(scene);
-                stage.show();   
-        }
+                stage.show();
+            }
         });
-        
+
     }
 }

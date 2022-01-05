@@ -15,14 +15,16 @@ public class Tic_Tac_Toe_game extends Application {
         Parent root = new Start(stage);
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setTitle("Tic Tac Toe game");
         stage.show();
     }
 
     @Override
     public void stop() {
-       try {
-		if(DAO.con != null)
-            DAO.con.close();
+        try {
+            if (DAO.con != null) {
+                DAO.con.close();
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Tic_Tac_Toe_game.class.getName()).log(Level.SEVERE, null, ex);
         }
