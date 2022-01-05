@@ -134,6 +134,10 @@ public  class FXMLSignUpp extends AnchorPane {
                                 if(DAO.SignUp(player)==1)
                                 {
                                     System.out.println("Succusseful signup");
+                                    Parent root2 = new FXMLSignIn(stage);
+                                    Scene scene2 = new Scene(root2);
+                                    stage.setScene(scene2);
+                                    stage.show();
                                 }
                                 else
                                 {
