@@ -117,13 +117,13 @@ public  class FXMLSignUpp extends AnchorPane {
             public void handle(ActionEvent event) 
             {
                 try {
-                if(!(UsernameInput.getText().trim().isEmpty())&& !(EmailInput.getText().trim().isEmpty())&& !(passwordInput.getText().trim().isEmpty())&& !(confirmpassInput.getText().trim().isEmpty()))
+                if(UsernameInput.getText().matches("[\\S]+{1,}")&&EmailInput.getText().matches("[\\S]+{1,}")&&passwordInput.getText().matches("[\\S]+{1,}")&&confirmpassInput.getText().matches("[\\S]+{1,}"))
                 {
                     //set values of DTO "player" 
-                    if(UsernameInput.getText().length()>2)
+                    if(UsernameInput.getText().matches("([a-zA-Z0-9]{2,})"))
                     {
                         player.setUserName(UsernameInput.getText());
-                        if(EmailInput.getText().indexOf('@') != -1)
+                        if(EmailInput.getText().matches("^[\\w][\\w!#$%&'*+-/=?^_`{|]+@{1}[\\w]+\\.{1}[\\w]{2,4}$"))
                         {
                             player.setEmail(EmailInput.getText());
                             if(passwordInput.getText().compareTo(confirmpassInput.getText())==0 )
@@ -133,7 +133,7 @@ public  class FXMLSignUpp extends AnchorPane {
                                 player.SetTotalScoore(0);
                                 if(DAO.SignUp(player)==1)
                                 {
-                                    new Alert(Alert.AlertType.ERROR, "Succusseful signup").show();
+                                    System.out.println("Succusseful signup");
                                 }
                                 else
                                 {
@@ -152,7 +152,7 @@ public  class FXMLSignUpp extends AnchorPane {
                     }
                     else
                         {
-                            new Alert(Alert.AlertType.ERROR, "Please enter more than 2 char").show();
+                            new Alert(Alert.AlertType.ERROR, "Please enter valid username").show();
                         }
                     }
                 else

@@ -1,6 +1,9 @@
 package tic_tac_toe_game;
 
 import java.io.File;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -126,18 +129,22 @@ public class RequestPage extends BorderPane {
         playerNameLabel.setPrefHeight(51.0);
         playerNameLabel.setPrefWidth(144.0);
          
-        Player player = DAO.retriveInformation(email);
+        Player player;
+        try {
+            player = DAO.retriveInformation(email);
+        
         // the name will change according to the player name when he will login or signup
         String name = player.getUserName();
         playerNameLabel.setText(name);
-
         scoreLabel.setAlignment(javafx.geometry.Pos.CENTER);
         scoreLabel.setPrefHeight(47.0);
         scoreLabel.setPrefWidth(166.0);
         // the name will bring the score according to the player from database
         String score = player.getTootalScoore() + "";
         scoreLabel.setText(score);
-        
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
         FlowPane.setMargin(scoreLabel, new Insets(0.0, 0.0, 0.0, 50.0));
 
         historyButton.setAlignment(javafx.geometry.Pos.CENTER);

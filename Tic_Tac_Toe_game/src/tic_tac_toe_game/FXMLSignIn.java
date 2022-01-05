@@ -76,8 +76,7 @@ public class FXMLSignIn extends AnchorPane {
             String email = emailSignIn.getText().trim();
             String password = passwordSIgnIn.getText().trim();
             try {
-            if (!email.isEmpty() && !password.isEmpty()) {
-                    //DAO.startConnection();
+                if (email.matches("[\\S]+{1,}") && password.matches("[\\S]+{1,}")) {
                     boolean resualt = DAO.checkLogin(email, password);
                     if (resualt) {
                         RequestPage.email = email;
@@ -88,9 +87,9 @@ public class FXMLSignIn extends AnchorPane {
                     } else {
                         new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
                     }
-            } else {
-                new Alert(Alert.AlertType.ERROR, "email or passwprd can not be empty").show();
-            }
+                } 
+                else 
+                {new Alert(Alert.AlertType.ERROR, "email or passwprd can not be empty").show();}
             } catch (SQLException ex) {}
         });
         backButton.setMnemonicParsing(false);
