@@ -1,5 +1,11 @@
 package tic_tac_toe_game;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
@@ -22,6 +28,9 @@ public class Start extends Pane {
     private TextInputDialog ipDialog;
     private boolean isRight = false;
     private String message = "Enter your Ip Address to play online";
+    static Socket server;
+    static DataInputStream dataInputStream;
+    static PrintStream printStream;
 
     public Start(Stage stage) {
         mystage = stage;
@@ -71,6 +80,14 @@ public class Start extends Pane {
             if (isRight) {
                 //Ip right
                 System.err.println("okButton");
+                try{
+            server = new Socket(IPAdress,5005);
+            printStream = new PrintStream(server.getOutputStream());
+            dataInputStream = new DataInputStream(server.getInputStream());
+            } catch (IOException ex) {
+                Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
                 Parent root2 = new FXMLSelection(stage);
                 Scene scene2 = new Scene(root2);
                 stage.setScene(scene2);

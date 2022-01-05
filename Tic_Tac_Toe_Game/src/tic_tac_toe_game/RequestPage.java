@@ -139,14 +139,14 @@ public class RequestPage extends BorderPane {
 
         Player player;
         String score = "0";
-        try {
-            player = DAO.retriveInformation(email);
-            String name = player.getUserName();
-            playerNameLabel.setText(name);
-            score = player.getTootalScoore() + "";
-        } catch (SQLException ex) {
-            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        //try {
+            //player = DAO.retriveInformation(email);
+            //String name = player.getUserName();
+            //playerNameLabel.setText(name);
+            //score = player.getTootalScoore() + "";
+        //} catch (SQLException ex) {
+          //  Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
+        //}
         // the name will change according to the player name when he will login or signup
 
         scoreLabel.setAlignment(javafx.geometry.Pos.CENTER);

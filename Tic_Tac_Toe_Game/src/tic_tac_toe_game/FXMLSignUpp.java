@@ -16,8 +16,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-//import static tic_tac_toe_game.FXMLSingUpp.id;
-//import static tic_tac_toe_game.FXMLSingUpp.id;
 
 public  class FXMLSignUpp extends AnchorPane {
 
@@ -33,6 +31,7 @@ public  class FXMLSignUpp extends AnchorPane {
     Player player = new Player();
     protected static int id = 0;
     protected static String message;
+    String msg;
     
     public FXMLSignUpp( Stage stage) {
 
@@ -116,7 +115,7 @@ public  class FXMLSignUpp extends AnchorPane {
             @Override
             public void handle(ActionEvent event) 
             {
-                try {
+                //try {
                 if(UsernameInput.getText().matches("[\\S]+{1,}")&&EmailInput.getText().matches("[\\S]+{1,}")&&passwordInput.getText().matches("[\\S]+{1,}")&&confirmpassInput.getText().matches("[\\S]+{1,}"))
                 {
                     //set values of DTO "player" 
@@ -131,18 +130,21 @@ public  class FXMLSignUpp extends AnchorPane {
                                 player.setPassword(passwordInput.getText());
                                 player.setId(++id);
                                 player.SetTotalScoore(0);
-                                if(DAO.SignUp(player)==1)
-                                {
+                                msg = player.getEmail().concat(" ! "+player.getUserName()+" ! "+player.getPassword());
+                                
+                                Start.printStream.println(msg);
+                                //if(DAO.SignUp(player)==1)
+                                //{
                                     System.out.println("Succusseful signup");
                                     Parent root2 = new FXMLSignIn(stage);
                                     Scene scene2 = new Scene(root2);
                                     stage.setScene(scene2);
                                     stage.show();
-                                }
-                                else
-                                {
-                                    new Alert(Alert.AlertType.ERROR, "UnSuccusseful signup").show();
-                                }    
+                                //}
+                                //else
+                                //{
+                                    //new Alert(Alert.AlertType.ERROR, "UnSuccusseful signup").show();
+                                //}    
                             }
                             else
                                 {
@@ -163,8 +165,8 @@ public  class FXMLSignUpp extends AnchorPane {
                 {
                     new Alert(Alert.AlertType.ERROR, "Fill all fields, please").show();
                 }
-                } catch (SQLException ex) {
-                    new Alert(Alert.AlertType.ERROR, message).show();}
+                //} catch (SQLException ex) {
+                   // new Alert(Alert.AlertType.ERROR, message).show();}
             }                    
         });  
     }

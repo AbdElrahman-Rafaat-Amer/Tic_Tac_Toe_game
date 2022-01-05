@@ -1,5 +1,10 @@
 package server;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -14,6 +19,7 @@ public  class Servertictactoe extends AnchorPane {
     protected final NumberAxis numberAxis;
     protected final AreaChart areaChart;
     private Stage mystage;
+    ServerSocket serverSocket;
     
     public Servertictactoe(Stage stage) {
 
@@ -32,7 +38,7 @@ public  class Servertictactoe extends AnchorPane {
         startServer.setLayoutX(233.0);
         startServer.setLayoutY(131.0);
         startServer.setMnemonicParsing(false);
-        startServer.setText("Start Server");
+        startServer.setText("Server ON");
 
         categoryAxis.setSide(javafx.geometry.Side.BOTTOM);
 
@@ -44,6 +50,21 @@ public  class Servertictactoe extends AnchorPane {
 
         getChildren().add(startServer);
         getChildren().add(areaChart);
+        
+        if(startServer.getText()=="Server ON")
+        {
+            startServer.setText("Server OFF");
+            Socket socket;
+            try {
+                serverSocket = new ServerSocket(5005);
+                while(true)
+                {
+                    socket = serverSocket.accept();
+                    new Handler(socket);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);} 
+        }
 
     }
 }

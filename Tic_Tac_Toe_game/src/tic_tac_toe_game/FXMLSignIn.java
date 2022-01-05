@@ -75,23 +75,26 @@ public class FXMLSignIn extends AnchorPane {
         buttonConSingIn.setOnAction((ActionEvent event) -> {
             String email = emailSignIn.getText().trim();
             String password = passwordSIgnIn.getText().trim();
-            try {
+            //try {
                 if (email.matches("[\\S]+{1,}") && password.matches("[\\S]+{1,}")) {
-                    boolean resualt = DAO.checkLogin(email, password);
-                    if (resualt) {
+                    //boolean resualt = DAO.checkLogin(email, password);
+                    //if (resualt) {
+                        String msg = emailSignIn.getText().trim().concat(" ! "+passwordSIgnIn.getText().trim());
+                        Start.printStream.println(msg);
+                        
                         RequestPage.email = email;
                         Parent root2 = new RequestPage(stage);
                         Scene scene2 = new Scene(root2);
                         stage.setScene(scene2);
                         stage.show();
-                    } else {
-                        new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
-                    }
+                    //} else {
+                        //new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
+                    //}
                 } 
                 else 
                 {new Alert(Alert.AlertType.ERROR, "email or passwprd can not be empty").show();}
-            } catch (SQLException ex) {}
-        });
+            } //catch (SQLException ex) {}}
+);
         backButton.setMnemonicParsing(false);
         backButton.setText("Back");
 

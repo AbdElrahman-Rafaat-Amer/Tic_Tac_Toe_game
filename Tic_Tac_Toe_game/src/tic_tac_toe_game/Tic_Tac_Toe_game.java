@@ -19,16 +19,7 @@ public class Tic_Tac_Toe_game extends Application {
         stage.show();
     }
 
-    @Override
-    public void stop() {
-        try {
-            if (DAO.con != null) {
-                DAO.con.close();
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Tic_Tac_Toe_game.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+
 
     public static void main(String[] args) {
         launch(args);
