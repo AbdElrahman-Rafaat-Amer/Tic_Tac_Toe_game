@@ -2,8 +2,6 @@ package tic_tac_toe_game;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,6 +10,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class ResultScene extends BorderPane {
@@ -21,19 +20,21 @@ public class ResultScene extends BorderPane {
     protected final BorderPane borderPane0;
     protected final Button skipButton;
     protected final MediaView videoView;
+    private MediaPlayer mediaPlayer;
+    private Stage stage;
 
     public ResultScene(Stage stage) throws MalformedURLException {
-
+        this.stage = stage;
         borderPane = new BorderPane();
         resultText = new Text();
         borderPane0 = new BorderPane();
         skipButton = new Button();
-        
+
         File mediaFile = new File("src\\vedios_media\\waiting vedio.mp4");
-        Media  media = new Media(mediaFile.toURI().toURL().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        Media media = new Media(mediaFile.toURI().toURL().toString());
+        mediaPlayer = new MediaPlayer(media);
         videoView = new MediaView(mediaPlayer);
-        
+
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -48,8 +49,9 @@ public class ResultScene extends BorderPane {
         BorderPane.setAlignment(resultText, javafx.geometry.Pos.CENTER);
         resultText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         resultText.setStrokeWidth(0.0);
-        resultText.setText("YOU WIN");
-        resultText.setWrappingWidth(71.6689453125);
+        resultText.setTextAlignment(TextAlignment.CENTER);
+        resultText.setText(GameScene.winner);
+        resultText.setWrappingWidth(170.6689453125);
         borderPane.setCenter(resultText);
         setTop(borderPane);
 
@@ -70,14 +72,29 @@ public class ResultScene extends BorderPane {
         videoView.setFitWidth(300.0);
         setCenter(videoView);
 
-        
         mediaPlayer.play();
-        
-        skipButton.setOnAction((Action)->{
+
+        skipButton.setOnAction((Action) -> {
+            /*   mediaPlayer.stop();
             Parent root2 = new Start(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
-            stage.show();
+            stage.show();*/
+            endVedio();
         });
+        
+         mediaPlayer.setOnEndOfMedia(() -> {
+             endVedio();
+         });
+
+    }
+   
+
+    void endVedio() {
+        mediaPlayer.stop();
+        Parent root2 = new Start(stage);
+        Scene scene2 = new Scene(root2);
+        stage.setScene(scene2);
+        stage.show();
     }
 }

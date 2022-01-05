@@ -1,10 +1,6 @@
 package tic_tac_toe_game;
 
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -66,13 +62,19 @@ public class GameScene extends BorderPane {
     protected final Label labelPane8;
     protected final Pane pane9;
     protected final Label labelPane9;
-    protected static String text ;
+    protected static String text;
     protected String[] values = new String[9];
-    static int i=0;
+    static int i = 0;
     protected static String winner;
-    
-    public GameScene(Stage stage) {
+    private String level;
+    private Game.NextMove computerMove;
+    private int moveNumber = 0;
+    private Stage stage;
+    private boolean isDraw = true;
 
+    public GameScene(Stage stage) {
+        this.stage = stage;
+        level = LevelPage.level;
         borderPane = new BorderPane();
         flowPane = new FlowPane();
         borderPane0 = new BorderPane();
@@ -117,8 +119,7 @@ public class GameScene extends BorderPane {
         labelPane8 = new Label();
         pane9 = new Pane();
         labelPane9 = new Label();
-        
-        
+        Label board[][] = {{labelPane1, labelPane2, labelPane3}, {labelPane4, labelPane5, labelPane6}, {labelPane7, labelPane8, labelPane9}};
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -196,7 +197,11 @@ public class GameScene extends BorderPane {
 
         Player2Text.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         Player2Text.setStrokeWidth(0.0);
-        Player2Text.setText("Player 2");
+        if (SelectPlayersNo.isSingle) {
+            Player2Text.setText("Computer");
+        } else {
+            Player2Text.setText("Player 2");
+        }
         Player2Text.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         Player2Text.setWrappingWidth(198.134765625);
 
@@ -390,28 +395,26 @@ public class GameScene extends BorderPane {
         pane9.getChildren().add(labelPane9);
         anchorPane.getChildren().add(pane9);
 
-        homeButton.setOnAction((Action)->{
+        homeButton.setOnAction((Action) -> {
             Parent root2 = new Start(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
         });
-        
-        resetButton.setOnAction((Action)->{
+
+        resetButton.setOnAction((Action) -> {
             Parent root2 = new GameScene(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
         });
-        
+
         //to set X and O fro each player
         ONotationText.setText(XorOSelection.playerOne);
-        if(XorOSelection.playerOne=="X")
-        {
+        if (XorOSelection.playerOne == "X") {
             XNotationText.setText("O");
-        }
-          else{
-                ONotationText.setText("O");
+        } else {
+            ONotationText.setText("O");
 
         }
         text = XNotationText.getText();
@@ -419,25 +422,24 @@ public class GameScene extends BorderPane {
         //to set labels text in the center 
         labelPane1.setAlignment(Pos.CENTER);
         labelPane2.setAlignment(Pos.CENTER);
-        labelPane3.setAlignment(Pos.CENTER); 
+        labelPane3.setAlignment(Pos.CENTER);
         labelPane4.setAlignment(Pos.CENTER);
         labelPane5.setAlignment(Pos.CENTER);
         labelPane6.setAlignment(Pos.CENTER);
         labelPane7.setAlignment(Pos.CENTER);
         labelPane8.setAlignment(Pos.CENTER);
         labelPane9.setAlignment(Pos.CENTER);
-        
-        pane1.setOnMouseClicked((MouseEvent)->{
+
+        /*
+        pane1.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if(values[0]==null)
-            {
+            if (values[0] == null) {
                 swapXO();
                 labelPane1.setText(text);
-                values[0]= text;
+                values[0] = text;
                 i++;
                 checkWinner(i);
-                if(winner != null)
-                {
+                if (winner != null) {
                     winner = null;
                     values = null;
                     Parent root2;
@@ -452,20 +454,18 @@ public class GameScene extends BorderPane {
                 }
             }
         });
-        
-        pane2.setOnMouseClicked((MouseEvent)->{
+
+        pane2.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if(values[1]==null)
-            {
+            if (values[1] == null) {
                 swapXO();
                 labelPane2.setText(text);
                 //fill the array with label text
-                values[1]= text;
+                values[1] = text;
                 // collect number of labels text 
                 i++;
                 checkWinner(i);
-                if(winner != null)
-                {
+                if (winner != null) {
                     winner = null;
                     values = null;
                     Parent root2;
@@ -480,17 +480,15 @@ public class GameScene extends BorderPane {
                 }
             }
         });
-        pane3.setOnMousePressed((MouseEvent)->{
+        pane3.setOnMousePressed((MouseEvent) -> {
             //to make label text uneditable
-            if(values[2]==null)
-            {
+            if (values[2] == null) {
                 swapXO();
                 labelPane3.setText(text);
-                values[2]= text;
+                values[2] = text;
                 i++;
                 checkWinner(i);
-                if(winner != null)
-                {
+                if (winner != null) {
                     winner = null;
                     values = null;
                     Parent root2;
@@ -505,17 +503,15 @@ public class GameScene extends BorderPane {
                 }
             }
         });
-        pane4.setOnMouseClicked((MouseEvent)->{
+        pane4.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if(values[3]==null)
-            {
+            if (values[3] == null) {
                 swapXO();
                 labelPane4.setText(text);
-                values[3]= text;
+                values[3] = text;
                 i++;
                 checkWinner(i);
-                if(winner != null)
-                {
+                if (winner != null) {
                     winner = null;
                     values = null;
                     Parent root2;
@@ -530,17 +526,15 @@ public class GameScene extends BorderPane {
                 }
             }
         });
-        pane5.setOnMouseClicked((MouseEvent)->{
+        pane5.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if(values[4]==null)
-            {
+            if (values[4] == null) {
                 swapXO();
                 labelPane5.setText(text);
-                values[4]= text;
+                values[4] = text;
                 i++;
                 checkWinner(i);
-                if(winner != null)
-                {
+                if (winner != null) {
                     winner = null;
                     values = null;
                     Parent root2;
@@ -555,17 +549,15 @@ public class GameScene extends BorderPane {
                 }
             }
         });
-        pane6.setOnMouseClicked((MouseEvent)->{
+        pane6.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if(values[5]==null)
-            {
+            if (values[5] == null) {
                 swapXO();
                 labelPane6.setText(text);
-                values[5]= text;
+                values[5] = text;
                 i++;
                 checkWinner(i);
-                if(winner != null)
-                {
+                if (winner != null) {
                     winner = null;
                     values = null;
                     Parent root2;
@@ -580,17 +572,15 @@ public class GameScene extends BorderPane {
                 }
             }
         });
-        pane7.setOnMouseClicked((MouseEvent)->{
+        pane7.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if(values[6]==null)
-            {
+            if (values[6] == null) {
                 swapXO();
                 labelPane7.setText(text);
-                values[6]= text;
+                values[6] = text;
                 i++;
                 checkWinner(i);
-                if(winner != null)
-                {
+                if (winner != null) {
                     winner = null;
                     values = null;
                     Parent root2;
@@ -605,17 +595,15 @@ public class GameScene extends BorderPane {
                 }
             }
         });
-        pane8.setOnMouseClicked((MouseEvent)->{
+        pane8.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if(values[7]==null)
-            {
+            if (values[7] == null) {
                 swapXO();
                 labelPane8.setText(text);
-                values[7]= text;
+                values[7] = text;
                 i++;
                 checkWinner(i);
-                if(winner != null)
-                {
+                if (winner != null) {
                     winner = null;
                     values = null;
                     Parent root2;
@@ -630,17 +618,15 @@ public class GameScene extends BorderPane {
                 }
             }
         });
-        pane9.setOnMouseClicked((MouseEvent)->{
+        pane9.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if(values[8]==null)
-            {
+            if (values[8] == null) {
                 swapXO();
                 labelPane9.setText(text);
-                values[8]= text;
+                values[8] = text;
                 i++;
                 checkWinner(i);
-                if(winner != null)
-                {
+                if (winner != null) {
                     Parent root2;
                     try {
                         winner = null;
@@ -655,64 +641,208 @@ public class GameScene extends BorderPane {
                 }
             }
         });
-        
-        
-    }
-    protected void swapXO()
-        {
-            if(text.compareTo("O")==0)
-            {
-                text = "X";
-            }
-            else
-            {
-                text ="O";
-            }
-        }
-    protected void CheckWinner(int x, int y , int z)
-    {
-        if((values[x]!=null)&&(values[y]!=null)&&(values[z]!=null))
-        {
-            if((values[x].compareTo("O")==0)&&(values[y].compareTo("O")==0)&&(values[z].compareTo("O")==0))
-            {
-                winner = "Player 1 Wins";
-            }
-            else
-            {
-                if((values[x].compareTo("X")==0)&&(values[y].compareTo("X")==0)&&(values[z].compareTo("X")==0))
-                {
-                    winner = "Player 2 Wins";
+         */
+        for (Label[] row : board) {
+            for (Label cell : row) {
+                if (SelectPlayersNo.isSingle) {
+                    switch (level) {
+                        case "easy":
+                            cell.setOnMouseClicked((event) -> {
+                                //player play
+                                cell.setText("O");
+
+                                cell.setMouseTransparent(true);
+                                moveNumber++;
+                                //check if there are 9 moves if true the computer will not play 
+                                if (moveNumber < 9) {
+                                    computerMove = EasyLevel.moveNext(board);
+                                    Thread t = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                Thread.sleep(1000);
+                                            } catch (InterruptedException e) {
+
+                                            }
+                                            Platform.runLater(() -> {
+
+                                                board[computerMove.row][computerMove.col].setText("X");
+                                                board[computerMove.row][computerMove.col].setMouseTransparent(true);
+                                                moveNumber++;
+                                                // checkWinner(board);
+                                            });
+                                            if (moveNumber >= 5) {
+                                                Platform.runLater(() -> {
+                                                    isDraw = Game.checkWinner(board);
+                                                    if (!isDraw) {
+                                                        Game.goToWinnerPage(stage);
+                                                    }
+                                                });
+
+                                            }
+
+                                        }
+                                    });
+                                    t.start();
+                                } else {
+                                    isDraw = Game.checkWinner(board);
+                                    if (isDraw == true) {
+                                        winner = "TIE";
+                                        Game.goToWinnerPage(stage);
+                                    }
+                                }
+                            });
+                            break;
+
+                        case "medium":
+                            System.err.println("you are in medium level");
+                            break;
+                        case "hard":
+                            System.err.println("you are in hard level");
+                            break;
+                    }
+                } else {
+                    // Two player
+
                 }
             }
         }
     }
-    protected void checkWinner(int x)
-    {
-        if(x>=5)
-        {
-            //check row 1
-            CheckWinner(0,1,2);
-            
-            //check row 2
-            CheckWinner(3,4,5);
-            
-            //check row 3
-            CheckWinner(6,7,8);
-            
-            //check column 1
-            CheckWinner(0,3,6);
-            
-            //check column 2
-            CheckWinner(1,4,7);
-            
-            //check column 3
-            CheckWinner(2,5,8);
-            
-            //check Hypotenuos 1
-            CheckWinner(0,4,8);
-            
-            //check Hypotenus 2
-            CheckWinner(2,4,6);
-        }   
+
+    /*
+    protected void swapXO() {
+        if (text.compareTo("O") == 0) {
+            text = "X";
+        } else {
+            text = "O";
+        }
     }
+     */
+ /* protected void CheckWinner(int x, int y, int z) {
+        
+        System.err.println("inside CheckWinner for" + cou + "Time");
+        cou++;
+        if ((values[x] != null) && (values[y] != null) && (values[z] != null)) {
+            if ((values[x].compareTo("O") == 0) && (values[y].compareTo("O") == 0) && (values[z].compareTo("O") == 0)) {
+                winner = "Player 1 Wins";
+                System.err.println("player 1 wins");
+                goToWinnerPage();
+            } else {
+                if ((values[x].compareTo("X") == 0) && (values[y].compareTo("X") == 0) && (values[z].compareTo("X") == 0)) {
+                    winner = "Player 2 Wins";
+                    System.err.println("player 2 wins");
+                    goToWinnerPage();
+                }
+            }
+        }
+    }*//*
+    protected void checkWinner(Label[][] labels) {
+
+        for (int row = 0; row < 3; row++) {
+            if (labels[row][0].getText().equals(labels[row][1].getText()) && labels[row][1].getText().equals(labels[row][2].getText())) {
+                switch (labels[row][0].getText()) {
+                    case "X":
+                        isDraw = false;
+                        winner = "COMPUTER";
+                        goToWinnerPage();
+                        break;
+                    case "O":
+                        isDraw = false;
+                        winner = "YOU";
+                        goToWinnerPage();
+                        break;
+                }
+            }
+        }
+
+        for (int col = 0; col < 3; col++) {
+            if (labels[0][col].getText().equals(labels[1][col].getText()) && labels[1][col].getText().equals(labels[2][col].getText())) {
+                switch (labels[0][col].getText()) {
+                    case "X":
+                       isDraw = false;
+                        winner = "COMPUTER";
+                        goToWinnerPage();
+                        break;
+                    case "O":
+                        isDraw = false;
+                        winner = "YOU";
+                        goToWinnerPage();
+                        break;
+                }
+            }
+        }
+
+        if (labels[0][0].getText().equals(labels[1][1].getText()) && labels[1][1].getText().equals(labels[2][2].getText())) {
+            switch (labels[0][0].getText()) {
+                case "X":
+                    isDraw = false;
+                    winner = "COMPUTER";
+                    goToWinnerPage();
+                    break;
+                case "O":
+                    isDraw = false;
+                    winner = "YOU";
+                    goToWinnerPage();
+                    break;
+            }
+        }
+
+        if (labels[0][2].getText().equals(labels[1][1].getText()) && labels[1][1].getText().equals(labels[2][0].getText())) {
+            switch (labels[0][2].getText()) {
+                case "X":
+                    isDraw = false;
+                    winner = "COMPUTER";
+                    goToWinnerPage();
+                    break;
+                case "O":
+                    isDraw = false;
+                    winner = "YOU";
+                    goToWinnerPage();
+                    break;
+            }
+        }
+
+    }
+
+    /*   protected void checkWinner(int x) {
+        if (x >= 5) {
+            //check row 1
+            CheckWinner(0, 1, 2);
+
+            //check row 2
+            CheckWinner(3, 4, 5);
+
+            //check row 3
+            CheckWinner(6, 7, 8);
+
+            //check column 1
+            CheckWinner(0, 3, 6);
+
+            //check column 2
+            CheckWinner(1, 4, 7);
+
+            //check column 3
+            CheckWinner(2, 5, 8);
+
+            //check Hypotenuos 1
+            CheckWinner(0, 4, 8);
+
+            //check Hypotenus 2
+            CheckWinner(2, 4, 6);
+        }
+
+    }*//*
+    private void goToWinnerPage() {
+        Parent root2;
+        try {
+            // winner = null;
+            values = null;
+            root2 = new ResultScene(stage);
+            Scene scene2 = new Scene(root2);
+            stage.setScene(scene2);
+            stage.show();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }*/
 }

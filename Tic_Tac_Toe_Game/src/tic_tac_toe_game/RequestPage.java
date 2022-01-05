@@ -44,8 +44,9 @@ public class RequestPage extends BorderPane {
     private MediaPlayer mediaPlayer;
     private Scene currentScene;
     protected static String email;
-    
-    public RequestPage( Stage stage) {
+    MediaView mediaView;
+
+    public RequestPage(Stage stage) {
         this.stage = stage;
         flowPane = new FlowPane();
         playerNameLabel = new Label();
@@ -56,9 +57,10 @@ public class RequestPage extends BorderPane {
         label = new Label();
         listRequests = new ListView();
         listAvailablePlayers = new ListView();
+
         ObservableList<String> sendList = FXCollections.observableArrayList("Player1", "Player2", "Player3", "Player4", "Player5", "Player6");
         listRequests.setItems(sendList);
-        
+
         listRequests.setCellFactory((Callback<ListView<String>, ListCell<String>>) param -> {
             return new ListCell<String>() {
                 @Override
@@ -84,14 +86,19 @@ public class RequestPage extends BorderPane {
                             File mediaFile = new File("src\\vedios_media\\waiting vedio.mp4");
                             Media media = new Media(mediaFile.toURI().toString());
                             mediaPlayer = new MediaPlayer(media);
-                            MediaView mediaView = new MediaView(mediaPlayer);
+                            mediaView = new MediaView(mediaPlayer);
+
                             mediaPlayer.setAutoPlay(true);
                             Group root2 = new Group();
                             root2.getChildren().add(mediaView);
                             currentScene = stage.getScene();
-                            Scene scene = new Scene(root2, 350, 350);
+                            Scene scene = new Scene(root2, 600, 600);
                             stage.setScene(scene);
                             stage.setTitle("Playing video");
+                            mediaView.setFitHeight(600);
+                            mediaView.setFitWidth(600);
+                            System.out.println(scene.getHeight());
+                            System.out.println(scene.getWidth());
                             stage.show();
                             sendRequest.setDisable(true);
 
@@ -113,6 +120,7 @@ public class RequestPage extends BorderPane {
                 }
             };
         });
+
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -128,23 +136,26 @@ public class RequestPage extends BorderPane {
         playerNameLabel.setAlignment(javafx.geometry.Pos.CENTER);
         playerNameLabel.setPrefHeight(51.0);
         playerNameLabel.setPrefWidth(144.0);
-         
+
         Player player;
+        String score = "0";
         try {
             player = DAO.retriveInformation(email);
-        
+            String name = player.getUserName();
+            playerNameLabel.setText(name);
+            score = player.getTootalScoore() + "";
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
         // the name will change according to the player name when he will login or signup
-        String name = player.getUserName();
-        playerNameLabel.setText(name);
+
         scoreLabel.setAlignment(javafx.geometry.Pos.CENTER);
         scoreLabel.setPrefHeight(47.0);
         scoreLabel.setPrefWidth(166.0);
         // the name will bring the score according to the player from database
-        String score = player.getTootalScoore() + "";
+
         scoreLabel.setText(score);
-        } catch (SQLException ex) {
-            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
         FlowPane.setMargin(scoreLabel, new Insets(0.0, 0.0, 0.0, 50.0));
 
         historyButton.setAlignment(javafx.geometry.Pos.CENTER);
@@ -152,13 +163,13 @@ public class RequestPage extends BorderPane {
         historyButton.setPrefHeight(45.0);
         historyButton.setPrefWidth(92.0);
         historyButton.setText("History");
-         historyButton.setOnAction(new EventHandler<ActionEvent>() {
+        historyButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 // Code will open the file contain recordes 
             }
         });
-         
+
         FlowPane.setMargin(historyButton, new Insets(0.0, 0.0, 0.0, 50.0));
 
         homeButton.setAlignment(javafx.geometry.Pos.CENTER);

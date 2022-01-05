@@ -1,26 +1,34 @@
 package tic_tac_toe_game;
 
-import com.sun.org.apache.bcel.internal.generic.INEG;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-//import javafx.scene.gamexo.FXMLDocumentBase2;
-public  class Start extends Pane {
+
+public class Start extends Pane {
+
     protected final Button online;
     protected final Button offline;
     protected final Button exit;
     private Stage mystage;
-    
-        
-    public Start( Stage stage) {
-          mystage = stage;
+    static String IPAdress;
+    private TextInputDialog ipDialog;
+    private boolean isRight = false;
+    private String message = "Enter your Ip Address to play online";
+
+    public Start(Stage stage) {
+        mystage = stage;
         online = new Button();
         offline = new Button();
         exit = new Button();
+        ipDialog = new TextInputDialog();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -53,19 +61,60 @@ public  class Start extends Pane {
         getChildren().add(online);
         getChildren().add(offline);
         getChildren().add(exit);
+        ipDialog.setHeaderText(message);
+
+        Button button = (Button) ipDialog.getDialogPane().lookupButton(ButtonType.OK);
+
+        button.setOnAction((ActionEvent event) -> {
+            IPAdress = ipDialog.getEditor().getText();
+            isRight = checkIPAddress(IPAdress);
+            if (isRight) {
+                //Ip right
+                System.err.println("okButton");
+                Parent root2 = new FXMLSelection(stage);
+                Scene scene2 = new Scene(root2);
+                stage.setScene(scene2);
+                stage.show();
+            } else {
+                //Error in IP Address
+                message = "there is error in your IP Address";
+                ipDialog.setHeaderText(message);
+                ipDialog.show();
+
+            }
+        });
+
         //button offline hytl3 3la 2 players
         offline.setOnAction((Action) -> {
-           Parent root2 = new SelectPlayersNo(stage);
-          Scene scene2 = new Scene(root2);
-          stage.setScene(scene2);
-          stage.show();  
+            Parent root2 = new SelectPlayersNo(stage);
+            Scene scene2 = new Scene(root2);
+            stage.setScene(scene2);
+            stage.show();
         });
-        
+
         online.setOnAction((Action) -> {
-           Parent root2 = new FXMLSelection(stage);
-          Scene scene2 = new Scene(root2);
-          stage.setScene(scene2);
-          stage.show();  
+            ipDialog.show();
         });
-}
+
+        exit.setOnAction((event) -> {
+            System.exit(0);
+            Platform.exit();
+
+        });
+    }
+
+    private boolean checkIPAddress(String ipAddress) {
+        boolean resulat = false;
+        if (ipAddress != null) {
+            String IPPattern = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
+            IPPattern = IPPattern + "\\." + IPPattern + "\\." + IPPattern + "\\." + IPPattern;
+            Pattern pattern = Pattern.compile(IPPattern);
+            Matcher matcher = pattern.matcher(ipAddress);
+            if (matcher.matches()) {
+                resulat = true;
+            }
+        }
+
+        return resulat;
+    }
 }
