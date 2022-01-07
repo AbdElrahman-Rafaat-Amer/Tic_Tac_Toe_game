@@ -1,8 +1,10 @@
 package tic_tac_toe_game;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -130,21 +132,28 @@ public  class FXMLSignUpp extends AnchorPane {
                                 player.setPassword(passwordInput.getText());
                                 player.setId(++id);
                                 player.SetTotalScoore(0);
+                                try {
                                 msg = player.getEmail().concat(" ! "+player.getUserName()+" ! "+player.getPassword());
-                                
                                 Start.printStream.println(msg);
-                                //if(DAO.SignUp(player)==1)
-                                //{
-                                    System.out.println("Succusseful signup");
-                                    Parent root2 = new FXMLSignIn(stage);
-                                    Scene scene2 = new Scene(root2);
-                                    stage.setScene(scene2);
-                                    stage.show();
-                                //}
-                                //else
-                                //{
-                                    //new Alert(Alert.AlertType.ERROR, "UnSuccusseful signup").show();
-                                //}    
+                                String reply = Start.dataInputStream.readLine();
+                                if(reply.equals("true")){
+                                    Platform.runLater(() -> {
+                                        System.out.println("Succusseful signup");
+                                        Parent root2 = new FXMLSignIn(stage);
+                                        Scene scene2 = new Scene(root2);
+                                        stage.setScene(scene2);
+                                        stage.show();
+                                    });
+                                }
+                                else
+                                {
+                                    Platform.runLater(() -> {
+                                         new Alert(Alert.AlertType.ERROR, "Sorry, this email already exists").show();
+                                    });
+                                }    
+                                } catch (IOException ex) {
+                                    Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             }
                             else
                                 {

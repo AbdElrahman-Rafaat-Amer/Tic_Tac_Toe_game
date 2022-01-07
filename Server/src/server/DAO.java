@@ -68,11 +68,11 @@ public class DAO {
     
     
     // to insert player un player table .. return 1 if insertion done and 0 if insertion undone
-        static int SignUp(Player dto) throws SQLException
+        static Boolean SignUp(Player dto) throws SQLException
         {
             //Compare email with existing emails to make sure it's not duplicated
             Statement statement;
-            int flag=1;
+            Boolean flag=true;
             Player selectedData = new Player();
             statement = con.createStatement();
              String QueryString = new String("select email from Player"); 
@@ -81,8 +81,9 @@ public class DAO {
             { 
                 if(resultSet.getString(1).compareTo(dto.getEmail())==0)
                 {
-                    flag = 0;
-                    new Alert(Alert.AlertType.ERROR, "Sorry, this email already exists").show();
+                    flag = false;
+                    return flag;
+                    //new Alert(Alert.AlertType.ERROR, "Sorry, this email already exists").show();
                 }
             }
             String QueryString1 = new String("select max(id) from Player"); 

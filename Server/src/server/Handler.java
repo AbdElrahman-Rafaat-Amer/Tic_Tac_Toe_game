@@ -21,16 +21,16 @@ import javafx.scene.control.Alert;
  */
 public class Handler extends Thread {
 
-    DataInputStream dataInputStream;
-    PrintStream printStream;
+    static DataInputStream dataInputStream;
+    static PrintStream printStream;
     static Vector<Handler> clientsVector = new Vector<Handler>();
     int x = 0;
 
     public Handler(Socket s) //Constructor
     {
         try {
-            dataInputStream = new DataInputStream(s.getInputStream());
-            printStream = new PrintStream(s.getOutputStream());
+             dataInputStream = new DataInputStream(s.getInputStream());
+             printStream = new PrintStream(s.getOutputStream());
             Handler.clientsVector.add(this);
             start();
         } catch (IOException ex) {
@@ -42,34 +42,27 @@ public class Handler extends Thread {
         while (true) {
             try {
                 String msg = dataInputStream.readLine();
-                sendMessageToSender(msg);
+                
                 String[] output = new String[3];
 
                 String[] str = msg.split(" ! ");
                 Player player = new Player();
-                /*if (str.length == 2) {
-                    try {
-                        if (!DAO.checkLogin(str[0], str[1])) {
-                            new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
-                        }
-
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } else {*/
-                if (str.length == 3) {
-                    player.setEmail(str[0]);
-                    player.setUserName(str[1]);
-                    player.setPassword(str[2]);
-                    try {
-                        if (DAO.SignUp(player) != 1) {
-                            new Alert(Alert.AlertType.ERROR, "UnSuccusseful signup").show();
-                        }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+                if (str.length == 1)
+                {
+                    sendMessageToSender(msg);
+                } 
+                else {
+                    if (str.length == 3) {
+                        player.setEmail(str[0]);
+                        player.setUserName(str[1]);
+                        player.setPassword(str[2]);
+                        try {
+                                Handler.printStream.println(DAO.SignUp(player));
+                            } catch (SQLException ex) {
+                                Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                     }
                 }
-                //}
             } catch (IOException ex) {
                 try {
                     dataInputStream.close();
