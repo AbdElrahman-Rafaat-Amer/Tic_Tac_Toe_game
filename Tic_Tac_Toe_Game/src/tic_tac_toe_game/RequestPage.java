@@ -1,7 +1,8 @@
 package tic_tac_toe_game;
 
+
 import java.io.File;
-import java.sql.SQLException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -45,8 +46,10 @@ public class RequestPage extends BorderPane {
     private Scene currentScene;
     protected static String email;
     MediaView mediaView;
+    String name, score;
 
     public RequestPage(Stage stage) {
+
         this.stage = stage;
         flowPane = new FlowPane();
         playerNameLabel = new Label();
@@ -57,6 +60,10 @@ public class RequestPage extends BorderPane {
         label = new Label();
         listRequests = new ListView();
         listAvailablePlayers = new ListView();
+
+      //  Platform.runLater(() -> {
+            retrivePlayerInformation();
+        //});
 
         ObservableList<String> sendList = FXCollections.observableArrayList("Player1", "Player2", "Player3", "Player4", "Player5", "Player6");
         listRequests.setItems(sendList);
@@ -136,24 +143,22 @@ public class RequestPage extends BorderPane {
         playerNameLabel.setAlignment(javafx.geometry.Pos.CENTER);
         playerNameLabel.setPrefHeight(51.0);
         playerNameLabel.setPrefWidth(144.0);
+        playerNameLabel.setText(name);
 
-        Player player;
-        String score = "0";
-        //try {
-            //player = DAO.retriveInformation(email);
-            //String name = player.getUserName();
-            //playerNameLabel.setText(name);
-            //score = player.getTootalScoore() + "";
-        //} catch (SQLException ex) {
-          //  Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
-        //}
+
+        /*try {
+            player = DAO.retriveInformation(email);
+            String name = player.getUserName();
+            playerNameLabel.setText(name);
+            score = player.getTootalScoore() + "";
+        } catch (SQLException ex) {
+            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
         // the name will change according to the player name when he will login or signup
-
         scoreLabel.setAlignment(javafx.geometry.Pos.CENTER);
         scoreLabel.setPrefHeight(47.0);
         scoreLabel.setPrefWidth(166.0);
         // the name will bring the score according to the player from database
-
         scoreLabel.setText(score);
 
         FlowPane.setMargin(scoreLabel, new Insets(0.0, 0.0, 0.0, 50.0));
@@ -221,5 +226,17 @@ public class RequestPage extends BorderPane {
         anchorPane.getChildren().add(listRequests);
         anchorPane.getChildren().add(listAvailablePlayers);
 
+    }
+
+    void retrivePlayerInformation() {
+        try {
+            Start.printStream.println(":" + email);
+            String reply = Start.dataInputStream.readLine();
+            int index = reply.indexOf(":");
+            name = reply.substring(0, index);
+            score = reply.substring(index + 1);
+        } catch (IOException ex) {
+            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

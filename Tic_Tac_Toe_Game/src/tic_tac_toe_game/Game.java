@@ -12,100 +12,95 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import static tic_tac_toe_game.GameScene.winner;
 
 /**
  *
  * @author Abdo
  */
 public class Game {
-    
+
     static class NextMove {
-        
+
         public int row, col;
     }
-    
+
     public static Boolean isMovesLeft(Label[][] labels) {
         boolean resualt = false;
         for (Label[] row : labels) {
             for (Label cell : row) {
-                if (cell.getText().isEmpty() || cell.getText().equals("")) {
+                if (cell.getText().equals("")) {
                     resualt = true;
                 }
             }
         }
         return resualt;
-        
+
     }
-    
-    protected static boolean checkWinner(Label[][] labels) {
-        boolean isDraw = true;
+
+    public static int checkWinner(Label[][] labels) {
+        int score = 0;
         for (int row = 0; row < 3; row++) {
             if (labels[row][0].getText().equals(labels[row][1].getText()) && labels[row][1].getText().equals(labels[row][2].getText())) {
                 switch (labels[row][0].getText()) {
                     case "X":
-                        isDraw = false;
-                        winner = "COMPUTER WIN";
-                        //goToWinnerPage(stage);
+                        score = 3;
+                         ResultScene.winner = "COMPUTER WIN";
                         break;
                     case "O":
-                        isDraw = false;
-                        winner = "YOU WIN";
-                        // goToWinnerPage(stage);
+                        score = -3;
+                         ResultScene.winner = "YOU WIN";
                         break;
+
                 }
             }
         }
-        
+
         for (int col = 0; col < 3; col++) {
             if (labels[0][col].getText().equals(labels[1][col].getText()) && labels[1][col].getText().equals(labels[2][col].getText())) {
                 switch (labels[0][col].getText()) {
+
                     case "X":
-                        isDraw = false;
-                        winner = "COMPUTER WIN";
-                        //goToWinnerPage(stage);
+                        score = 3;
+                         ResultScene.winner = "COMPUTER WIN";
                         break;
                     case "O":
-                        isDraw = false;
-                        winner = "YOU WIN";
-                        // goToWinnerPage(stage);
+                        score = -3;
+                         ResultScene.winner = "YOU WIN";
                         break;
                 }
             }
         }
-        
+
         if (labels[0][0].getText().equals(labels[1][1].getText()) && labels[1][1].getText().equals(labels[2][2].getText())) {
             switch (labels[0][0].getText()) {
+
                 case "X":
-                    isDraw = false;
-                    winner = "COMPUTER WIN";
-                    //goToWinnerPage(stage);
+                    score = 3;
+                     ResultScene.winner = "COMPUTER WIN";
                     break;
                 case "O":
-                    isDraw = false;
-                    winner = "YOU WIN";
-                    // goToWinnerPage(stage);
+                    score = -3;
+                     ResultScene.winner = "YOU WIN";
                     break;
             }
         }
-        
+
         if (labels[0][2].getText().equals(labels[1][1].getText()) && labels[1][1].getText().equals(labels[2][0].getText())) {
             switch (labels[0][2].getText()) {
+
                 case "X":
-                    isDraw = false;
-                    winner = "COMPUTER WIN";
-                    // goToWinnerPage(stage);
+                    score = 3;
+                     ResultScene.winner = "COMPUTER WIN";
                     break;
                 case "O":
-                    isDraw = false;
-                    winner = "YOU WIN";
-                    //goToWinnerPage(stage);
+                    score = -3;
+                     ResultScene.winner = "YOU WIN";
                     break;
             }
         }
-        return isDraw;
+        return score;
     }
-    
+
     static void goToWinnerPage(Stage stage) {
         Parent root2;
         try {

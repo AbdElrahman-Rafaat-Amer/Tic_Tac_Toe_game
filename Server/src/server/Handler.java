@@ -19,62 +19,102 @@ import javafx.scene.control.Alert;
  *
  * @author Esraa
  */
-public class Handler extends Thread{
+public class Handler extends Thread {
+
     DataInputStream dataInputStream;
     PrintStream printStream;
     static Vector<Handler> clientsVector = new Vector<Handler>();
-        
-        public Handler(Socket s)        //Constructor
-        {
+    int x = 0;
+
+    public Handler(Socket s) //Constructor
+    {
+        try {
+            dataInputStream = new DataInputStream(s.getInputStream());
+            printStream = new PrintStream(s.getOutputStream());
+            Handler.clientsVector.add(this);
+            start();
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void run() {
+        while (true) {
             try {
-                dataInputStream = new DataInputStream(s.getInputStream());
-                printStream = new PrintStream(s.getOutputStream());
-                Handler.clientsVector.add(this);
-                start();
-            } catch (IOException ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        public void run()
-        {
-            while(true)
-            {
-                try {
-                    String msg = dataInputStream.readLine();
-                    String[] output= new String[3];
-                    
-                    String[] str=msg.split(" ! ");
-                    Player player = new Player();
-                    if(str.length==2)
-                    {
-                        try {
-                            if(!DAO.checkLogin(str[0],str[1]))
-                            {new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();}
-                            
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+                String msg = dataInputStream.readLine();
+                sendMessageToSender(msg);
+                String[] output = new String[3];
+
+                String[] str = msg.split(" ! ");
+                Player player = new Player();
+                /*if (str.length == 2) {
+                    try {
+                        if (!DAO.checkLogin(str[0], str[1])) {
+                            new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
                         }
+
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    else
-                    {
-                        if(str.length==3)
-                        {
-                            player.setEmail(str[0]);
-                            player.setUserName(str[1]);
-                            player.setPassword(str[2]);
-                            try {
-                                if(DAO.SignUp(player)!=1)
-                                {
-                                    new Alert(Alert.AlertType.ERROR, "UnSuccusseful signup").show();
-                                }
-                            } catch (SQLException ex) {
-                                Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex); }
+                } else {*/
+                if (str.length == 3) {
+                    player.setEmail(str[0]);
+                    player.setUserName(str[1]);
+                    player.setPassword(str[2]);
+                    try {
+                        if (DAO.SignUp(player) != 1) {
+                            new Alert(Alert.AlertType.ERROR, "UnSuccusseful signup").show();
                         }
-                    }     
-                } catch (IOException ex) {
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                //}
+            } catch (IOException ex) {
+                try {
+                    dataInputStream.close();
+                    printStream.close();
                     Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                }  
+                } catch (IOException ex1) {
+                    Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex1);
+                }
             }
         }
-        
+    }
+
+    void sendMessageToSender(String msg) {
+        Handler ch = clientsVector.get(x);
+
+        System.out.println("X = " + x);
+        if (msg.charAt(0) == ':') {
+            try {
+                // retrive data
+                Player player = new Player();
+                player = DAO.retriveInformation(msg.substring(1));
+                String information = player.getUserName() + ":" + player.getTootalScoore();
+                ch.printStream.println(information);
+                System.err.println("information = " + information);
+            } catch (SQLException ex) {
+                Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            //log in
+            int index = msg.indexOf(":");
+            String email = msg.substring(0, index);
+            String password = msg.substring(index + 1);
+
+            try {
+                boolean resualt = DAO.checkLogin(email, password);
+                ch.printStream.println(resualt);
+                System.err.println("resualt = " + resualt);
+            } catch (SQLException ex) {
+                Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        System.out.println("clientsVector = " + clientsVector);
+
+    }
+
 }

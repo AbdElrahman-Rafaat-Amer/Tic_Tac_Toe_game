@@ -80,14 +80,13 @@ public class Start extends Pane {
             if (isRight) {
                 //Ip right
                 System.err.println("okButton");
-                try{
-            server = new Socket(IPAdress,5005);
-            printStream = new PrintStream(server.getOutputStream());
-            dataInputStream = new DataInputStream(server.getInputStream());
-            } catch (IOException ex) {
-                Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                
+                try {
+                    server = new Socket(IPAdress, 5005);
+                    printStream = new PrintStream(server.getOutputStream());
+                    dataInputStream = new DataInputStream(server.getInputStream());
+                } catch (IOException ex) {
+                    Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 Parent root2 = new FXMLSelection(stage);
                 Scene scene2 = new Scene(root2);
                 stage.setScene(scene2);

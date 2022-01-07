@@ -12,7 +12,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public  class Servertictactoe extends AnchorPane {
+public class Servertictactoe extends AnchorPane {
 
     protected final ToggleButton startServer;
     protected final CategoryAxis categoryAxis;
@@ -20,7 +20,7 @@ public  class Servertictactoe extends AnchorPane {
     protected final AreaChart areaChart;
     private Stage mystage;
     ServerSocket serverSocket;
-    
+
     public Servertictactoe(Stage stage) {
 
         startServer = new ToggleButton();
@@ -50,20 +50,25 @@ public  class Servertictactoe extends AnchorPane {
 
         getChildren().add(startServer);
         getChildren().add(areaChart);
-        
-        if(startServer.getText()=="Server ON")
-        {
+
+        if (startServer.getText() == "Server ON") {
             startServer.setText("Server OFF");
-            Socket socket;
-            try {
-                serverSocket = new ServerSocket(5005);
-                while(true)
-                {
-                    socket = serverSocket.accept();
-                    new Handler(socket);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Socket socket;
+                    try {
+                        serverSocket = new ServerSocket(5005);
+                        while (true) {
+                            socket = serverSocket.accept();
+                            new Handler(socket);
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);} 
+            }).start();
+
         }
 
     }

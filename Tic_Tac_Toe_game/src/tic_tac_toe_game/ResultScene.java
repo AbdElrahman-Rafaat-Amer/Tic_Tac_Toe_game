@@ -22,6 +22,7 @@ public class ResultScene extends BorderPane {
     protected final MediaView videoView;
     private MediaPlayer mediaPlayer;
     private Stage stage;
+    protected static String winner;
 
     public ResultScene(Stage stage) throws MalformedURLException {
         this.stage = stage;
@@ -50,7 +51,7 @@ public class ResultScene extends BorderPane {
         resultText.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         resultText.setStrokeWidth(0.0);
         resultText.setTextAlignment(TextAlignment.CENTER);
-        resultText.setText(GameScene.winner);
+        resultText.setText(winner);
         resultText.setWrappingWidth(170.6689453125);
         borderPane.setCenter(resultText);
         setTop(borderPane);
