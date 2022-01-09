@@ -1,10 +1,8 @@
 package tic_tac_toe_game;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -19,7 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public  class FXMLSignUpp extends AnchorPane {
+public class FXMLSignUpp extends AnchorPane {
 
     protected final Pane pane1;
     protected final Pane pane2;
@@ -34,8 +32,8 @@ public  class FXMLSignUpp extends AnchorPane {
     protected static int id = 0;
     protected static String message;
     String msg;
-    
-    public FXMLSignUpp( Stage stage) {
+
+    public FXMLSignUpp(Stage stage) {
 
         pane1 = new Pane();
         pane2 = new Pane();
@@ -105,78 +103,58 @@ public  class FXMLSignUpp extends AnchorPane {
         pane1.getChildren().add(pane2);
         getChildren().add(pane1);
 
-        backButton.setOnAction((Action)->{
+        backButton.setOnAction((Action) -> {
             Parent root2 = new FXMLSelection(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
         });
-        
-        
-        confirmButton.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+
+        confirmButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent event) 
-            {
+            public void handle(ActionEvent event) {
                 //try {
-                if(UsernameInput.getText().matches("[\\S]+{1,}")&&EmailInput.getText().matches("[\\S]+{1,}")&&passwordInput.getText().matches("[\\S]+{1,}")&&confirmpassInput.getText().matches("[\\S]+{1,}"))
-                {
+                if (UsernameInput.getText().matches("[\\S]+{1,}") && EmailInput.getText().matches("[\\S]+{1,}") && passwordInput.getText().matches("[\\S]+{1,}") && confirmpassInput.getText().matches("[\\S]+{1,}")) {
                     //set values of DTO "player" 
-                    if(UsernameInput.getText().matches("([a-zA-Z0-9]{2,})"))
-                    {
+                    if (UsernameInput.getText().matches("([a-zA-Z0-9]{2,})")) {
                         player.setUserName(UsernameInput.getText());
-                        if(EmailInput.getText().matches("^[\\w][\\w!#$%&'*+-/=?^_`{|]+@{1}[\\w]+\\.{1}[\\w]{2,4}$"))
-                        {
+                        if (EmailInput.getText().matches("^[\\w][\\w!#$%&'*+-/=?^_`{|]+@{1}[\\w]+\\.{1}[\\w]{2,4}$")) {
                             player.setEmail(EmailInput.getText());
-                            if(passwordInput.getText().compareTo(confirmpassInput.getText())==0 )
-                            {
+                            if (passwordInput.getText().compareTo(confirmpassInput.getText()) == 0) {
                                 player.setPassword(passwordInput.getText());
                                 player.setId(++id);
                                 player.SetTotalScoore(0);
-                                try {
-                                msg = player.getEmail().concat(" ! "+player.getUserName()+" ! "+player.getPassword());
+                                msg = player.getEmail().concat(" ! " + player.getUserName() + " ! " + player.getPassword());
+
                                 Start.printStream.println(msg);
-                                String reply = Start.dataInputStream.readLine();
-                                if(reply.equals("true")){
-                                    Platform.runLater(() -> {
-                                        System.out.println("Succusseful signup");
-                                        Parent root2 = new FXMLSignIn(stage);
-                                        Scene scene2 = new Scene(root2);
-                                        stage.setScene(scene2);
-                                        stage.show();
-                                    });
-                                }
-                                else
-                                {
-                                    Platform.runLater(() -> {
-                                         new Alert(Alert.AlertType.ERROR, "Sorry, this email already exists").show();
-                                    });
-                                }    
-                                } catch (IOException ex) {
-                                    Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
-                                }
+                                //if(DAO.SignUp(player)==1)
+                                //{
+                                System.out.println("Succusseful signup");
+                                Parent root2 = new FXMLSignIn(stage);
+                                Scene scene2 = new Scene(root2);
+                                stage.setScene(scene2);
+                                stage.show();
+                                //}
+                                //else
+                                //{
+                                //new Alert(Alert.AlertType.ERROR, "UnSuccusseful signup").show();
+                                //}    
+                            } else {
+                                new Alert(Alert.AlertType.ERROR, "Password and confirm password didn't match").show();
                             }
-                            else
-                                {
-                                    new Alert(Alert.AlertType.ERROR, "Password and confirm password didn't match").show();
-                                }
+                        } else {
+                            new Alert(Alert.AlertType.ERROR, "Please enter valid email").show();
                         }
-                         else
-                            {
-                                new Alert(Alert.AlertType.ERROR, "Please enter valid email").show();
-                            }
+                    } else {
+                        new Alert(Alert.AlertType.ERROR, "Please enter valid username").show();
                     }
-                    else
-                        {
-                            new Alert(Alert.AlertType.ERROR, "Please enter valid username").show();
-                        }
-                    }
-                else
-                {
+                } else {
                     new Alert(Alert.AlertType.ERROR, "Fill all fields, please").show();
                 }
                 //} catch (SQLException ex) {
-                   // new Alert(Alert.AlertType.ERROR, message).show();}
-            }                    
-        });  
+                // new Alert(Alert.AlertType.ERROR, message).show();}
+            }
+        });
     }
+
 }

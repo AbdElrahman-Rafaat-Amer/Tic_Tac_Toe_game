@@ -1,10 +1,10 @@
 package tic_tac_toe_game;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -46,7 +46,7 @@ public class RequestPage extends BorderPane {
     private Scene currentScene;
     protected static String email;
     MediaView mediaView;
-    String name, score;
+    String name = "Player", score = "score";
 
     public RequestPage(Stage stage) {
 
@@ -60,11 +60,11 @@ public class RequestPage extends BorderPane {
         label = new Label();
         listRequests = new ListView();
         listAvailablePlayers = new ListView();
+        name = FXMLSignIn.playerName;
+        score = FXMLSignIn.playerScore;
 
-      //  Platform.runLater(() -> {
-            retrivePlayerInformation();
-        //});
-
+        playerNameLabel.setText(name);
+        scoreLabel.setText(score);
         ObservableList<String> sendList = FXCollections.observableArrayList("Player1", "Player2", "Player3", "Player4", "Player5", "Player6");
         listRequests.setItems(sendList);
 
@@ -118,6 +118,7 @@ public class RequestPage extends BorderPane {
                             });
 
                             //if there is  response by accept the invite will end the vedio and go to play
+                            //go to game online
                             //if there is  response by refus the invite will end the vedio and go back to the current page to send another request 
                         });
 
@@ -143,18 +144,9 @@ public class RequestPage extends BorderPane {
         playerNameLabel.setAlignment(javafx.geometry.Pos.CENTER);
         playerNameLabel.setPrefHeight(51.0);
         playerNameLabel.setPrefWidth(144.0);
+        // the name will change according to the player name when he will login or signup
         playerNameLabel.setText(name);
 
-
-        /*try {
-            player = DAO.retriveInformation(email);
-            String name = player.getUserName();
-            playerNameLabel.setText(name);
-            score = player.getTootalScoore() + "";
-        } catch (SQLException ex) {
-            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        // the name will change according to the player name when he will login or signup
         scoreLabel.setAlignment(javafx.geometry.Pos.CENTER);
         scoreLabel.setPrefHeight(47.0);
         scoreLabel.setPrefWidth(166.0);
@@ -225,18 +217,6 @@ public class RequestPage extends BorderPane {
         anchorPane.getChildren().add(label);
         anchorPane.getChildren().add(listRequests);
         anchorPane.getChildren().add(listAvailablePlayers);
-
     }
 
-    void retrivePlayerInformation() {
-        try {
-            Start.printStream.println(":" + email);
-            String reply = Start.dataInputStream.readLine();
-            int index = reply.indexOf(":");
-            name = reply.substring(0, index);
-            score = reply.substring(index + 1);
-        } catch (IOException ex) {
-            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 }

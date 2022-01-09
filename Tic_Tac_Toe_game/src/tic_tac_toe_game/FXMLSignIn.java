@@ -1,8 +1,11 @@
 package tic_tac_toe_game;
 
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.StringTokenizer;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -23,8 +26,10 @@ public class FXMLSignIn extends AnchorPane {
     protected final Button buttonConSingIn;
     protected final Button backButton;
     private Stage stage;
-    private String reply;
+    private String realReply = "";
     private String email, password;
+    static String playerName;
+    static String playerScore;
 
     public FXMLSignIn(Stage stage) {
         this.stage = stage;
@@ -36,6 +41,42 @@ public class FXMLSignIn extends AnchorPane {
         buttonConSingIn = new Button();
         backButton = new Button();
 
+        reciveData();
+        /* new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        String reply = dataInputStream.readLine();
+                        System.out.println("Reply >>>>>>>>> " + reply);
+                        realReply = reply;
+                        System.out.println("realReply >>>>>>>>> " + realReply);
+                         Platform.runLater(() -> {
+                            if (realReply.equals("true")) {
+                                Platform.runLater(() -> {
+                                    RequestPage.email = email;
+                                    Parent root2 = new RequestPage(stage);
+                                    Scene scene2 = new Scene(root2);
+                                    stage.setScene(scene2);
+                                    stage.show();
+                                });
+                            } else {
+                                Platform.runLater(() -> {
+                                    new Alert(Alert.AlertType.ERROR, "Password or email is wrong\n" + realReply).show();
+                                });
+                            }
+                        });
+                    } catch (IOException ex) {
+                        closeTheConnection();
+                        Platform.exit();
+                        System.exit(0);
+                        new Alert(Alert.AlertType.ERROR, "Error in recieve Data\n" + ex.getMessage()).show();
+                        System.out.println("-------------------------------Error in recieve Data-------------------------------");
+                        // Logger.getLogger(FXMLSignIn.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }).start();*/
         setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
@@ -72,100 +113,19 @@ public class FXMLSignIn extends AnchorPane {
         buttonConSingIn.setPrefHeight(31.0);
         buttonConSingIn.setPrefWidth(91.0);
         buttonConSingIn.setText("CONFIRM");
-        buttonConSingIn.setOnAction((ActionEvent event) -> {
-            String email = emailSignIn.getText().trim();
-            String password = passwordSIgnIn.getText().trim();
-            //try {
-            if (email.matches("[\\S]+{1,}") && password.matches("[\\S]+{1,}")) {
-                //  Platform.runLater(() -> {
-                //    checkLogin(email, password);
-                // });
-
-                try {
-                    String msg = email + ":" + password;
-                    Start.printStream.println(msg);
-                    String reply = Start.dataInputStream.readLine();
-                    if (reply.equals("true")) {
-                        Platform.runLater(() -> {
-                            RequestPage.email = email;
-                            Parent root2 = new RequestPage(stage);
-                            Scene scene2 = new Scene(root2);
-                            stage.setScene(scene2);
-                            stage.show();
-                        });
-
-                    } else {
-                        Platform.runLater(() -> {
-                            new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
-                        });
-                    }
-                } catch (IOException ex) {
-                    new Alert(Alert.AlertType.ERROR, "there are problem in connection").show();
-                    //Logger.getLogger(FXMLSignIn.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        buttonConSingIn.setOnAction((event) -> {
+            email = emailSignIn.getText().trim();
+            password = passwordSIgnIn.getText().trim();
+            System.out.println("email = " + email + "\t\tPassword = " + password);
+            if (!email.isEmpty() && !password.isEmpty()) {
+                String msg = email + ":" + password;
+                Start.printStream.println(msg);
+                System.out.println("msg >>>>>>>>>>>>>>>>>>>>>> " + msg);
+                System.out.println("Reply ============befotr==============" + realReply);
             } else {
                 new Alert(Alert.AlertType.ERROR, "email or passwprd can not be empty").show();
             }
-        } //catch (SQLException ex) {}}
-        );
-        /* buttonConSingIn.setOnAction((ActionEvent event) -> {
-            email = emailSignIn.getText().trim();
-            password = passwordSIgnIn.getText().trim();
-            //try {
-            if (email.matches("[\\S]+{1,}") && password.matches("[\\S]+{1,}")) {
-                //  Platform.runLater(() -> {
-                //    checkLogin(email, password);
-                // });
-                String msg = email + ":" + password;
-                Start.printStream.println(msg);
-                System.err.println("reply in button >>>>>>>>>>>>>>>>>>>>>" + reply);
-
-                if (reply.equals("true")) {
-                    Platform.runLater(() -> {
-                        RequestPage.email = email;
-                        Parent root2 = new RequestPage(stage);
-                        Scene scene2 = new Scene(root2);
-                        stage.setScene(scene2);
-                        stage.show();
-                    });
-                } else {
-                    Platform.runLater(() -> {
-                        new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
-                    });
-
-                }
-            } else {
-                Platform.runLater(() -> {
-                    new Alert(Alert.AlertType.ERROR, "email or passwprd can not be empty").show();
-                });
-
-            }
         });
-        Platform.runLater(() -> {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (true) {
-                        try {
-                            reply = Start.dataInputStream.readLine();
-                            /* if (reply.equals("true")) {
-                                RequestPage.email = email;
-                                Parent root2 = new RequestPage(stage);
-                                Scene scene2 = new Scene(root2);
-                                stage.setScene(scene2);
-                                stage.show();
-                            } else {
-                                Platform.runLater(() -> {
-                                    new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
-                                });
-                            }
-                        } catch (IOException ex) {
-                            new Alert(Alert.AlertType.ERROR, "there are problem in connection").show();
-                        }
-                    }
-                }
-            }).start();
-        });*/
         backButton.setMnemonicParsing(false);
         backButton.setText("Back");
 
@@ -179,77 +139,77 @@ public class FXMLSignIn extends AnchorPane {
 
         backButton.setOnAction(
                 (Action) -> {
-
                     Parent root2 = new FXMLSelection(stage);
                     Scene scene2 = new Scene(root2);
                     stage.setScene(scene2);
                     stage.show();
                 }
         );
-
     }
-    /*
-    void checkLogin(String email, String password) {
-        
-        //while (true) {
 
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String msg = email + ":" + password;
-                    Start.printStream.println(msg);
-                    final String reply = Start.dataInputStream.readLine();
-                    setReply(reply);
-                } catch (IOException ex) {
-                    new Alert(Alert.AlertType.ERROR, "there are problem in connection").show();
-                    //Logger.getLogger(FXMLSignIn.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-               
-        if (!reply.equals("") && !reply.isEmpty() && reply.equals("true")) {
-            RequestPage.email = email;
-            Parent root2 = new RequestPage(stage);
-            Scene scene2 = new Scene(root2);
-            stage.setScene(scene2);
-            stage.show();
-        } else {
-            new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
-        }
-
-        //}
+    void reciveData() {
         new Thread(new Runnable() {
-
             @Override
             public void run() {
                 while (true) {
                     try {
-                        String msg = email + ":" + password;
-                        Start.printStream.println(msg);
                         String reply = Start.dataInputStream.readLine();
-                        if (reply.equals("true")) {
-                            RequestPage.email = email;
-                            Parent root2 = new RequestPage(stage);
-                            Scene scene2 = new Scene(root2);
-                            stage.setScene(scene2);
-                            stage.show();
-                        } else {
-                            new Alert(Alert.AlertType.ERROR, "Password or email is wrong").show();
-                        }
+                        System.out.println("Reply >>>>>>>>> " + reply);
+                        realReply = reply;
+                        System.out.println("realReply >>>>>>>>> " + realReply);
+                        Platform.runLater(() -> {
+                            if (!realReply.equals("false")) {
+                                Platform.runLater(() -> {
+                                    divideReply(realReply);
+                                    RequestPage.email = email;
+                                    Parent root2 = new RequestPage(stage);
+                                    Scene scene2 = new Scene(root2);
+                                    stage.setScene(scene2);
+                                    stage.show();
+                                });
+                            } else {
+                                //Platform.runLater(() -> {
+                                new Alert(Alert.AlertType.ERROR, "Password or email is wrong\n" + realReply).show();
+                                //});
+                            }
+                        });
                     } catch (IOException ex) {
-                        new Alert(Alert.AlertType.ERROR, "there are problem in connection").show();
-                        //Logger.getLogger(FXMLSignIn.class.getName()).log(Level.SEVERE, null, ex);
+                        closeTheConnection();
+                        Platform.exit();
+                        System.exit(0);
+                        new Alert(Alert.AlertType.ERROR, "Error in recieve Data\n" + ex.getMessage()).show();
+                        System.out.println("-------------------------------Error in recieve Data-------------------------------");
+                        // Logger.getLogger(FXMLSignIn.class.getName()).log(Level.SEVERE, null, ex);
                     }
-
                 }
             }
-
         }).start();
- /* }
+    }
 
-    void setReply(String re) {
-       reply = re;
-        
-    }*/
+    public void closeTheConnection() {
+
+        try {
+            Start.printStream.close();
+            Start.dataInputStream.close();
+            Start.server.close();
+        } catch (IOException ex) {
+            new Alert(Alert.AlertType.ERROR, "Error in close Connection\n" + ex.getMessage()).show();
+        }
+
+    }
+
+    public void divideReply(String reply) {
+
+        StringTokenizer stringTokenizer = new StringTokenizer(reply, " ");
+
+        /*while (stringTokenizer.hasMoreTokens()) {
+            
+            
+        }*/
+        String replString = stringTokenizer.nextToken();
+        playerName = stringTokenizer.nextToken();
+        playerScore = stringTokenizer.nextToken();
+
+        System.out.println(replString + "\t\t\t" + playerName + "\t\t\t" + playerScore + "\t\t\t");
+    }
 }

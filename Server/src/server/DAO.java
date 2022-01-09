@@ -68,7 +68,7 @@ public class DAO {
     
     
     // to insert player un player table .. return 1 if insertion done and 0 if insertion undone
-        static Boolean SignUp(Player dto) throws SQLException
+        static boolean SignUp(Player dto) throws SQLException
         {
             //Compare email with existing emails to make sure it's not duplicated
             Statement statement;

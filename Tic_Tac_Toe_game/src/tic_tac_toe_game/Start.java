@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
@@ -33,6 +34,7 @@ public class Start extends Pane {
     static PrintStream printStream;
 
     public Start(Stage stage) {
+
         mystage = stage;
         online = new Button();
         offline = new Button();
@@ -79,18 +81,20 @@ public class Start extends Pane {
             isRight = checkIPAddress(IPAdress);
             if (isRight) {
                 //Ip right
-                System.err.println("okButton");
                 try {
                     server = new Socket(IPAdress, 5005);
                     printStream = new PrintStream(server.getOutputStream());
                     dataInputStream = new DataInputStream(server.getInputStream());
+                    Parent root2 = new FXMLSelection(stage);
+                    Scene scene2 = new Scene(root2);
+                    stage.setScene(scene2);
+                    stage.show();
                 } catch (IOException ex) {
-                    Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+                    new Alert(Alert.AlertType.ERROR, "There are erro in connection to server\nPlease ensure the server is running").show();
+                    System.out.println("in catch in start Page for try of assign socket and dataprint stream");
+                    //Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                Parent root2 = new FXMLSelection(stage);
-                Scene scene2 = new Scene(root2);
-                stage.setScene(scene2);
-                stage.show();
+
             } else {
                 //Error in IP Address
                 message = "there is error in your IP Address";

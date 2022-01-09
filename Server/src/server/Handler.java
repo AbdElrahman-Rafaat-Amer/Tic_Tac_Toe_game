@@ -21,93 +21,138 @@ import javafx.scene.control.Alert;
  */
 public class Handler extends Thread {
 
-    static DataInputStream dataInputStream;
-    static PrintStream printStream;
+    DataInputStream dataInputStream;
+    PrintStream printStream;
     static Vector<Handler> clientsVector = new Vector<Handler>();
     int x = 0;
+    boolean flag = true;
+    boolean isRemoved = true;
+    int removed;
 
     public Handler(Socket s) //Constructor
     {
         try {
-             dataInputStream = new DataInputStream(s.getInputStream());
-             printStream = new PrintStream(s.getOutputStream());
+            dataInputStream = new DataInputStream(s.getInputStream());
+            printStream = new PrintStream(s.getOutputStream());
             Handler.clientsVector.add(this);
+            x = clientsVector.size() - 1;
             start();
+            /* System.out.println("before start");
+                new Thread() {
+                    public void run() {
+                        System.out.println("in start");
+                        while (true) {
+                            try {
+                                String message = dataInputStream.readLine();
+                                sendMessageToSender(message);
+                            } catch (IOException ex) {
+                                try {
+                                    System.out.println("remove");
+                                    dataInputStream.close();
+                                    printStream.close();
+                                    clientsVector.remove(this);
+                                    // x--;
+                                    isRemoved = !isRemoved;
+                                    break;
+                                } catch (IOException ex1) {
+                                    //Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex1);
+                                    new Alert(Alert.AlertType.ERROR, "Error in read dataInputStream in run method server\n"
+                                            + ex1.getMessage()).show();
+                                }
+
+                            }
+                        }
+                    }
+                }.start();*/
         } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            new Alert(Alert.AlertType.ERROR, "Error in open connection in server\n"
+                    + ex.getMessage()).show();
+            //Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     public void run() {
+        System.out.println("in start");
         while (true) {
             try {
-                String msg = dataInputStream.readLine();
-                
+                String message = dataInputStream.readLine();
                 String[] output = new String[3];
-
-                String[] str = msg.split(" ! ");
+                String[] str = message.split(" ! ");
                 Player player = new Player();
-                if (str.length == 1)
-                {
-                    sendMessageToSender(msg);
-                } 
-                else {
+                System.out.println("str length >>>>>>>>>>>> " + str.length);
+                if (str.length == 1) {
+                    System.out.println("will go to sendMessageToSender to login");
+                    sendMessageToSender(message);
+                } else {
                     if (str.length == 3) {
+                        System.out.println("will go to signup to signup");
                         player.setEmail(str[0]);
                         player.setUserName(str[1]);
                         player.setPassword(str[2]);
                         try {
-                                Handler.printStream.println(DAO.SignUp(player));
-                            } catch (SQLException ex) {
-                                Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                            Handler handler = clientsVector.get(x);
+                            DAO.SignUp(player);
+                            //handler.printStream.println(DAO.SignUp(player));
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
+
             } catch (IOException ex) {
                 try {
+                    System.out.println("remove");
                     dataInputStream.close();
                     printStream.close();
-                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                    clientsVector.remove(this);
+                    // x--;
+                    isRemoved = !isRemoved;
+                    break;
                 } catch (IOException ex1) {
-                    Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex1);
+                    //Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex1);
+                    new Alert(Alert.AlertType.ERROR, "Error in read dataInputStream in run method server\n"
+                            + ex1.getMessage()).show();
                 }
+
             }
         }
     }
 
-    void sendMessageToSender(String msg) {
-        Handler ch = clientsVector.get(x);
-
-        System.out.println("X = " + x);
-        if (msg.charAt(0) == ':') {
-            try {
-                // retrive data
-                Player player = new Player();
-                player = DAO.retriveInformation(msg.substring(1));
-                String information = player.getUserName() + ":" + player.getTootalScoore();
-                ch.printStream.println(information);
-                System.err.println("information = " + information);
-            } catch (SQLException ex) {
-                Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            //log in
-            int index = msg.indexOf(":");
-            String email = msg.substring(0, index);
-            String password = msg.substring(index + 1);
-
-            try {
-                boolean resualt = DAO.checkLogin(email, password);
-                ch.printStream.println(resualt);
-                System.err.println("resualt = " + resualt);
-            } catch (SQLException ex) {
-                Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+    /*void sendToAll() {
+        for (Handler h : clientsVector) {
+            new Thread(h.getName());
         }
+    }*/
+    void sendMessageToSender(String msg) {
+        System.out.println("X from sendMessageToSender = " + x);
+        Handler handler = clientsVector.get(x);
+        System.out.println("handler from sendMessageToSender >>>>>>>>>> " + handler);
 
+        System.out.println("Message >>>>>>>> " + msg);
+
+        int index = msg.indexOf(':');
+        System.out.println("index >>>>>>>>>>>>> " + index);
+        String email = msg.substring(0, index);
+        String password = msg.substring(index + 1);
+
+        System.out.println("eamil >>> " + email + "\t\t\tPassword >>> " + password);
+
+        try {
+            boolean resualt = DAO.checkLogin(email, password);
+            System.out.println("Resualt >>>>>>>>>>>> " + resualt);
+            if (resualt == true) {
+                //Log in Success
+                Player player = DAO.retriveInformation(email);  // retrive information of player
+                System.out.println("information >>>>>>>>> " + player.getUserName() + "\t\t" + player.getTootalScoore());
+                handler.printStream.println("true" + " " + player.getUserName() + " " + player.getTootalScoore());
+            } else {
+                //Log in Failed
+                handler.printStream.println("false");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error in sendMessageToSender in server\n" + ex.getMessage());
+        }
         System.out.println("clientsVector = " + clientsVector);
-
     }
 
 }
