@@ -30,9 +30,11 @@ public class Start extends Pane {
     private boolean isRight = false;
     private String message = "Enter your Ip Address to play online";
     static Socket server;
-    static DataInputStream dataInputStream;
-    static PrintStream printStream;
+    //DataInputStream dataInputStream;
+    //PrintStream printStream;
 
+    //public Start() {
+    //}
     public Start(Stage stage) {
 
         mystage = stage;
@@ -83,8 +85,8 @@ public class Start extends Pane {
                 //Ip right
                 try {
                     server = new Socket(IPAdress, 5005);
-                    printStream = new PrintStream(server.getOutputStream());
-                    dataInputStream = new DataInputStream(server.getInputStream());
+                    //              printStream = new PrintStream(server.getOutputStream());
+                    //            dataInputStream = new DataInputStream(server.getInputStream());
                     Parent root2 = new FXMLSelection(stage);
                     Scene scene2 = new Scene(root2);
                     stage.setScene(scene2);

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,6 +32,10 @@ public class FXMLSignIn extends AnchorPane {
     private String email, password;
     static String playerName;
     static String playerScore;
+    Start start;
+    DataInputStream dataInputStream;
+    PrintStream printStream;
+    Thread thread;
 
     public FXMLSignIn(Stage stage) {
         this.stage = stage;
@@ -40,6 +46,14 @@ public class FXMLSignIn extends AnchorPane {
         passwordSIgnIn = new TextField();
         buttonConSingIn = new Button();
         backButton = new Button();
+        start = new Start(stage);
+
+        try {
+            printStream = new PrintStream(Start.server.getOutputStream());
+            dataInputStream = new DataInputStream(Start.server.getInputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         reciveData();
         /* new Thread(new Runnable() {
@@ -119,7 +133,7 @@ public class FXMLSignIn extends AnchorPane {
             System.out.println("email = " + email + "\t\tPassword = " + password);
             if (!email.isEmpty() && !password.isEmpty()) {
                 String msg = email + ":" + password;
-                Start.printStream.println(msg);
+                printStream.println(msg);
                 System.out.println("msg >>>>>>>>>>>>>>>>>>>>>> " + msg);
                 System.out.println("Reply ============befotr==============" + realReply);
             } else {
@@ -148,12 +162,12 @@ public class FXMLSignIn extends AnchorPane {
     }
 
     void reciveData() {
-        new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try {
-                        String reply = Start.dataInputStream.readLine();
+                        String reply = dataInputStream.readLine();
                         System.out.println("Reply >>>>>>>>> " + reply);
                         realReply = reply;
                         System.out.println("realReply >>>>>>>>> " + realReply);
@@ -165,6 +179,7 @@ public class FXMLSignIn extends AnchorPane {
                                     Parent root2 = new RequestPage(stage);
                                     Scene scene2 = new Scene(root2);
                                     stage.setScene(scene2);
+                                     thread.stop();
                                     stage.show();
                                 });
                             } else {
@@ -183,14 +198,15 @@ public class FXMLSignIn extends AnchorPane {
                     }
                 }
             }
-        }).start();
+        });
+        thread.start();
     }
 
     public void closeTheConnection() {
 
         try {
-            Start.printStream.close();
-            Start.dataInputStream.close();
+            printStream.close();
+            dataInputStream.close();
             Start.server.close();
         } catch (IOException ex) {
             new Alert(Alert.AlertType.ERROR, "Error in close Connection\n" + ex.getMessage()).show();

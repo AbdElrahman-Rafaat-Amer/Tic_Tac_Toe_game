@@ -144,6 +144,7 @@ public class Handler extends Thread {
                 //Log in Success
                 Player player = DAO.retriveInformation(email);  // retrive information of player
                 System.out.println("information >>>>>>>>> " + player.getUserName() + "\t\t" + player.getTootalScoore());
+                
                 handler.printStream.println("true" + " " + player.getUserName() + " " + player.getTootalScoore());
             } else {
                 //Log in Failed
@@ -155,4 +156,5 @@ public class Handler extends Thread {
         System.out.println("clientsVector = " + clientsVector);
     }
 
+    
 }
