@@ -1,8 +1,10 @@
 package tic_tac_toe_game;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -125,20 +127,8 @@ public class FXMLSignUpp extends AnchorPane {
                                 player.setId(++id);
                                 player.SetTotalScoore(0);
                                 msg = player.getEmail().concat(" ! " + player.getUserName() + " ! " + player.getPassword());
-
                                 Start.printStream.println(msg);
-                                //if(DAO.SignUp(player)==1)
-                                //{
-                                System.out.println("Succusseful signup");
-                                Parent root2 = new FXMLSignIn(stage);
-                                Scene scene2 = new Scene(root2);
-                                stage.setScene(scene2);
-                                stage.show();
-                                //}
-                                //else
-                                //{
-                                //new Alert(Alert.AlertType.ERROR, "UnSuccusseful signup").show();
-                                //}    
+                                System.out.println("msg from signup " + msg);
                             } else {
                                 new Alert(Alert.AlertType.ERROR, "Password and confirm password didn't match").show();
                             }
@@ -155,6 +145,33 @@ public class FXMLSignUpp extends AnchorPane {
                 // new Alert(Alert.AlertType.ERROR, message).show();}
             }
         });
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        String reply = Start.dataInputStream.readLine();
+                        System.out.println("reoly from signup " + reply);
+                        if (reply.equals("true")) {
+                            Platform.runLater(() -> {
+                                System.out.println("Succusseful signup");
+                                Parent root2 = new FXMLSignIn(stage);
+                                Scene scene2 = new Scene(root2);
+                                stage.setScene(scene2);
+                                stage.show();
+                            });
+                        } else {
+                            Platform.runLater(() -> {
+                                new Alert(Alert.AlertType.ERROR, "Sorry, this email already exists").show();
+                            });
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }).start();
     }
 
 }

@@ -91,8 +91,8 @@ public class Handler extends Thread {
                         player.setPassword(str[2]);
                         try {
                             Handler handler = clientsVector.get(x);
-                            DAO.SignUp(player);
-                            //handler.printStream.println(DAO.SignUp(player));
+                            //DAO.SignUp(player);
+                            handler.printStream.println(DAO.SignUp(player));
                         } catch (SQLException ex) {
                             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
                         }
