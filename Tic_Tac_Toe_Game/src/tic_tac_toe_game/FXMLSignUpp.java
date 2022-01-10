@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 
 public class FXMLSignUpp extends AnchorPane {
 
@@ -34,7 +35,7 @@ public class FXMLSignUpp extends AnchorPane {
     protected final Text textSignUp;
     Player player = new Player();
     protected static int id = 0;
-    private String message;
+    private boolean message;
     String msg;
     // DataInputStream dataInputStream;
     //PrintStream printStream;
@@ -53,13 +54,6 @@ public class FXMLSignUpp extends AnchorPane {
         backButton = new Button();
         textSignUp = new Text();
 
-        /*        try {
-            printStream = new PrintStream(Start.server.getOutputStream());
-            dataInputStream = new DataInputStream(Start.server.getInputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         */
         setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
@@ -139,9 +133,15 @@ public class FXMLSignUpp extends AnchorPane {
                                 player.setPassword(passwordInput.getText());
                                 player.setId(++id);
                                 player.SetTotalScoore(0);
-                                msg = player.getEmail().concat(" ! " + player.getUserName() + " ! " + player.getPassword());
-                                Start.printStream.println(msg);
-                                System.out.println("msg from signup " + msg);
+                                
+                                JSONObject JSObject1 = new JSONObject();
+                                JSObject1.put("key", "signup");
+                                JSObject1.put("Email",player.getEmail());
+                                JSObject1.put("ID",player.getId());
+                                JSObject1.put("Username",player.getUserName());
+                                JSObject1.put("Password",player.getPassword());
+                                JSObject1.put("Score",player.getTootalScoore());
+                                Start.printStream.println(JSObject1);
                             } else {
                                 new Alert(Alert.AlertType.ERROR, "Password and confirm password didn't match").show();
                             }
@@ -154,8 +154,6 @@ public class FXMLSignUpp extends AnchorPane {
                 } else {
                     new Alert(Alert.AlertType.ERROR, "Fill all fields, please").show();
                 }
-                //} catch (SQLException ex) {
-                // new Alert(Alert.AlertType.ERROR, message).show();}
             }
         });
 
@@ -165,9 +163,11 @@ public class FXMLSignUpp extends AnchorPane {
                 while (true) {
                     try {
                         String reply = Start.dataInputStream.readLine();
-                        message = reply;
+                        JSONObject object = new JSONObject(reply);
+                        boolean rep = object.getBoolean("signup");
+                        message = rep;
                         System.out.println("reoly from signup " + reply);
-                        if (reply.equals("true")) {
+                        if (rep) {
                             Platform.runLater(() -> {
                                 System.out.println("Succusseful signup");
                                 Parent root2 = new FXMLSignIn(stage);
@@ -183,7 +183,7 @@ public class FXMLSignUpp extends AnchorPane {
                     } catch (IOException ex) {
                         Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    if (message.equals("true")) {
+                    if (message) {
                         break;
                     }
                 }

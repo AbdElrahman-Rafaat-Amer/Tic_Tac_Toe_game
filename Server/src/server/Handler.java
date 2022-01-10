@@ -25,7 +25,9 @@ public class Handler extends Thread {
     DataInputStream dataInputStream;
     PrintStream printStream;
     static Vector<Handler> clientsVector = new Vector<Handler>();
-    static Vector<String> avaliablePlayers = new Vector<>();
+    //static Vector<String> avaliablePlayers = new Vector<>();
+    static JSONObject avaliablePlayers  = new JSONObject();
+    static int playerCount = 0;
     static String totalPlayers;
     int x = 0, i=0;
     boolean flag = true;
@@ -78,8 +80,7 @@ public class Handler extends Thread {
     public void run() {
         System.out.println("in start");
         while (true) {
-            try {
-
+            try{
                 String message = dataInputStream.readLine();
                 JSONObject jSObject = new JSONObject(message);
                 String key = jSObject.getString("key");
@@ -90,6 +91,16 @@ public class Handler extends Thread {
                         break;
                     case "signup":
                         //code will insert in database
+                        Player player = new Player();
+                        player.setEmail(jSObject.getString("Email"));
+                        player.setId(jSObject.getInt("ID"));
+                        player.setUserName(jSObject.getString("Username"));
+                        player.setPassword(jSObject.getString("Password"));
+                        player.SetTotalScoore(jSObject.getInt("Score"));
+                        boolean resualt = DAO.SignUp(player);
+                        JSONObject jsono = new JSONObject();
+                        jsono.put("signup", resualt);
+                        printStream.println(jsono);
                         break;
 
                     case "playerList":
@@ -100,30 +111,6 @@ public class Handler extends Thread {
                         //code will insert in database
                         break;
                 }
-                /*
-                String[] output = new String[3];
-                String[] str = message.split(" ! ");
-                Player player = new Player();
-                System.out.println("str length >>>>>>>>>>>> " + str.length);
-                if (str.length == 1) {
-                    System.out.println("will go to sendMessageToSender to login");
-                    sendMessageToSender(message);
-                } else {
-                    if (str.length == 3) {
-                        System.out.println("will go to signup to signup");
-                        player.setEmail(str[0]);
-                        player.setUserName(str[1]);
-                        player.setPassword(str[2]);
-                        try {
-                            Handler handler = clientsVector.get(x);
-                            //DAO.SignUp(player);
-                            handler.printStream.println(DAO.SignUp(player));
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-                 */
             } catch (IOException ex) {
                 try {
                     System.out.println("remove");
@@ -139,6 +126,8 @@ public class Handler extends Thread {
                             + ex1.getMessage()).show();
                 }
 
+            } catch (SQLException ex) {
+                Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -191,8 +180,8 @@ public class Handler extends Thread {
     {
         for( Handler ch: clientsVector)
             {
-                System.err.println("true");
-                ch.printStream.println(ch.getName());
+                System.out.println("ch" + ch);
+                ch.printStream.println(avaliablePlayers);
             }    
     }
 
@@ -204,10 +193,21 @@ public class Handler extends Thread {
 
         try {
             boolean resualt = DAO.checkLogin(email, password);
+            
             JSONObject jsono = new JSONObject();
             jsono.put("login", resualt);
             String reply = jsono.toString();
             sendMessageToSender(reply);
+            if (resualt)
+            {
+                System.out.println("you are in condition");
+                Player player;
+                player = DAO.retriveInformation(email);
+                avaliablePlayers.put(String.valueOf(playerCount), player.getUserName());
+                playerCount++;
+                System.out.println(avaliablePlayers);
+                ShowAvaliablePlayers();
+            }
             //   int j = 0;
             //  jsono.put(String.valueOf(j), DAO.retriveInformation(email).getUserName());
         } catch (SQLException ex) {

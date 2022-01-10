@@ -37,6 +37,7 @@ public class FXMLSignIn extends AnchorPane {
     //PrintStream printStream;
     Thread thread;
     boolean r;
+    static JSONObject players;
 
     public FXMLSignIn(Stage stage) {
         this.stage = stage;
@@ -48,7 +49,7 @@ public class FXMLSignIn extends AnchorPane {
         buttonConSingIn = new Button();
         backButton = new Button();
         start = new Start(stage);
-
+        
         /*  try {
             printStream = new PrintStream(Start.server.getOutputStream());
             dataInputStream = new DataInputStream(Start.server.getInputStream());
@@ -174,6 +175,8 @@ public class FXMLSignIn extends AnchorPane {
                 while (true) {
                     try {
                         String reply = Start.dataInputStream.readLine();
+                        String returnPlayers = Start.dataInputStream.readLine();
+                        players = new JSONObject(returnPlayers);
                         JSONObject object = new JSONObject(reply);
                         r = object.getBoolean("login");
                         System.out.println("Reply >>>>>>>>> " + reply);

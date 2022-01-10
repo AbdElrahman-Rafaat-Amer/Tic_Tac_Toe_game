@@ -2,6 +2,11 @@ package tic_tac_toe_game;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,6 +31,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.json.JSONObject;
 
 public class RequestPage extends BorderPane {
 
@@ -70,29 +76,40 @@ public class RequestPage extends BorderPane {
 
         playerNameLabel.setText(name);
         scoreLabel.setText(score);
-        //printStream.println("Avaliable Players");
+        
+        //to get the first response after login  
+        for (int i =0 ; i< FXMLSignIn.players.length() ; i++)
+        {
+            listRequests.getItems().add(FXMLSignIn.players.getString(String.valueOf(i)));
+        }
+        
+        //to continue checking for updates in list 
         new Thread(new Runnable(){
             public void run()
             {
                 while(true)
                 {
-                    String returnPlayers;
                     try {
-                        returnPlayers = dataInputStream.readLine();
-                        if((returnPlayers != "true") && (returnPlayers != "false"))
-                        {
+                        String returnPlayers = dataInputStream.readLine();
+                        JSONObject players = new JSONObject(returnPlayers);
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
-                                    listRequests.getItems().add(returnPlayers);
+                                    //to clear the list before adding sending the updates because updates contains the whole list not only the new one. 
+                                    listRequests.getItems().clear();
+                                    for (int i =0 ; i< players.length() ; i++)
+                                    {
+                                    listRequests.getItems().add(players.getString(String.valueOf(i)));
+                                    }
                                 }
                             });
-                        }
+                        //}
                     } catch (IOException ex) {
                         Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }}).start();
+        
 
         listRequests.setCellFactory((Callback<ListView<String>, ListCell<String>>) param -> {
             return new ListCell<String>() {
@@ -244,5 +261,7 @@ public class RequestPage extends BorderPane {
         anchorPane.getChildren().add(listRequests);
         anchorPane.getChildren().add(listAvailablePlayers);
     }
+    
+   
 
 }
