@@ -5,6 +5,12 @@
  */
 package tic_tac_toe_game;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,11 +50,11 @@ public class Game {
                 switch (labels[row][0].getText()) {
                     case "X":
                         score = 3;
-                        ResultScene.winner = "COMPUTER WIN";
+                         ResultScene.winner = "COMPUTER WIN";
                         break;
                     case "O":
                         score = -3;
-                        ResultScene.winner = "YOU WIN";
+                         ResultScene.winner = "YOU WIN";
                         break;
 
                 }
@@ -61,11 +67,11 @@ public class Game {
 
                     case "X":
                         score = 3;
-                        ResultScene.winner = "COMPUTER WIN";
+                         ResultScene.winner = "COMPUTER WIN";
                         break;
                     case "O":
                         score = -3;
-                        ResultScene.winner = "YOU WIN";
+                         ResultScene.winner = "YOU WIN";
                         break;
                 }
             }
@@ -76,11 +82,11 @@ public class Game {
 
                 case "X":
                     score = 3;
-                    ResultScene.winner = "COMPUTER WIN";
+                     ResultScene.winner = "COMPUTER WIN";
                     break;
                 case "O":
                     score = -3;
-                    ResultScene.winner = "YOU WIN";
+                     ResultScene.winner = "YOU WIN";
                     break;
             }
         }
@@ -90,11 +96,11 @@ public class Game {
 
                 case "X":
                     score = 3;
-                    ResultScene.winner = "COMPUTER WIN";
+                     ResultScene.winner = "COMPUTER WIN";
                     break;
                 case "O":
                     score = -3;
-                    ResultScene.winner = "YOU WIN";
+                     ResultScene.winner = "YOU WIN";
                     break;
             }
         }
@@ -106,7 +112,9 @@ public class Game {
         try {
             // winner = null;
             // values = null;
-            root2 = new ResultSceneLoser2(stage);
+            save(GameTwoPlayersOffline.saved);
+             RetriveRecords.open();
+            root2 = new ResultScene(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
@@ -114,4 +122,29 @@ public class Game {
             Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-}
+    
+    private static void save(String saved) {
+        
+        FileWriter writer = null;
+        try {
+            
+            writer = new FileWriter("abdoo");
+            BufferedWriter buffer = new BufferedWriter(writer);
+            buffer.write(saved);
+     
+           buffer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);  
+        } finally {
+            try {
+                writer.close();
+            } catch (IOException ex) {
+                Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+                        
+        
+    }
+    }
+   

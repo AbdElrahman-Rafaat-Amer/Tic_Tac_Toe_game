@@ -1,5 +1,15 @@
 package tic_tac_toe_game;
 
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +23,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class GameTwoPlayersOffline extends BorderPane {
 
@@ -63,12 +76,21 @@ public class GameTwoPlayersOffline extends BorderPane {
     protected final Label labelPane9;
     protected static String text;
     protected String[] values = new String[9];
+    protected String[] sequence = new String[9];
+
     private int i = 0;
     private String winner;
     private Stage stage;
     private boolean isDraw = true;
     private String playerOne;
     private String playerTwo;
+    public  static String saved;
+    public  static String reply;
+
+    private JSONObject obj;
+    private JSONObject obj1;
+     
+
 
     public GameTwoPlayersOffline(Stage stage) {
 
@@ -119,6 +141,25 @@ public class GameTwoPlayersOffline extends BorderPane {
         labelPane9 = new Label();
         playerOne = XorOSelection.playerOne;
         playerTwo = XorOSelection.playerTwo;
+        reply = RetriveRecords.open();
+        obj = new  JSONObject();
+        obj1 = new  JSONObject(reply);
+        Label board [] = {labelPane1, labelPane2, labelPane3,labelPane4, labelPane5, labelPane6,labelPane7, labelPane8, labelPane9};
+
+        
+         JSONArray array= (JSONArray) obj1.get("sequence");
+         
+         int n;
+         
+         //JSON move = obj.get("moves");
+         for(n=0;n<array.length();n++){
+            
+            // int x = array[n];
+            // board[x].settext(move[n]);
+             
+         }
+         
+
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -428,15 +469,27 @@ public class GameTwoPlayersOffline extends BorderPane {
         labelPane8.setAlignment(Pos.CENTER);
         labelPane9.setAlignment(Pos.CENTER);
 
+       //int sequenses[]=null;
+        //String moves[];
+        int Label[];
+        
+        //obj.put("sequence",sequenses);
+       
+      // save(saved);
         pane1.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
             if (values[0] == null) {
                 swapXO();
                 labelPane1.setText(text);
-                values[0] = text;
+               
                 i++;
+                values[i] = text;
+                sequence[0]=i+"";
+                
                 checkWinner(i);
                 if (winner != null) {
+                    obj.put("moves", values);
+                    saved =obj.toString();
                     Game.goToWinnerPage(stage);
                 }
             }
@@ -449,11 +502,15 @@ public class GameTwoPlayersOffline extends BorderPane {
                 swapXO();
                 labelPane2.setText(text);
                 //fill the array with label text
-                values[1] = text;
+            
                 // collect number of labels text 
                 i++;
+                 values[i] = text;
+                sequence[1]=i+"";
                 checkWinner(i);
                 if (winner != null) {
+                     obj.put("moves", values);
+                    saved =obj.toString();
                     Game.goToWinnerPage(stage);
                 }
             }
@@ -464,10 +521,13 @@ public class GameTwoPlayersOffline extends BorderPane {
             if (values[2] == null) {
                 swapXO();
                 labelPane3.setText(text);
-                values[2] = text;
                 i++;
+                 values[i] = text;
+                sequence[2]=i+"";
                 checkWinner(i);
                 if (winner != null) {
+                    obj.put("moves", values);
+                    saved =obj.toString();
                     Game.goToWinnerPage(stage);
                 }
             }
@@ -478,10 +538,13 @@ public class GameTwoPlayersOffline extends BorderPane {
             if (values[3] == null) {
                 swapXO();
                 labelPane4.setText(text);
-                values[3] = text;
                 i++;
+                 values[i] = text;
+                sequence[3]=i+"";
                 checkWinner(i);
                 if (winner != null) {
+                   obj.put("moves", values);
+                  saved =obj.toString();
                     Game.goToWinnerPage(stage);
                 }
             }
@@ -492,10 +555,14 @@ public class GameTwoPlayersOffline extends BorderPane {
             if (values[4] == null) {
                 swapXO();
                 labelPane5.setText(text);
-                values[4] = text;
+                //values[4] = text;
                 i++;
+                 values[i] = text;
+                sequence[4]=i+"";
                 checkWinner(i);
                 if (winner != null) {
+                    obj.put("moves", values);
+                    saved =obj.toString();
                     Game.goToWinnerPage(stage);
                 }
             }
@@ -506,10 +573,15 @@ public class GameTwoPlayersOffline extends BorderPane {
             if (values[5] == null) {
                 swapXO();
                 labelPane6.setText(text);
-                values[5] = text;
+            // String sequence[]= sequence+5;
+                //values[5] = text;
                 i++;
+                 values[i] = text;
+                sequence[5]=i+"";
                 checkWinner(i);
                 if (winner != null) {
+                    obj.put("moves", values);
+                    saved =obj.toString();
                     Game.goToWinnerPage(stage);
                 }
             }
@@ -520,10 +592,14 @@ public class GameTwoPlayersOffline extends BorderPane {
             if (values[6] == null) {
                 swapXO();
                 labelPane7.setText(text);
-                values[6] = text;
+               // values[6] = text;
                 i++;
+                 values[i] = text;
+                sequence[6]=i+"";
                 checkWinner(i);
                 if (winner != null) {
+                    obj.put("moves", values);
+                    saved =obj.toString();
                     Game.goToWinnerPage(stage);
                 }
             }
@@ -534,10 +610,72 @@ public class GameTwoPlayersOffline extends BorderPane {
             if (values[7] == null) {
                 swapXO();
                 labelPane8.setText(text);
-                values[7] = text;
+                //values[7] = text;
                 i++;
+                 values[i] = text;
+                sequence[7]=i+"";
                 checkWinner(i);
                 if (winner != null) {
+                    obj.put("moves", values);
+                    saved =obj.toString();
+                  
+               /* FileOutputStream fos;
+                
+                    try {
+                        //DataOutputStream = new ObjectOutputStream(fos);
+                        
+                        FileWriter writer = new FileWriter("hahahhahahahahhahahahhaa");  
+                         BufferedWriter buffer = new BufferedWriter(writer);
+                         for(int j=0 ;j<9;j++)
+                    {
+                         if(j==3 || j==6){
+                                buffer.newLine();
+                         
+                        }
+                        if(values[j]==null)
+                        {
+                            buffer.write(" ");
+                            
+                        }
+                        else
+                        {
+                            
+                         buffer.write(values[j]);
+                       
+           
+
+                        }
+                    }
+                        
+                         buffer.close();  
+                        
+                        
+                        
+                      BufferedWriter buffer= new BufferedWriter(new FileWriter("nooooooooo")); 
+                        buffer.write("hagermagdyyyy"); 
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                        
+                   
+                        // DataOutputStream writeUTF = fo.writeUTF(pane8.getText());
+                        //FileOutputStream write = fos.write(pane8.getText().getBytes());
+
+               
+                // fos.write(textarea.getText().getBytes());
+                 //fo.flush();
+                 //fo.close();
+                    FileOutputStream fos;
+                    try {
+                        fos = new FileOutputStream(values[i]);
+                        saveFile = new ObjectOutputStream(fos);
+                BufferedWriter f_writer= new BufferedWriter(new FileWriter(""));
+ 
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                       */
+            	
                     Game.goToWinnerPage(stage);
                 }
             }
@@ -548,11 +686,17 @@ public class GameTwoPlayersOffline extends BorderPane {
             if (values[8] == null) {
                 swapXO();
                 labelPane9.setText(text);
-                values[8] = text;
+               // values[8] = text;
                 i++;
+                 values[i] = text;
+                sequence[8]=i+"";
                 checkWinner(i);
                 if (winner != null) {
-                    Parent root2;
+                  //  Parent root2;
+                    obj.put("moves", values);
+                  obj.put("sequence", sequence);
+
+                    saved =obj.toString();
                     Game.goToWinnerPage(stage);
                 }
             }
@@ -616,4 +760,6 @@ public class GameTwoPlayersOffline extends BorderPane {
             Game.goToWinnerPage(stage);
         }
     }
+
+    
 }
