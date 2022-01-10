@@ -14,6 +14,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
+import org.json.*;
 
 /**
  *
@@ -24,7 +25,9 @@ public class Handler extends Thread {
     DataInputStream dataInputStream;
     PrintStream printStream;
     static Vector<Handler> clientsVector = new Vector<Handler>();
-    int x = 0;
+    static Vector<String> avaliablePlayers = new Vector<>();
+    static String totalPlayers;
+    int x = 0, i=0;
     boolean flag = true;
     boolean isRemoved = true;
     int removed;
@@ -75,10 +78,28 @@ public class Handler extends Thread {
         System.out.println("in start");
         while (true) {
             try {
-                String message = dataInputStream.readLine();
-                String[] output = new String[3];
-                String[] str = message.split(" ! ");
-                Player player = new Player();
+                //String message = dataInputStream.readLine();
+                JSONObject obj = new JSONObject(dataInputStream.readLine());
+                String key = obj.getString("key");
+                System.out.println("key = "+key);
+                switch(key)
+                {
+                    case "login":
+                        String email = obj.getString("email");
+                        String pass = obj.getString("password");
+                        System.out.println("email = "+email);
+                        System.out.println("password = "+pass);
+                        String out = obj.getString("email")+":"+obj.getString("password");
+                        System.out.println("will go to sendMessageToSender to login");
+                        sendMessageToSender(out);
+                        
+                        break;
+                    case "signup":
+                        break;
+                }
+                //String[] output = new String[3];
+                //String[] str = message.split(" ! ");
+                /*Player player = new Player();
                 System.out.println("str length >>>>>>>>>>>> " + str.length);
                 if (str.length == 1) {
                     System.out.println("will go to sendMessageToSender to login");
@@ -97,7 +118,7 @@ public class Handler extends Thread {
                             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                }
+                }*/
 
             } catch (IOException ex) {
                 try {
@@ -138,14 +159,23 @@ public class Handler extends Thread {
         System.out.println("eamil >>> " + email + "\t\t\tPassword >>> " + password);
 
         try {
+            Handler ch = clientsVector.get(x);
             boolean resualt = DAO.checkLogin(email, password);
             System.out.println("Resualt >>>>>>>>>>>> " + resualt);
             if (resualt == true) {
                 //Log in Success
                 Player player = DAO.retriveInformation(email);  // retrive information of player
+                //request page
+                clientsVector.get(clientsVector.size()-1).setName(DAO.RetrieveUsername(email));
+                totalPlayers = totalPlayers+" "+ch.getName();
+                avaliablePlayers.add(i,ch.getName());
+                i++;
+                ShowAvaliablePlayers();
                 System.out.println("information >>>>>>>>> " + player.getUserName() + "\t\t" + player.getTootalScoore());
                 
-                handler.printStream.println("true" + " " + player.getUserName() + " " + player.getTootalScoore());
+                handler.printStream.println("true" + " " + player.getUserName() + " " + player.getTootalScoore()+ " " +  totalPlayers);
+                
+               
             } else {
                 //Log in Failed
                 handler.printStream.println("false");
@@ -154,6 +184,14 @@ public class Handler extends Thread {
             System.out.println("Error in sendMessageToSender in server\n" + ex.getMessage());
         }
         System.out.println("clientsVector = " + clientsVector);
+    }
+    void ShowAvaliablePlayers()
+    {
+        for( Handler ch: clientsVector)
+            {
+                System.err.println("true");
+                ch.printStream.println(ch.getName());
+            }    
     }
 
     

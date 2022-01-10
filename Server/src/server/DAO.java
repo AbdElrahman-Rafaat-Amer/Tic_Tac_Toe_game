@@ -101,5 +101,23 @@ public class DAO {
             ps.close();
             return flag;
         }
+        // to retrieve player Username 
+    static String RetrieveUsername(String mail) throws SQLException
+    {
+        String userName = new String();
+        Statement statement;
+        statement = con.createStatement();
+        PreparedStatement pst = con.prepareStatement("select username from Player where email = ?"); 
+        pst.setString(1, mail);
+        
+        ResultSet resultSet2 = pst.executeQuery();
+        while(resultSet2.next())
+        { 
+            userName = resultSet2.getString(1);
+            System.err.println(userName);
+        }
+        statement.close();
+        return userName;
+    }
 
 }

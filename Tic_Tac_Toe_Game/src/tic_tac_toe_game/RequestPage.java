@@ -1,7 +1,9 @@
 package tic_tac_toe_game;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -47,6 +49,8 @@ public class RequestPage extends BorderPane {
     protected static String email;
     MediaView mediaView;
     String name = "Player", score = "score";
+    DataInputStream dataInputStream;
+    PrintStream printStream;
 
     public RequestPage(Stage stage) {
 
@@ -62,11 +66,38 @@ public class RequestPage extends BorderPane {
         listAvailablePlayers = new ListView();
         name = FXMLSignIn.playerName;
         score = FXMLSignIn.playerScore;
+        try {
+            printStream = new PrintStream(Start.server.getOutputStream());
+            dataInputStream = new DataInputStream(Start.server.getInputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         playerNameLabel.setText(name);
         scoreLabel.setText(score);
-        ObservableList<String> sendList = FXCollections.observableArrayList("Player1", "Player2", "Player3", "Player4", "Player5", "Player6");
-        listRequests.setItems(sendList);
+        //printStream.println("Avaliable Players");
+        new Thread(new Runnable(){
+            public void run()
+            {
+                while(true)
+                {
+                    String returnPlayers;
+                    try {
+                        returnPlayers = dataInputStream.readLine();
+                        if((returnPlayers != "true") && (returnPlayers != "false"))
+                        {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    listRequests.getItems().add(returnPlayers);
+                                }
+                            });
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }}).start();
 
         listRequests.setCellFactory((Callback<ListView<String>, ListCell<String>>) param -> {
             return new ListCell<String>() {

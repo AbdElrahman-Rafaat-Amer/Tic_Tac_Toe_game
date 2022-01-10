@@ -17,6 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 
 public class FXMLSignIn extends AnchorPane {
 
@@ -133,6 +134,11 @@ public class FXMLSignIn extends AnchorPane {
             System.out.println("email = " + email + "\t\tPassword = " + password);
             if (!email.isEmpty() && !password.isEmpty()) {
                 String msg = email + ":" + password;
+                JSONObject object = new JSONObject();
+                object.put("key","login");
+                object.put("email",email);
+                object.put("password",password);
+                printStream.println(object);
                 printStream.println(msg);
                 System.out.println("msg >>>>>>>>>>>>>>>>>>>>>> " + msg);
                 System.out.println("Reply ============befotr==============" + realReply);
@@ -167,6 +173,7 @@ public class FXMLSignIn extends AnchorPane {
             public void run() {
                 while (true) {
                     try {
+                        
                         String reply = dataInputStream.readLine();
                         System.out.println("Reply >>>>>>>>> " + reply);
                         realReply = reply;
