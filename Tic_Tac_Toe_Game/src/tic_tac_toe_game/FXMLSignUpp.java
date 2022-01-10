@@ -34,10 +34,10 @@ public class FXMLSignUpp extends AnchorPane {
     protected final Text textSignUp;
     Player player = new Player();
     protected static int id = 0;
-    protected static String message;
+    private String message;
     String msg;
-    DataInputStream dataInputStream;
-    PrintStream printStream;
+    // DataInputStream dataInputStream;
+    //PrintStream printStream;
     boolean flag = true;
     Thread thread;
 
@@ -53,13 +53,13 @@ public class FXMLSignUpp extends AnchorPane {
         backButton = new Button();
         textSignUp = new Text();
 
-        try {
+        /*        try {
             printStream = new PrintStream(Start.server.getOutputStream());
             dataInputStream = new DataInputStream(Start.server.getInputStream());
         } catch (IOException ex) {
             Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+         */
         setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
@@ -140,7 +140,7 @@ public class FXMLSignUpp extends AnchorPane {
                                 player.setId(++id);
                                 player.SetTotalScoore(0);
                                 msg = player.getEmail().concat(" ! " + player.getUserName() + " ! " + player.getPassword());
-                                printStream.println(msg);
+                                Start.printStream.println(msg);
                                 System.out.println("msg from signup " + msg);
                             } else {
                                 new Alert(Alert.AlertType.ERROR, "Password and confirm password didn't match").show();
@@ -164,7 +164,8 @@ public class FXMLSignUpp extends AnchorPane {
             public void run() {
                 while (true) {
                     try {
-                        String reply = dataInputStream.readLine();
+                        String reply = Start.dataInputStream.readLine();
+                        message = reply;
                         System.out.println("reoly from signup " + reply);
                         if (reply.equals("true")) {
                             Platform.runLater(() -> {
@@ -172,9 +173,7 @@ public class FXMLSignUpp extends AnchorPane {
                                 Parent root2 = new FXMLSignIn(stage);
                                 Scene scene2 = new Scene(root2);
                                 stage.setScene(scene2);
-                                
-                                thread.stop();
-                               stage.show();
+                                stage.show();
                             });
                         } else {
                             Platform.runLater(() -> {
@@ -183,6 +182,9 @@ public class FXMLSignUpp extends AnchorPane {
                         }
                     } catch (IOException ex) {
                         Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if (message.equals("true")) {
+                        break;
                     }
                 }
             }

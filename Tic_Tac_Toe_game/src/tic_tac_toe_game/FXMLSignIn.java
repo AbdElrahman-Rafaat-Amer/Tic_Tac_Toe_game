@@ -3,7 +3,6 @@ package tic_tac_toe_game;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.Socket;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 
 public class FXMLSignIn extends AnchorPane {
 
@@ -33,9 +33,10 @@ public class FXMLSignIn extends AnchorPane {
     static String playerName;
     static String playerScore;
     Start start;
-    DataInputStream dataInputStream;
-    PrintStream printStream;
+    //DataInputStream dataInputStream;
+    //PrintStream printStream;
     Thread thread;
+    boolean r;
 
     public FXMLSignIn(Stage stage) {
         this.stage = stage;
@@ -48,13 +49,12 @@ public class FXMLSignIn extends AnchorPane {
         backButton = new Button();
         start = new Start(stage);
 
-        try {
+        /*  try {
             printStream = new PrintStream(Start.server.getOutputStream());
             dataInputStream = new DataInputStream(Start.server.getInputStream());
         } catch (IOException ex) {
             Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        }*/
         reciveData();
         /* new Thread(new Runnable() {
             @Override
@@ -132,10 +132,17 @@ public class FXMLSignIn extends AnchorPane {
             password = passwordSIgnIn.getText().trim();
             System.out.println("email = " + email + "\t\tPassword = " + password);
             if (!email.isEmpty() && !password.isEmpty()) {
-                String msg = email + ":" + password;
-                printStream.println(msg);
-                System.out.println("msg >>>>>>>>>>>>>>>>>>>>>> " + msg);
-                System.out.println("Reply ============befotr==============" + realReply);
+                // String msg = email + ":" + password;
+                JSONObject jSObject = new JSONObject();
+                jSObject.put("key", "login");
+                jSObject.put("email", email);
+                jSObject.put("password", password);
+                String msg = jSObject.toString();
+                Start.printStream.println(msg);
+
+                // System.out.println("msg >>>>>>>>>>>>>>>>>>>>>> " + msg);
+                System.out.println("Reply ============befotr==============" + msg);
+
             } else {
                 new Alert(Alert.AlertType.ERROR, "email or passwprd can not be empty").show();
             }
@@ -162,25 +169,32 @@ public class FXMLSignIn extends AnchorPane {
     }
 
     void reciveData() {
-        thread = new Thread(new Runnable() {
+
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try {
-                        String reply = dataInputStream.readLine();
+                        String reply = Start.dataInputStream.readLine();
+                        JSONObject object = new JSONObject(reply);
+                        r = object.getBoolean("login");
+
+                        //realReply = object.getString("reply");
+                        //String jsonreply = object.get("reply");
                         System.out.println("Reply >>>>>>>>> " + reply);
-                        realReply = reply;
+                        //  realReply = reply;
                         System.out.println("realReply >>>>>>>>> " + realReply);
                         Platform.runLater(() -> {
-                            if (!realReply.equals("false")) {
+                            if (r/*!realReply.equals("false")*/) {
                                 Platform.runLater(() -> {
-                                    divideReply(realReply);
+                                    //divideReply(realReply);
                                     RequestPage.email = email;
                                     Parent root2 = new RequestPage(stage);
                                     Scene scene2 = new Scene(root2);
                                     stage.setScene(scene2);
-                                     thread.stop();
+                                    //thread.stop();
                                     stage.show();
+
                                 });
                             } else {
                                 //Platform.runLater(() -> {
@@ -196,17 +210,20 @@ public class FXMLSignIn extends AnchorPane {
                         System.out.println("-------------------------------Error in recieve Data-------------------------------");
                         // Logger.getLogger(FXMLSignIn.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    if (r) {
+                        break;
+                    }
+
                 }
             }
-        });
-        thread.start();
+        }).start();
     }
 
     public void closeTheConnection() {
 
         try {
-            printStream.close();
-            dataInputStream.close();
+            Start.printStream.close();
+            Start.dataInputStream.close();
             Start.server.close();
         } catch (IOException ex) {
             new Alert(Alert.AlertType.ERROR, "Error in close Connection\n" + ex.getMessage()).show();
@@ -214,18 +231,21 @@ public class FXMLSignIn extends AnchorPane {
 
     }
 
-    public void divideReply(String reply) {
+    /* public void divideReply(String reply) {
 
         StringTokenizer stringTokenizer = new StringTokenizer(reply, " ");
 
-        /*while (stringTokenizer.hasMoreTokens()) {
+        while (stringTokenizer.hasMoreTokens()) {
             
+            int  o = Integer.parseInt(stringTokenizer.nextToken());
             
-        }*/
+          //  bord[o].settest(values[o]);
+           // label.setText(vales[o]);
+        }
         String replString = stringTokenizer.nextToken();
         playerName = stringTokenizer.nextToken();
         playerScore = stringTokenizer.nextToken();
 
         System.out.println(replString + "\t\t\t" + playerName + "\t\t\t" + playerScore + "\t\t\t");
-    }
+    }*/
 }

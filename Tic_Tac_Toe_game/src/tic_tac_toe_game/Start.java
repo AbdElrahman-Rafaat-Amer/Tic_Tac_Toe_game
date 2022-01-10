@@ -30,8 +30,8 @@ public class Start extends Pane {
     private boolean isRight = false;
     private String message = "Enter your Ip Address to play online";
     static Socket server;
-    //DataInputStream dataInputStream;
-    //PrintStream printStream;
+    public static DataInputStream dataInputStream;
+    public static PrintStream printStream;
 
     //public Start() {
     //}
@@ -83,19 +83,21 @@ public class Start extends Pane {
             isRight = checkIPAddress(IPAdress);
             if (isRight) {
                 //Ip right
-                try {
-                    server = new Socket(IPAdress, 5005);
-                    //              printStream = new PrintStream(server.getOutputStream());
-                    //            dataInputStream = new DataInputStream(server.getInputStream());
-                    Parent root2 = new FXMLSelection(stage);
-                    Scene scene2 = new Scene(root2);
-                    stage.setScene(scene2);
-                    stage.show();
-                } catch (IOException ex) {
-                    new Alert(Alert.AlertType.ERROR, "There are erro in connection to server\nPlease ensure the server is running").show();
-                    System.out.println("in catch in start Page for try of assign socket and dataprint stream");
-                    //Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
-                }
+               // new Thread(() -> {
+                    try {
+                        server = new Socket(IPAdress, 5005);
+                        printStream = new PrintStream(server.getOutputStream());
+                        dataInputStream = new DataInputStream(server.getInputStream());
+                        Parent root2 = new FXMLSelection(stage);
+                        Scene scene2 = new Scene(root2);
+                        stage.setScene(scene2);
+                        stage.show();
+                    } catch (IOException ex) {
+                        new Alert(Alert.AlertType.ERROR, "There are erro in connection to server\nPlease ensure the server is running\n" + ex.getMessage()).show();
+                        System.out.println("in catch in start Page for try of assign socket and dataprint stream");
+                        //Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+              //  }).start();
 
             } else {
                 //Error in IP Address

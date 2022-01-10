@@ -18,7 +18,7 @@ public class ResultScene extends BorderPane {
     protected final BorderPane borderPane;
     protected final Text resultText;
     protected final BorderPane borderPane0;
-    protected final Button skipButton;
+    protected final Button backToMenu;
     protected final MediaView videoView;
     private MediaPlayer mediaPlayer;
     private Stage stage;
@@ -29,8 +29,7 @@ public class ResultScene extends BorderPane {
         borderPane = new BorderPane();
         resultText = new Text();
         borderPane0 = new BorderPane();
-        skipButton = new Button();
-
+        backToMenu = new Button();
         File mediaFile = new File("src\\vedios_media\\waiting vedio.mp4");
         Media media = new Media(mediaFile.toURI().toURL().toString());
         mediaPlayer = new MediaPlayer(media);
@@ -60,12 +59,12 @@ public class ResultScene extends BorderPane {
         borderPane0.setPrefHeight(67.0);
         borderPane0.setPrefWidth(600.0);
 
-        BorderPane.setAlignment(skipButton, javafx.geometry.Pos.CENTER);
-        skipButton.setMnemonicParsing(false);
-        skipButton.setPrefHeight(38.0);
-        skipButton.setPrefWidth(96.0);
-        skipButton.setText("Skip");
-        borderPane0.setCenter(skipButton);
+        BorderPane.setAlignment(backToMenu, javafx.geometry.Pos.CENTER);
+        backToMenu.setMnemonicParsing(false);
+        backToMenu.setPrefHeight(38.0);
+        backToMenu.setPrefWidth(96.0);
+        backToMenu.setText("Skip");
+        borderPane0.setCenter(backToMenu);
         setBottom(borderPane0);
 
         BorderPane.setAlignment(videoView, javafx.geometry.Pos.CENTER);
@@ -75,7 +74,7 @@ public class ResultScene extends BorderPane {
 
         mediaPlayer.play();
 
-        skipButton.setOnAction((Action) -> {
+        backToMenu.setOnAction((Action) -> {
             /*   mediaPlayer.stop();
             Parent root2 = new Start(stage);
             Scene scene2 = new Scene(root2);
@@ -83,13 +82,12 @@ public class ResultScene extends BorderPane {
             stage.show();*/
             endVedio();
         });
-        
-         mediaPlayer.setOnEndOfMedia(() -> {
-             endVedio();
-         });
+
+        mediaPlayer.setOnEndOfMedia(() -> {
+            endVedio();
+        });
 
     }
-   
 
     void endVedio() {
         mediaPlayer.stop();

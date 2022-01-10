@@ -44,11 +44,11 @@ public class Game {
                 switch (labels[row][0].getText()) {
                     case "X":
                         score = 3;
-                         ResultScene.winner = "COMPUTER WIN";
+                        ResultScene.winner = "COMPUTER WIN";
                         break;
                     case "O":
                         score = -3;
-                         ResultScene.winner = "YOU WIN";
+                        ResultScene.winner = "YOU WIN";
                         break;
 
                 }
@@ -61,11 +61,11 @@ public class Game {
 
                     case "X":
                         score = 3;
-                         ResultScene.winner = "COMPUTER WIN";
+                        ResultScene.winner = "COMPUTER WIN";
                         break;
                     case "O":
                         score = -3;
-                         ResultScene.winner = "YOU WIN";
+                        ResultScene.winner = "YOU WIN";
                         break;
                 }
             }
@@ -76,11 +76,11 @@ public class Game {
 
                 case "X":
                     score = 3;
-                     ResultScene.winner = "COMPUTER WIN";
+                    ResultScene.winner = "COMPUTER WIN";
                     break;
                 case "O":
                     score = -3;
-                     ResultScene.winner = "YOU WIN";
+                    ResultScene.winner = "YOU WIN";
                     break;
             }
         }
@@ -90,11 +90,11 @@ public class Game {
 
                 case "X":
                     score = 3;
-                     ResultScene.winner = "COMPUTER WIN";
+                    ResultScene.winner = "COMPUTER WIN";
                     break;
                 case "O":
                     score = -3;
-                     ResultScene.winner = "YOU WIN";
+                    ResultScene.winner = "YOU WIN";
                     break;
             }
         }
@@ -106,7 +106,7 @@ public class Game {
         try {
             // winner = null;
             // values = null;
-            root2 = new ResultScene(stage);
+            root2 = new ResultSceneLoser2(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
             stage.show();
