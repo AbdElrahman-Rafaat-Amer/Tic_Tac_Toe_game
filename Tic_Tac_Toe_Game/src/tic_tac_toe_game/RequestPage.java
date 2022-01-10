@@ -2,11 +2,6 @@ package tic_tac_toe_game;
 
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

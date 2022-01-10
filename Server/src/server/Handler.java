@@ -39,6 +39,7 @@ public class Handler extends Thread {
             printStream = new PrintStream(s.getOutputStream());
             Handler.clientsVector.add(this);
             x = clientsVector.size() - 1;
+
             start();
             /* System.out.println("before start");
                 new Thread() {
@@ -78,28 +79,31 @@ public class Handler extends Thread {
         System.out.println("in start");
         while (true) {
             try {
-                //String message = dataInputStream.readLine();
-                JSONObject obj = new JSONObject(dataInputStream.readLine());
-                String key = obj.getString("key");
-                System.out.println("key = "+key);
-                switch(key)
-                {
+
+                String message = dataInputStream.readLine();
+                JSONObject jSObject = new JSONObject(message);
+                String key = jSObject.getString("key");
+                System.out.println("key  >>>>>>>>>>>>>>>>>>>>> " + key);//jSObject.get("key");
+                switch (key) {
                     case "login":
-                        String email = obj.getString("email");
-                        String pass = obj.getString("password");
-                        System.out.println("email = "+email);
-                        System.out.println("password = "+pass);
-                        String out = obj.getString("email")+":"+obj.getString("password");
-                        System.out.println("will go to sendMessageToSender to login");
-                        sendMessageToSender(out);
-                        
+                        login(jSObject);
                         break;
                     case "signup":
+                        //code will insert in database
+                        break;
+
+                    case "playerList":
+                        //code will insert in database
+                        break;
+
+                    case "retriveInformation":
+                        //code will insert in database
                         break;
                 }
-                //String[] output = new String[3];
-                //String[] str = message.split(" ! ");
-                /*Player player = new Player();
+                /*
+                String[] output = new String[3];
+                String[] str = message.split(" ! ");
+                Player player = new Player();
                 System.out.println("str length >>>>>>>>>>>> " + str.length);
                 if (str.length == 1) {
                     System.out.println("will go to sendMessageToSender to login");
@@ -118,8 +122,8 @@ public class Handler extends Thread {
                             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                }*/
-
+                }
+                 */
             } catch (IOException ex) {
                 try {
                     System.out.println("remove");
@@ -150,20 +154,13 @@ public class Handler extends Thread {
         System.out.println("handler from sendMessageToSender >>>>>>>>>> " + handler);
 
         System.out.println("Message >>>>>>>> " + msg);
-
-        int index = msg.indexOf(':');
-        System.out.println("index >>>>>>>>>>>>> " + index);
-        String email = msg.substring(0, index);
-        String password = msg.substring(index + 1);
-
-        System.out.println("eamil >>> " + email + "\t\t\tPassword >>> " + password);
-
-        try {
-            Handler ch = clientsVector.get(x);
-            boolean resualt = DAO.checkLogin(email, password);
-            System.out.println("Resualt >>>>>>>>>>>> " + resualt);
-            if (resualt == true) {
-                //Log in Success
+        handler.printStream.println(msg);
+        //int index = msg.indexOf(':');
+        //System.out.println("index >>>>>>>>>>>>> " + index);
+        //String email = msg.substring(0, index);
+        //String password = msg.substring(index + 1);
+        //System.out.println("eamil >>> " + email + "\t\t\tPassword >>> " + password);
+/*
                 Player player = DAO.retriveInformation(email);  // retrive information of player
                 //request page
                 clientsVector.get(clientsVector.size()-1).setName(DAO.RetrieveUsername(email));
@@ -176,13 +173,18 @@ public class Handler extends Thread {
                 handler.printStream.println("true" + " " + player.getUserName() + " " + player.getTootalScoore()+ " " +  totalPlayers);
                 
                
+                /*  Player player = DAO.retriveInformation(email);  // retrive information of player
+                System.out.println("information >>>>>>>>> " + player.getUserName() + "\t\t" + player.getTootalScoore());
+                
+                handler.printStream.println("true" + " " + player.getUserName() + " " + player.getTootalScoore());
+                handler.printStream.println("true");
             } else {
                 //Log in Failed
                 handler.printStream.println("false");
             }
         } catch (SQLException ex) {
             System.out.println("Error in sendMessageToSender in server\n" + ex.getMessage());
-        }
+        }*/
         System.out.println("clientsVector = " + clientsVector);
     }
     void ShowAvaliablePlayers()
@@ -194,5 +196,23 @@ public class Handler extends Thread {
             }    
     }
 
-    
+    private void login(JSONObject object) {
+
+        String email = object.getString("email");
+        String password = object.getString("password");
+        System.out.println("Email = " + email + "\t\t\tPassword = " + password);
+
+        try {
+            boolean resualt = DAO.checkLogin(email, password);
+            JSONObject jsono = new JSONObject();
+            jsono.put("login", resualt);
+            String reply = jsono.toString();
+            sendMessageToSender(reply);
+            //   int j = 0;
+            //  jsono.put(String.valueOf(j), DAO.retriveInformation(email).getUserName());
+        } catch (SQLException ex) {
+            Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }

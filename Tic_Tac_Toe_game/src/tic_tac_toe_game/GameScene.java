@@ -479,7 +479,7 @@ public class GameScene extends BorderPane {
                                         ResultScene.winner = "TIE";
                                         Game.goToWinnerPage(stage);
                                     } else {
-                                         ResultScene.winner = "You Win";
+                                        ResultScene.winner = "You Win";
                                         Game.goToWinnerPage(stage);
                                     }
                                 }
@@ -529,10 +529,10 @@ public class GameScene extends BorderPane {
 
                                     score = Game.checkWinner(board);
                                     if (score == 0) {
-                                         ResultScene.winner = "TIE";
+                                        ResultScene.winner = "TIE";
                                         Game.goToWinnerPage(stage);
                                     } else {
-                                         ResultScene.winner = "You Win";
+                                        ResultScene.winner = "You Win";
                                         Game.goToWinnerPage(stage);
                                     }
                                 }
@@ -581,10 +581,10 @@ public class GameScene extends BorderPane {
                                 } else {
                                     score = Game.checkWinner(board);
                                     if (score == 0) {
-                                         ResultScene.winner = "TIE";
+                                        ResultScene.winner = "TIE";
                                         Game.goToWinnerPage(stage);
                                     } else {
-                                         ResultScene.winner = "You Win";
+                                        ResultScene.winner = "You Win";
                                         Game.goToWinnerPage(stage);
                                     }
                                 }

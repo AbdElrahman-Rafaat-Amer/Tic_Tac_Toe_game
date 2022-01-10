@@ -16,6 +16,9 @@ public class Tic_Tac_Toe_game extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Tic Tac Toe game");
+        stage.setResizable(false);
+       // stage.setWidth(600);
+        //stage.setHeight(400);
         stage.show();
     }
 
