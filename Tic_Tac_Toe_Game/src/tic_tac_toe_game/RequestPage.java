@@ -49,9 +49,11 @@ public class RequestPage extends BorderPane {
     private Scene currentScene;
     protected static String email;
     MediaView mediaView;
-    String name = "Player", score = "score";
+    String name = "Player";
+    int  score = -1;
     DataInputStream dataInputStream;
     PrintStream printStream;
+    JSONObject returnplayers;
 
     public RequestPage(Stage stage) {
 
@@ -67,6 +69,7 @@ public class RequestPage extends BorderPane {
         listAvailablePlayers = new ListView();
         name = FXMLSignIn.playerName;
         score = FXMLSignIn.playerScore;
+        
         try {
             printStream = new PrintStream(Start.server.getOutputStream());
             dataInputStream = new DataInputStream(Start.server.getInputStream());
@@ -75,7 +78,7 @@ public class RequestPage extends BorderPane {
         }
 
         playerNameLabel.setText(name);
-        scoreLabel.setText(score);
+        scoreLabel.setText(String.valueOf(score));
         
         //to get the first response after login  
         for (int i =0 ; i< FXMLSignIn.players.length() ; i++)
@@ -91,16 +94,21 @@ public class RequestPage extends BorderPane {
                 {
                     try {
                         String returnPlayers = dataInputStream.readLine();
-                        JSONObject players = new JSONObject(returnPlayers);
+                        returnplayers = new JSONObject(returnPlayers);
+                        System.out.println("player IN 1 : "+returnplayers);
+
+                        //copyPlayers. players;
+                        
                             Platform.runLater(new Runnable() {
                                 @Override
                                 public void run() {
                                     //to clear the list before adding sending the updates because updates contains the whole list not only the new one. 
                                     listRequests.getItems().clear();
-                                    for (int i =0 ; i< players.length() ; i++)
+                                    for (int i =0 ; i< returnplayers.length() ; i++)
                                     {
-                                    listRequests.getItems().add(players.getString(String.valueOf(i)));
+                                    listRequests.getItems().add(returnplayers.getString(String.valueOf(i)));
                                     }
+                                    System.out.println("player IN : "+returnplayers);
                                 }
                             });
                         //}
@@ -131,6 +139,30 @@ public class RequestPage extends BorderPane {
                         Button sendRequest = new Button("Send");
                         sendRequest.setOnAction(event -> {
                             // Code to send invite   
+                            //JSONObject invitation = new JSONObject();
+                            JSONObject js = new JSONObject();
+                            js.put("key", "request key");
+                            for(int j=0; j<returnplayers.length();j++)
+                            {
+                                if(returnplayers.getString(String.valueOf(j)).compareTo(item)==0)
+                                {
+                                    System.out.println("PLayer2 key:"+j);
+                                    js.put("player2 key",String.valueOf(j));
+                                }
+                            }
+                            for(int j=0; j<returnplayers.length();j++)
+                            {
+                                if(returnplayers.getString(String.valueOf(j)).compareTo(name)==0)
+                                {
+                                    System.out.println("PLayer1 key:"+j);
+                                    js.put("player1 key",String.valueOf(j));
+                                }
+                            }
+                                printStream.println(js);
+                            
+                           // System.out.println(returnplayers.keySet().);
+                           // System.out.println("key of name : "+ players.getString(item));
+                            System.out.println("cell factory "+item);
 
                             //then play vedio until response
                             File mediaFile = new File("src\\vedios_media\\waiting vedio.mp4");
@@ -194,7 +226,7 @@ public class RequestPage extends BorderPane {
         scoreLabel.setPrefHeight(47.0);
         scoreLabel.setPrefWidth(166.0);
         // the name will bring the score according to the player from database
-        scoreLabel.setText(score);
+        scoreLabel.setText(String.valueOf(score));
 
         FlowPane.setMargin(scoreLabel, new Insets(0.0, 0.0, 0.0, 50.0));
 

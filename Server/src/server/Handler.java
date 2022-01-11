@@ -25,11 +25,11 @@ public class Handler extends Thread {
     DataInputStream dataInputStream;
     PrintStream printStream;
     static Vector<Handler> clientsVector = new Vector<Handler>();
-    //static Vector<String> avaliablePlayers = new Vector<>();
     static JSONObject avaliablePlayers  = new JSONObject();
+    static JSONObject onlinePlayers  = new JSONObject();
     static int playerCount = 0;
     static String totalPlayers;
-    int x = 0, i=0;
+    int x = 0;
     boolean flag = true;
     boolean isRemoved = true;
     int removed;
@@ -43,37 +43,10 @@ public class Handler extends Thread {
             x = clientsVector.size() - 1;
 
             start();
-            /* System.out.println("before start");
-                new Thread() {
-                    public void run() {
-                        System.out.println("in start");
-                        while (true) {
-                            try {
-                                String message = dataInputStream.readLine();
-                                sendMessageToSender(message);
-                            } catch (IOException ex) {
-                                try {
-                                    System.out.println("remove");
-                                    dataInputStream.close();
-                                    printStream.close();
-                                    clientsVector.remove(this);
-                                    // x--;
-                                    isRemoved = !isRemoved;
-                                    break;
-                                } catch (IOException ex1) {
-                                    //Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex1);
-                                    new Alert(Alert.AlertType.ERROR, "Error in read dataInputStream in run method server\n"
-                                            + ex1.getMessage()).show();
-                                }
 
-                            }
-                        }
-                    }
-                }.start();*/
         } catch (IOException ex) {
             new Alert(Alert.AlertType.ERROR, "Error in open connection in server\n"
                     + ex.getMessage()).show();
-            //Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -83,6 +56,7 @@ public class Handler extends Thread {
             try{
                 String message = dataInputStream.readLine();
                 JSONObject jSObject = new JSONObject(message);
+                System.out.println("message: "+jSObject);
                 String key = jSObject.getString("key");
                 System.out.println("key  >>>>>>>>>>>>>>>>>>>>> " + key);//jSObject.get("key");
                 switch (key) {
@@ -103,13 +77,21 @@ public class Handler extends Thread {
                         printStream.println(jsono);
                         break;
 
-                    case "playerList":
+                    //case "playerList":
                         //code will insert in database
-                        break;
+                       // break;
 
-                    case "retriveInformation":
+                    //case "retriveInformation":
                         //code will insert in database
-                        break;
+                        //break;
+                    case "request key":
+                        //String message2 = dataInputStream.readLine();
+                        //JSONObject jSObj = new JSONObject(message2);
+                        String player2ID = jSObject.getString("player2 key");
+                        String player1ID = jSObject.getString("player1 key");
+                        System.out.println("player2 id: "+player2ID+" thread no: "+onlinePlayers.getString(player2ID));
+                        System.out.println("player1 id: "+player1ID+" thread no: "+onlinePlayers.getString(player1ID));
+                        
                 }
             } catch (IOException ex) {
                 try {
@@ -132,11 +114,6 @@ public class Handler extends Thread {
         }
     }
 
-    /*void sendToAll() {
-        for (Handler h : clientsVector) {
-            new Thread(h.getName());
-        }
-    }*/
     void sendMessageToSender(String msg) {
         System.out.println("X from sendMessageToSender = " + x);
         Handler handler = clientsVector.get(x);
@@ -144,36 +121,6 @@ public class Handler extends Thread {
 
         System.out.println("Message >>>>>>>> " + msg);
         handler.printStream.println(msg);
-        //int index = msg.indexOf(':');
-        //System.out.println("index >>>>>>>>>>>>> " + index);
-        //String email = msg.substring(0, index);
-        //String password = msg.substring(index + 1);
-        //System.out.println("eamil >>> " + email + "\t\t\tPassword >>> " + password);
-/*
-                Player player = DAO.retriveInformation(email);  // retrive information of player
-                //request page
-                clientsVector.get(clientsVector.size()-1).setName(DAO.RetrieveUsername(email));
-                totalPlayers = totalPlayers+" "+ch.getName();
-                avaliablePlayers.add(i,ch.getName());
-                i++;
-                ShowAvaliablePlayers();
-                System.out.println("information >>>>>>>>> " + player.getUserName() + "\t\t" + player.getTootalScoore());
-                
-                handler.printStream.println("true" + " " + player.getUserName() + " " + player.getTootalScoore()+ " " +  totalPlayers);
-                
-               
-                /*  Player player = DAO.retriveInformation(email);  // retrive information of player
-                System.out.println("information >>>>>>>>> " + player.getUserName() + "\t\t" + player.getTootalScoore());
-                
-                handler.printStream.println("true" + " " + player.getUserName() + " " + player.getTootalScoore());
-                handler.printStream.println("true");
-            } else {
-                //Log in Failed
-                handler.printStream.println("false");
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error in sendMessageToSender in server\n" + ex.getMessage());
-        }*/
         System.out.println("clientsVector = " + clientsVector);
     }
     void ShowAvaliablePlayers()
@@ -196,6 +143,8 @@ public class Handler extends Thread {
             
             JSONObject jsono = new JSONObject();
             jsono.put("login", resualt);
+            jsono.put("username", DAO.retriveInformation(email).getUserName());
+            jsono.put("score", DAO.retriveInformation(email).getTootalScoore());
             String reply = jsono.toString();
             sendMessageToSender(reply);
             if (resualt)
@@ -204,6 +153,8 @@ public class Handler extends Thread {
                 Player player;
                 player = DAO.retriveInformation(email);
                 avaliablePlayers.put(String.valueOf(playerCount), player.getUserName());
+                onlinePlayers.put(String.valueOf(playerCount), clientsVector.get(x).getName());
+                System.out.println(onlinePlayers);
                 playerCount++;
                 System.out.println(avaliablePlayers);
                 ShowAvaliablePlayers();

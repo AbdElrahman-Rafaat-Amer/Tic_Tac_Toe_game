@@ -31,13 +31,12 @@ public class FXMLSignIn extends AnchorPane {
     private String realReply = "";
     private String email, password;
     static String playerName;
-    static String playerScore;
+    static int playerScore;
     Start start;
-    //DataInputStream dataInputStream;
-    //PrintStream printStream;
     Thread thread;
     boolean r;
     static JSONObject players;
+    
 
     public FXMLSignIn(Stage stage) {
         this.stage = stage;
@@ -179,6 +178,8 @@ public class FXMLSignIn extends AnchorPane {
                         players = new JSONObject(returnPlayers);
                         JSONObject object = new JSONObject(reply);
                         r = object.getBoolean("login");
+                        playerName = object.getString("username");
+                        playerScore = object.getInt("score");
                         System.out.println("Reply >>>>>>>>> " + reply);
                         //  realReply = reply;
                         System.out.println("realReply >>>>>>>>> " + realReply);
