@@ -27,10 +27,8 @@ public class RetriveRecords {
             
             BufferedReader buffer = new BufferedReader(file);
             try {
-                 text = buffer.readLine();
-                System.out.println("text is here" +text);
-                
-                
+                text = buffer.readLine();
+                System.out.println("text is here" +text);                  
             } catch (IOException ex) {
                 Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
             }

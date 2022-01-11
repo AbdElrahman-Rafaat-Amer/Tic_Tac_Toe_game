@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Pos;
@@ -76,21 +77,22 @@ public class GameTwoPlayersOffline extends BorderPane {
     protected final Label labelPane9;
     protected static String text;
     protected String[] values = new String[9];
-    protected String[] sequence = new String[9];
-
+    protected ArrayList<String> sequence = new ArrayList<>();
+    private int labelNumber = 0;
     private int i = 0;
     private String winner;
     private Stage stage;
     private boolean isDraw = true;
     private String playerOne;
     private String playerTwo;
-    public  static String saved;
-    public  static String reply;
+    public static String saved;
+    public static String reply;
 
     private JSONObject obj;
     private JSONObject obj1;
-     
 
+    public static String firstPlayer = "try";
+    public static String secpndPlayer = "try";
 
     public GameTwoPlayersOffline(Stage stage) {
 
@@ -141,26 +143,22 @@ public class GameTwoPlayersOffline extends BorderPane {
         labelPane9 = new Label();
         playerOne = XorOSelection.playerOne;
         playerTwo = XorOSelection.playerTwo;
-        reply = RetriveRecords.open();
-        obj = new  JSONObject();
-        obj1 = new  JSONObject(reply);
-        Label board [] = {labelPane1, labelPane2, labelPane3,labelPane4, labelPane5, labelPane6,labelPane7, labelPane8, labelPane9};
+//        reply = RetriveRecords.open();
+        obj = new JSONObject();
+//        obj1 = new  JSONObject(reply);
+        Label board[] = {labelPane1, labelPane2, labelPane3, labelPane4, labelPane5, labelPane6, labelPane7, labelPane8, labelPane9};
 
-        
-         JSONArray array= (JSONArray) obj1.get("sequence");
-         
-         int n;
-         
-         //JSON move = obj.get("moves");
-         for(n=0;n<array.length();n++){
+//         JSONArray array= (JSONArray) obj1.get("sequence");
+        int n;
+
+        //JSON move = obj.get("moves");
+        /*  for(n=0;n<array.length();n++){
             
             // int x = array[n];
             // board[x].settext(move[n]);
              
          }
-         
-
-
+         */
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -469,240 +467,208 @@ public class GameTwoPlayersOffline extends BorderPane {
         labelPane8.setAlignment(Pos.CENTER);
         labelPane9.setAlignment(Pos.CENTER);
 
-       //int sequenses[]=null;
+        //int sequenses[]=null;
         //String moves[];
         int Label[];
-        
+
         //obj.put("sequence",sequenses);
-       
-      // save(saved);
+        // save(saved);
         pane1.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if (values[0] == null) {
-                swapXO();
+            labelNumber = 0;
+            if (values[labelNumber] == null) {
+                paneClicked(labelPane1);
+                /*swapXO();
                 labelPane1.setText(text);
-               
+
                 i++;
-                values[i] = text;
-                sequence[0]=i+"";
-                
+                values[labelNumber] = text;
+//                sequence[labelNumber]=i+"";
+                sequence.add(String.valueOf(labelNumber));
                 checkWinner(i);
                 if (winner != null) {
                     obj.put("moves", values);
-                    saved =obj.toString();
+                    saved = obj.toString();
                     Game.goToWinnerPage(stage);
-                }
+                }*/
             }
             System.err.println("i = " + i);
         });
 
         pane2.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if (values[1] == null) {
-                swapXO();
+            labelNumber = 1;
+            if (values[labelNumber] == null) {
+                paneClicked(labelPane2);
+                /*swapXO();
                 labelPane2.setText(text);
                 //fill the array with label text
-            
+
                 // collect number of labels text 
                 i++;
-                 values[i] = text;
-                sequence[1]=i+"";
-                checkWinner(i);
+                values[labelNumber] = text;
+                //sequence[labelNumber]=i+"";
+                sequence.add(String.valueOf(labelNumber));
+                checkWinner(labelNumber);
                 if (winner != null) {
-                     obj.put("moves", values);
-                    saved =obj.toString();
+                    obj.put("moves", values);
+                    saved = obj.toString();
                     Game.goToWinnerPage(stage);
-                }
+                }*/
             }
             System.err.println("i = " + i);
         });
         pane3.setOnMousePressed((MouseEvent) -> {
             //to make label text uneditable
-            if (values[2] == null) {
-                swapXO();
+            labelNumber = 2;
+            if (values[labelNumber] == null) {
+                paneClicked(labelPane3);
+                /*swapXO();
                 labelPane3.setText(text);
                 i++;
-                 values[i] = text;
-                sequence[2]=i+"";
+                values[labelNumber] = text;
+                sequence.add(String.valueOf(labelNumber));
+                //sequence[labelNumber] = i + "";
                 checkWinner(i);
                 if (winner != null) {
                     obj.put("moves", values);
-                    saved =obj.toString();
+                    saved = obj.toString();
                     Game.goToWinnerPage(stage);
-                }
+                }*/
             }
             System.err.println("i = " + i);
         });
         pane4.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if (values[3] == null) {
-                swapXO();
+            labelNumber = 3;
+            if (values[labelNumber] == null) {
+                paneClicked(labelPane4);
+                /*       swapXO();
                 labelPane4.setText(text);
                 i++;
-                 values[i] = text;
-                sequence[3]=i+"";
+                values[labelNumber] = text;
+                sequence.add(String.valueOf(labelNumber));
+//sequence[labelNumber] = i + "";
                 checkWinner(i);
                 if (winner != null) {
-                   obj.put("moves", values);
-                  saved =obj.toString();
+                    obj.put("moves", values);
+                    saved = obj.toString();
                     Game.goToWinnerPage(stage);
-                }
+                }*/
             }
             System.err.println("i = " + i);
         });
         pane5.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if (values[4] == null) {
-                swapXO();
+            labelNumber = 4;
+
+            if (values[labelNumber] == null) {
+                // paneClicked(labelPane5);
+                paneClicked(labelPane5);
+                /*swapXO();
                 labelPane5.setText(text);
                 //values[4] = text;
                 i++;
-                 values[i] = text;
-                sequence[4]=i+"";
+                values[labelNumber] = text;
+                sequence.add(String.valueOf(labelNumber));
+                //sequence[labelNumber] = i + "";
                 checkWinner(i);
                 if (winner != null) {
                     obj.put("moves", values);
-                    saved =obj.toString();
+                    saved = obj.toString();
                     Game.goToWinnerPage(stage);
-                }
+                }*/
             }
             System.err.println("i = " + i);
         });
         pane6.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if (values[5] == null) {
-                swapXO();
+            labelNumber = 5;
+            if (values[labelNumber] == null) {
+                paneClicked(labelPane6);
+                /*   swapXO();
                 labelPane6.setText(text);
-            // String sequence[]= sequence+5;
+                // String sequence[]= sequence+5;
                 //values[5] = text;
                 i++;
-                 values[i] = text;
-                sequence[5]=i+"";
+                values[labelNumber] = text;
+                sequence.add(String.valueOf(labelNumber));
+                //sequence[labelNumber] = i + "";
                 checkWinner(i);
                 if (winner != null) {
                     obj.put("moves", values);
-                    saved =obj.toString();
+                    saved = obj.toString();
                     Game.goToWinnerPage(stage);
-                }
+                }*/
             }
             System.err.println("i = " + i);
         });
         pane7.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if (values[6] == null) {
-                swapXO();
+            labelNumber = 6;
+            if (values[labelNumber] == null) {
+                paneClicked(labelPane7);
+                /*swapXO();
                 labelPane7.setText(text);
-               // values[6] = text;
+                // values[6] = text;
                 i++;
-                 values[i] = text;
-                sequence[6]=i+"";
+                values[labelNumber] = text;
+                sequence.add(String.valueOf(labelNumber));
+//sequence[labelNumber] = i + "";
                 checkWinner(i);
                 if (winner != null) {
                     obj.put("moves", values);
-                    saved =obj.toString();
+                    saved = obj.toString();
                     Game.goToWinnerPage(stage);
-                }
+                }*/
             }
             System.err.println("i = " + i);
         });
         pane8.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if (values[7] == null) {
-                swapXO();
+            labelNumber = 7;
+            if (values[labelNumber] == null) {
+                paneClicked(labelPane8);
+                /*swapXO();
                 labelPane8.setText(text);
                 //values[7] = text;
                 i++;
-                 values[i] = text;
-                sequence[7]=i+"";
+                values[labelNumber] = text;
+                sequence.add(String.valueOf(labelNumber));
+//sequence[labelNumber]=i+"";
                 checkWinner(i);
                 if (winner != null) {
                     obj.put("moves", values);
-                    saved =obj.toString();
-                  
-               /* FileOutputStream fos;
-                
-                    try {
-                        //DataOutputStream = new ObjectOutputStream(fos);
-                        
-                        FileWriter writer = new FileWriter("hahahhahahahahhahahahhaa");  
-                         BufferedWriter buffer = new BufferedWriter(writer);
-                         for(int j=0 ;j<9;j++)
-                    {
-                         if(j==3 || j==6){
-                                buffer.newLine();
-                         
-                        }
-                        if(values[j]==null)
-                        {
-                            buffer.write(" ");
-                            
-                        }
-                        else
-                        {
-                            
-                         buffer.write(values[j]);
-                       
-           
+                    saved = obj.toString();
 
-                        }
-                    }
-                        
-                         buffer.close();  
-                        
-                        
-                        
-                      BufferedWriter buffer= new BufferedWriter(new FileWriter("nooooooooo")); 
-                        buffer.write("hagermagdyyyy"); 
-                    } catch (IOException ex) {
-                        Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                        
-                   
-                        // DataOutputStream writeUTF = fo.writeUTF(pane8.getText());
-                        //FileOutputStream write = fos.write(pane8.getText().getBytes());
-
-               
-                // fos.write(textarea.getText().getBytes());
-                 //fo.flush();
-                 //fo.close();
-                    FileOutputStream fos;
-                    try {
-                        fos = new FileOutputStream(values[i]);
-                        saveFile = new ObjectOutputStream(fos);
-                BufferedWriter f_writer= new BufferedWriter(new FileWriter(""));
- 
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                       */
-            	
                     Game.goToWinnerPage(stage);
-                }
+                }*/
             }
             System.err.println("i = " + i);
         });
         pane9.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
-            if (values[8] == null) {
-                swapXO();
-                labelPane9.setText(text);
-               // values[8] = text;
-                i++;
-                 values[i] = text;
-                sequence[8]=i+"";
-                checkWinner(i);
-                if (winner != null) {
-                  //  Parent root2;
-                    obj.put("moves", values);
-                  obj.put("sequence", sequence);
-
-                    saved =obj.toString();
-                    Game.goToWinnerPage(stage);
-                }
+            labelNumber = 8;
+            if (values[labelNumber] == null) {
+                paneClicked(labelPane9);
             }
             System.err.println("i = " + i);
         });
+    }
 
+    void paneClicked(Label label) {
+        swapXO();
+        label.setText(text);
+        i++;
+        values[labelNumber] = text;
+        sequence.add(String.valueOf(labelNumber));
+        checkWinner(i);
+        if (winner != null) {
+            obj.put("moves", values);
+            obj.put("sequence", sequence);
+            saved = obj.toString();
+            Game.goToWinnerPage(stage);
+        }
     }
 
     protected void swapXO() {
@@ -760,6 +726,4 @@ public class GameTwoPlayersOffline extends BorderPane {
             Game.goToWinnerPage(stage);
         }
     }
-
-    
 }

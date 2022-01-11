@@ -50,11 +50,11 @@ public class Game {
                 switch (labels[row][0].getText()) {
                     case "X":
                         score = 3;
-                         ResultScene.winner = "COMPUTER WIN";
+                        ResultScene.winner = "COMPUTER WIN";
                         break;
                     case "O":
                         score = -3;
-                         ResultScene.winner = "YOU WIN";
+                        ResultScene.winner = "YOU WIN";
                         break;
 
                 }
@@ -67,11 +67,11 @@ public class Game {
 
                     case "X":
                         score = 3;
-                         ResultScene.winner = "COMPUTER WIN";
+                        ResultScene.winner = "COMPUTER WIN";
                         break;
                     case "O":
                         score = -3;
-                         ResultScene.winner = "YOU WIN";
+                        ResultScene.winner = "YOU WIN";
                         break;
                 }
             }
@@ -82,11 +82,11 @@ public class Game {
 
                 case "X":
                     score = 3;
-                     ResultScene.winner = "COMPUTER WIN";
+                    ResultScene.winner = "COMPUTER WIN";
                     break;
                 case "O":
                     score = -3;
-                     ResultScene.winner = "YOU WIN";
+                    ResultScene.winner = "YOU WIN";
                     break;
             }
         }
@@ -96,11 +96,11 @@ public class Game {
 
                 case "X":
                     score = 3;
-                     ResultScene.winner = "COMPUTER WIN";
+                    ResultScene.winner = "COMPUTER WIN";
                     break;
                 case "O":
                     score = -3;
-                     ResultScene.winner = "YOU WIN";
+                    ResultScene.winner = "YOU WIN";
                     break;
             }
         }
@@ -113,7 +113,7 @@ public class Game {
             // winner = null;
             // values = null;
             save(GameTwoPlayersOffline.saved);
-             RetriveRecords.open();
+//             RetriveRecords.open();
             root2 = new ResultScene(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
@@ -122,19 +122,19 @@ public class Game {
             Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private static void save(String saved) {
-        
+
         FileWriter writer = null;
         try {
-            
-            writer = new FileWriter("abdoo");
+
+            writer = new FileWriter(GameTwoPlayersOffline.firstPlayer + GameTwoPlayersOffline.secpndPlayer);
             BufferedWriter buffer = new BufferedWriter(writer);
             buffer.write(saved);
-     
-           buffer.close();
+
+            buffer.close();
         } catch (IOException ex) {
-            Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);  
+            Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 writer.close();
@@ -143,8 +143,6 @@ public class Game {
             }
 
         }
-                        
-        
+
     }
-    }
-   
+}
