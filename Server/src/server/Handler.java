@@ -24,9 +24,14 @@ public class Handler extends Thread {
 
     DataInputStream dataInputStream;
     PrintStream printStream;
+    // all users in connection
     static Vector<Handler> clientsVector = new Vector<Handler>();
-    static JSONObject avaliablePlayers  = new JSONObject();
-    static JSONObject onlinePlayers  = new JSONObject();
+    //online Players vector
+    static Vector<Handler> onlinePlayers = new Vector<Handler>();
+    //UserName vector
+    static Vector<String> avaliablePlayers = new Vector<String>();
+    //game players vector
+    static Vector<Handler> gamePlayers = new Vector<Handler>();
     static int playerCount = 0;
     static String totalPlayers;
     int x = 0;
@@ -89,9 +94,15 @@ public class Handler extends Thread {
                         //JSONObject jSObj = new JSONObject(message2);
                         String player2ID = jSObject.getString("player2 key");
                         String player1ID = jSObject.getString("player1 key");
-                        System.out.println("player2 id: "+player2ID+" thread no: "+onlinePlayers.getString(player2ID));
-                        System.out.println("player1 id: "+player1ID+" thread no: "+onlinePlayers.getString(player1ID));
-                        
+                        Handler player1Thread = onlinePlayers.get(Integer.parseInt(player1ID));
+                        Handler player2Thread = onlinePlayers.get(Integer.parseInt(player2ID));
+                        System.out.println("player2 id: "+player2ID+" thread no: "+onlinePlayers.get(Integer.parseInt(player2ID)));
+                        System.out.println("player1 id: "+player1ID+" thread no: "+onlinePlayers.get(Integer.parseInt(player1ID)));
+                        sendRequestMessage(player1Thread, player2Thread, player1ID);
+                        break;
+                    case "replay":
+                        System.out.println("request replay :" + jSObject.getString("request replay"));
+                        sendReplayToplayer2(jSObject.getString("request replay"));
                 }
             } catch (IOException ex) {
                 try {
@@ -128,7 +139,10 @@ public class Handler extends Thread {
         for( Handler ch: clientsVector)
             {
                 System.out.println("ch" + ch);
-                ch.printStream.println(avaliablePlayers);
+                JSONObject playerList = new JSONObject();
+                playerList.put("key", "player list");
+                playerList.put("list", avaliablePlayers);
+                ch.printStream.println(playerList);
             }    
     }
 
@@ -152,18 +166,27 @@ public class Handler extends Thread {
                 System.out.println("you are in condition");
                 Player player;
                 player = DAO.retriveInformation(email);
-                avaliablePlayers.put(String.valueOf(playerCount), player.getUserName());
-                onlinePlayers.put(String.valueOf(playerCount), clientsVector.get(x).getName());
-                System.out.println(onlinePlayers);
+                avaliablePlayers.add(playerCount, player.getUserName());
+                onlinePlayers.add(playerCount, clientsVector.get(x));
                 playerCount++;
-                System.out.println(avaliablePlayers);
                 ShowAvaliablePlayers();
             }
-            //   int j = 0;
-            //  jsono.put(String.valueOf(j), DAO.retriveInformation(email).getUserName());
         } catch (SQLException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    void sendRequestMessage(Handler one, Handler two,String player1Key)
+    {
+        JSONObject requestMessage = new JSONObject();
+        requestMessage.put("key", "play with me, please");
+        requestMessage.put("player1 username", avaliablePlayers.get(Integer.parseInt(player1Key)));
+        System.out.println("request JSON :"+requestMessage);
+        two.printStream.println(requestMessage);
+    }
+    
+    void sendReplayToplayer2(String reply)
+    {
+        
+    }
 }

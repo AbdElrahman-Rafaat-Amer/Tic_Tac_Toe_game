@@ -175,6 +175,7 @@ public class FXMLSignIn extends AnchorPane {
                     try {
                         String reply = Start.dataInputStream.readLine();
                         String returnPlayers = Start.dataInputStream.readLine();
+                        System.out.println("return players :"+returnPlayers);
                         players = new JSONObject(returnPlayers);
                         JSONObject object = new JSONObject(reply);
                         r = object.getBoolean("login");
