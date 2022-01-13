@@ -119,24 +119,45 @@ public class RequestPage extends BorderPane {
                                             //oke button is pressed
                                             {
                                                 replay.put("request replay", "true");
+                                                replay.put("player1 NO", returnplayer.getString("player1 NO"));
+                                                replay.put("player2 NO", returnplayer.getString("player2 NO"));
                                                 Start.printStream.println(replay);
-                                                Parent root2 = new GameScene(stage);
-                                                Scene scene2 = new Scene(root2);
-                                                stage.setScene(scene2);
-                                                stage.show();
+                                                //Parent root2 = new GameScene(stage);
+                                                //Scene scene2 = new Scene(root2);
+                                                //stage.setScene(scene2);
+                                                //stage.show();
                                             }
                                             else
                                                 if(result.get() == ButtonType.CANCEL)
                                                 // cancel button is pressed
                                                 {
                                                     replay.put("request replay", "false");
+                                                    replay.put("player1 NO", returnplayer.getString("player1 NO"));
+                                                    replay.put("player2 NO", returnplayer.getString("player2 NO"));
                                                     Start.printStream.println(replay);
-                                                    Parent root2 = new RequestPage(stage);
-                                                    Scene scene2 = new Scene(root2);
-                                                    stage.setScene(scene2);
-                                                    stage.show();
+                                                    //Parent root2 = new RequestPage(stage);
+                                                    //Scene scene2 = new Scene(root2);
+                                                    //stage.setScene(scene2);
+                                                    //stage.show();
                                                 }
                                             break;
+                                            
+                                        case "Request Response":
+                                            String reply = returnplayer.getString("response");
+                                            if(reply.compareTo("true")==0)
+                                            {
+                                                //Parent root3 = new GameScene(stage);
+                                                //Scene scene3 = new Scene(root3);
+                                                //stage.setScene(scene3);
+                                                //stage.show();
+                                            }
+                                            else
+                                            {
+                                                //Parent root3 = new RequestPage(stage);
+                                                //Scene scene3 = new Scene(root3);
+                                                //stage.setScene(scene3);
+                                                //stage.show();
+                                            }
                                     }
                                 }
                             });

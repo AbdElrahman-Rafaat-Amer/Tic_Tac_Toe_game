@@ -30,14 +30,13 @@ public class Handler extends Thread {
     static Vector<Handler> onlinePlayers = new Vector<Handler>();
     //UserName vector
     static Vector<String> avaliablePlayers = new Vector<String>();
-    //game players vector
-    static Vector<Handler> gamePlayers = new Vector<Handler>();
     static int playerCount = 0;
     static String totalPlayers;
     int x = 0;
     boolean flag = true;
     boolean isRemoved = true;
     int removed;
+    static Handler player1;
 
     public Handler(Socket s) //Constructor
     {
@@ -82,13 +81,6 @@ public class Handler extends Thread {
                         printStream.println(jsono);
                         break;
 
-                    //case "playerList":
-                        //code will insert in database
-                       // break;
-
-                    //case "retriveInformation":
-                        //code will insert in database
-                        //break;
                     case "request key":
                         //String message2 = dataInputStream.readLine();
                         //JSONObject jSObj = new JSONObject(message2);
@@ -98,11 +90,14 @@ public class Handler extends Thread {
                         Handler player2Thread = onlinePlayers.get(Integer.parseInt(player2ID));
                         System.out.println("player2 id: "+player2ID+" thread no: "+onlinePlayers.get(Integer.parseInt(player2ID)));
                         System.out.println("player1 id: "+player1ID+" thread no: "+onlinePlayers.get(Integer.parseInt(player1ID)));
-                        sendRequestMessage(player1Thread, player2Thread, player1ID);
+                        sendRequestMessage(player1ID,player2ID, player2Thread, player1ID);
                         break;
+                        
                     case "replay":
                         System.out.println("request replay :" + jSObject.getString("request replay"));
-                        sendReplayToplayer2(jSObject.getString("request replay"));
+                        String IDPlayer1 = jSObject.getString("player1 NO");
+                        String IDPlayer2 = jSObject.getString("player2 NO");
+                        sendReplayToplayer2(jSObject.getString("request replay"), onlinePlayers.get(Integer.parseInt(IDPlayer1)), onlinePlayers.get(Integer.parseInt(IDPlayer2)));
                 }
             } catch (IOException ex) {
                 try {
@@ -176,17 +171,23 @@ public class Handler extends Thread {
         }
     }
     
-    void sendRequestMessage(Handler one, Handler two,String player1Key)
+    void sendRequestMessage(String one, String two, Handler threadPlayer2,String player1Key)
     {
         JSONObject requestMessage = new JSONObject();
         requestMessage.put("key", "play with me, please");
         requestMessage.put("player1 username", avaliablePlayers.get(Integer.parseInt(player1Key)));
+        requestMessage.put("player1 NO", one);
+        requestMessage.put("player2 NO", two);
         System.out.println("request JSON :"+requestMessage);
-        two.printStream.println(requestMessage);
+        threadPlayer2.printStream.println(requestMessage);
     }
     
-    void sendReplayToplayer2(String reply)
+    void sendReplayToplayer2(String reply, Handler playerOne, Handler playertwo)
     {
-        
+        JSONObject requestResponse = new JSONObject();
+        requestResponse.put("key", "Request Response");
+        requestResponse.put("response", reply);
+        System.out.println("request response :"+requestResponse);
+        playerOne.printStream.println(requestResponse);
     }
 }
