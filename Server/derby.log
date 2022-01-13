@@ -1,7 +1,7 @@
-Wed Jan 12 22:31:51 EET 2022 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
+Thu Jan 13 21:14:45 EET 2022 : Apache Derby Network Server - 10.11.1.2 - (1629631) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Wed Jan 12 22:31:51 EET 2022:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-017e-4ffd-5b6c-00003fd32141 
+Thu Jan 13 21:14:46 EET 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-017e-54dd-236a-00003fd32141 
 on database directory C:\Users\Wind\OneDrive\Desktop\Tic_Tac_Toe_game\Server\Database_tic_tack with class loader sun.misc.Launcher$AppClassLoader@6f94fa3e 
 Loaded from file:/C:/Program%20Files/Java/jdk1.8.0_112/db/lib/derby.jar
 java.vendor=Oracle Corporation

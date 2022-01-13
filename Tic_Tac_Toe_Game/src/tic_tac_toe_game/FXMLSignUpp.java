@@ -36,10 +36,6 @@ public class FXMLSignUpp extends AnchorPane {
     Player player = new Player();
     protected static int id = 0;
     private boolean message;
-    String msg;
-    // DataInputStream dataInputStream;
-    //PrintStream printStream;
-    boolean flag = true;
     Thread thread;
 
     public FXMLSignUpp(Stage stage) {
@@ -122,7 +118,6 @@ public class FXMLSignUpp extends AnchorPane {
         confirmButton.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //try {
                 if (UsernameInput.getText().matches("[\\S]+{1,}") && EmailInput.getText().matches("[\\S]+{1,}") && passwordInput.getText().matches("[\\S]+{1,}") && confirmpassInput.getText().matches("[\\S]+{1,}")) {
                     //set values of DTO "player" 
                     if (UsernameInput.getText().matches("([a-zA-Z0-9]{2,})")) {
@@ -181,7 +176,19 @@ public class FXMLSignUpp extends AnchorPane {
                             });
                         }
                     } catch (IOException ex) {
-                        Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
+                        try {
+                            Start.server.close();
+                            Start.printStream.close();
+                            Start.dataInputStream.close();
+                        } catch (IOException ex1) {
+                            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+                        Platform.runLater(() -> {
+                            new Alert(Alert.AlertType.INFORMATION, "There are problem in connection\n you can play offline\n" + ex.getMessage()).show();
+                        });
+                        System.out.println("-------------------------------SignUp in Error in recieve Data-------------------------------");
+                        break;
+
                     }
                     if (message) {
                         break;

@@ -28,7 +28,6 @@ public class FXMLSignIn extends AnchorPane {
     protected final Button buttonConSingIn;
     protected final Button backButton;
     private Stage stage;
-    private String realReply = "";
     private String email, password;
     static String playerName;
     static int playerScore;
@@ -36,7 +35,6 @@ public class FXMLSignIn extends AnchorPane {
     Thread thread;
     boolean r;
     static JSONObject players;
-    
 
     public FXMLSignIn(Stage stage) {
         this.stage = stage;
@@ -48,49 +46,10 @@ public class FXMLSignIn extends AnchorPane {
         buttonConSingIn = new Button();
         backButton = new Button();
         start = new Start(stage);
-        
-        /*  try {
-            printStream = new PrintStream(Start.server.getOutputStream());
-            dataInputStream = new DataInputStream(Start.server.getInputStream());
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLSignUpp.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+
+        //recieving data in signup page..
         reciveData();
-        /* new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        String reply = dataInputStream.readLine();
-                        System.out.println("Reply >>>>>>>>> " + reply);
-                        realReply = reply;
-                        System.out.println("realReply >>>>>>>>> " + realReply);
-                         Platform.runLater(() -> {
-                            if (realReply.equals("true")) {
-                                Platform.runLater(() -> {
-                                    RequestPage.email = email;
-                                    Parent root2 = new RequestPage(stage);
-                                    Scene scene2 = new Scene(root2);
-                                    stage.setScene(scene2);
-                                    stage.show();
-                                });
-                            } else {
-                                Platform.runLater(() -> {
-                                    new Alert(Alert.AlertType.ERROR, "Password or email is wrong\n" + realReply).show();
-                                });
-                            }
-                        });
-                    } catch (IOException ex) {
-                        closeTheConnection();
-                        Platform.exit();
-                        System.exit(0);
-                        new Alert(Alert.AlertType.ERROR, "Error in recieve Data\n" + ex.getMessage()).show();
-                        System.out.println("-------------------------------Error in recieve Data-------------------------------");
-                        // Logger.getLogger(FXMLSignIn.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        }).start();*/
+
         setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
@@ -133,7 +92,6 @@ public class FXMLSignIn extends AnchorPane {
             System.out.println("email = " + email + "\t\tPassword = " + password);
             if (!email.isEmpty() && !password.isEmpty()) {
 
-                // String msg = email + ":" + password;
                 JSONObject jSObject = new JSONObject();
                 jSObject.put("key", "login");
                 jSObject.put("email", email);
@@ -174,39 +132,50 @@ public class FXMLSignIn extends AnchorPane {
                 while (true) {
                     try {
                         String reply = Start.dataInputStream.readLine();
-                        String returnPlayers = Start.dataInputStream.readLine();
-                        System.out.println("return players :"+returnPlayers);
-                        players = new JSONObject(returnPlayers);
                         JSONObject object = new JSONObject(reply);
                         r = object.getBoolean("login");
-                        playerName = object.getString("username");
-                        playerScore = object.getInt("score");
+
                         System.out.println("Reply >>>>>>>>> " + reply);
-                        //  realReply = reply;
-                        System.out.println("realReply >>>>>>>>> " + realReply);
                         Platform.runLater(() -> {
                             if (r) {
                                 Platform.runLater(() -> {
-                                    //divideReply(realReply);
-                                    RequestPage.email = email;
-                                    Parent root2 = new RequestPage(stage);
-                                    Scene scene2 = new Scene(root2);
-                                    stage.setScene(scene2);
-                                    //thread.stop();
-                                    stage.show();
-
+                                    String returnPlayers;
+                                    try {
+                                        //from the first message "reply"
+                                        playerName = object.getString("username");
+                                        playerScore = object.getInt("score");
+                                        returnPlayers = Start.dataInputStream.readLine();
+                                        System.out.println("return players :" + returnPlayers);
+                                        players = new JSONObject(returnPlayers);
+                                        RequestPage.email = email;
+                                        Parent root2 = new RequestPage(stage);
+                                        Scene scene2 = new Scene(root2);
+                                        stage.setScene(scene2);
+                                        stage.show();
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(FXMLSignIn.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                 });
                             } else {
-                                new Alert(Alert.AlertType.ERROR, "Password or email is wrong\n" + realReply).show();
+                                Platform.runLater(() -> {
+                                    new Alert(Alert.AlertType.ERROR, "Password or email is wrong\n").show();
+                                });
                             }
                         });
                     } catch (IOException ex) {
-                        closeTheConnection();
-                        Platform.exit();
-                        System.exit(0);
-                        new Alert(Alert.AlertType.ERROR, "Error in recieve Data\n" + ex.getMessage()).show();
-                        System.out.println("-------------------------------Error in recieve Data-------------------------------");
-                        // Logger.getLogger(FXMLSignIn.class.getName()).log(Level.SEVERE, null, ex);
+                        try {
+                            Start.server.close();
+                            Start.printStream.close();
+                            Start.dataInputStream.close();
+                        } catch (IOException ex1) {
+                            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+                        Platform.runLater(() -> {
+                            new Alert(Alert.AlertType.INFORMATION, "There are problem in connection\n you can play offline\n" + ex.getMessage()).show();
+                        });
+                        System.out.println("-------------------------------SignIn in Error in recieve Data-------------------------------");
+                        break;
+
                     }
                     if (r) {
                         break;
@@ -216,34 +185,4 @@ public class FXMLSignIn extends AnchorPane {
             }
         }).start();
     }
-
-    public void closeTheConnection() {
-
-        try {
-            Start.printStream.close();
-            Start.dataInputStream.close();
-            Start.server.close();
-        } catch (IOException ex) {
-            new Alert(Alert.AlertType.ERROR, "Error in close Connection\n" + ex.getMessage()).show();
-        }
-
-    }
-
-    /* public void divideReply(String reply) {
-
-        StringTokenizer stringTokenizer = new StringTokenizer(reply, " ");
-
-        while (stringTokenizer.hasMoreTokens()) {
-            
-            int  o = Integer.parseInt(stringTokenizer.nextToken());
-            
-          //  bord[o].settest(values[o]);
-           // label.setText(vales[o]);
-        }
-        String replString = stringTokenizer.nextToken();
-        playerName = stringTokenizer.nextToken();
-        playerScore = stringTokenizer.nextToken();
-
-        System.out.println(replString + "\t\t\t" + playerName + "\t\t\t" + playerScore + "\t\t\t");
-    }*/
 }

@@ -56,6 +56,7 @@ public class RequestPage extends BorderPane {
     String name = "Player";
     int  score = -1;
     JSONObject returnplayer;
+    
 
     public RequestPage(Stage stage) {
 
@@ -71,14 +72,13 @@ public class RequestPage extends BorderPane {
         listAvailablePlayers = new ListView();
         name = FXMLSignIn.playerName;
         score = FXMLSignIn.playerScore;
-        
 
         playerNameLabel.setText(name);
         scoreLabel.setText(String.valueOf(score));
         Vector<String> player = new Vector<String>();
         System.out.println("player list: "+FXMLSignIn.players.getJSONArray("list"));
         for (int i =0 ; i< FXMLSignIn.players.getJSONArray("list").length() ; i++)
-        {//String.valueOf(i)
+        {
             listRequests.getItems().add(FXMLSignIn.players.getJSONArray("list").get(i));
             System.out.println("list element :"+FXMLSignIn.players.getJSONArray("list").get(i));
         }
@@ -112,33 +112,37 @@ public class RequestPage extends BorderPane {
                                             Optional<ButtonType> result = request.showAndWait();
                                             JSONObject replay = new JSONObject();
                                             replay.put("key", "replay");
-                                            //if(!result.isPresent())
-                                                // alert is exited, no button has been pressed.
-                                            //else
+
                                             if(result.get() == ButtonType.OK)
                                             //oke button is pressed
                                             {
+                                                mediaPlayer.stop();
                                                 replay.put("request replay", "true");
                                                 replay.put("player1 NO", returnplayer.getString("player1 NO"));
                                                 replay.put("player2 NO", returnplayer.getString("player2 NO"));
                                                 Start.printStream.println(replay);
-                                                //Parent root2 = new GameScene(stage);
-                                                //Scene scene2 = new Scene(root2);
-                                                //stage.setScene(scene2);
-                                                //stage.show();
+                                                Platform.runLater(() -> {
+                                                Parent root2 = new OnlineGame(stage);
+                                                Scene scene2 = new Scene(root2);
+                                                stage.setScene(scene2);
+                                                stage.show();
+                                                });
                                             }
                                             else
                                                 if(result.get() == ButtonType.CANCEL)
                                                 // cancel button is pressed
                                                 {
+                                                    mediaPlayer.stop();
                                                     replay.put("request replay", "false");
                                                     replay.put("player1 NO", returnplayer.getString("player1 NO"));
                                                     replay.put("player2 NO", returnplayer.getString("player2 NO"));
                                                     Start.printStream.println(replay);
-                                                    //Parent root2 = new RequestPage(stage);
-                                                    //Scene scene2 = new Scene(root2);
-                                                    //stage.setScene(scene2);
-                                                    //stage.show();
+                                                    Platform.runLater(() -> {
+                                                    Parent root2 = new RequestPage(stage);
+                                                    Scene scene2 = new Scene(root2);
+                                                    stage.setScene(scene2);
+                                                    stage.show();
+                                                    });
                                                 }
                                             break;
                                             
@@ -146,24 +150,38 @@ public class RequestPage extends BorderPane {
                                             String reply = returnplayer.getString("response");
                                             if(reply.compareTo("true")==0)
                                             {
-                                                //Parent root3 = new GameScene(stage);
-                                                //Scene scene3 = new Scene(root3);
-                                                //stage.setScene(scene3);
-                                                //stage.show();
+                                                Platform.runLater(() -> {
+                                                Parent root3 = new OnlineGame(stage);
+                                                Scene scene3 = new Scene(root3);
+                                                stage.setScene(scene3);
+                                                stage.show();
+                                                });
                                             }
                                             else
                                             {
-                                                //Parent root3 = new RequestPage(stage);
-                                                //Scene scene3 = new Scene(root3);
-                                                //stage.setScene(scene3);
-                                                //stage.show();
+                                                Platform.runLater(() -> {
+                                                Parent root3 = new RequestPage(stage);
+                                                Scene scene3 = new Scene(root3);
+                                                stage.setScene(scene3);
+                                                stage.show();
+                                                });
                                             }
                                     }
                                 }
                             });
-                        //}
                     } catch (IOException ex) {
-                        Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex);
+                        try {
+                            Start.server.close();
+                            Start.printStream.close();
+                            Start.dataInputStream.close();
+                        } catch (IOException ex1) {
+                            Logger.getLogger(RequestPage.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+                        Platform.runLater(() -> {
+                            new Alert(Alert.AlertType.INFORMATION, "There are problem in connection\n you can play offline\n" + ex.getMessage()).show();
+                        });
+                        System.out.println("-------------------------------Request in Error in recieve Data-------------------------------");
+                        break;
                     }
                 }
             }}).start();
@@ -236,10 +254,6 @@ public class RequestPage extends BorderPane {
                             }
                             Start.printStream.println(js);
                             
-                           // System.out.println(returnplayers.keySet().);
-                           // System.out.println("key of name : "+ players.getString(item));
-                            System.out.println("cell factory "+item);
-
                             //then play vedio until response
                             File mediaFile = new File("src\\vedios_media\\waiting vedio.mp4");
                             Media media = new Media(mediaFile.toURI().toString());
@@ -267,10 +281,7 @@ public class RequestPage extends BorderPane {
                                     stage.setScene(currentScene);
                                 }
                             });
-
-                            //if there is  response by accept the invite will end the vedio and go to play
-                            //go to game online
-                            //if there is  response by refus the invite will end the vedio and go back to the current page to send another request 
+                            
                         });
 
                         root.getChildren().addAll(sendRequest);

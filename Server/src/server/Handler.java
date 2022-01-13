@@ -26,16 +26,15 @@ public class Handler extends Thread {
     PrintStream printStream;
     // all users in connection
     static Vector<Handler> clientsVector = new Vector<Handler>();
-    //online Players vector
+    //online Players vector "threads"
     static Vector<Handler> onlinePlayers = new Vector<Handler>();
     //UserName vector
     static Vector<String> avaliablePlayers = new Vector<String>();
+    static Vector<String> updateOnlinePlayers = new Vector<String>();
+    int clientIndex = 0;
     static int playerCount = 0;
     static String totalPlayers;
     int x = 0;
-    boolean flag = true;
-    boolean isRemoved = true;
-    int removed;
     static Handler player1;
 
     public Handler(Socket s) //Constructor
@@ -82,8 +81,6 @@ public class Handler extends Thread {
                         break;
 
                     case "request key":
-                        //String message2 = dataInputStream.readLine();
-                        //JSONObject jSObj = new JSONObject(message2);
                         String player2ID = jSObject.getString("player2 key");
                         String player1ID = jSObject.getString("player1 key");
                         Handler player1Thread = onlinePlayers.get(Integer.parseInt(player1ID));
@@ -98,6 +95,8 @@ public class Handler extends Thread {
                         String IDPlayer1 = jSObject.getString("player1 NO");
                         String IDPlayer2 = jSObject.getString("player2 NO");
                         sendReplayToplayer2(jSObject.getString("request replay"), onlinePlayers.get(Integer.parseInt(IDPlayer1)), onlinePlayers.get(Integer.parseInt(IDPlayer2)));
+                        
+                    
                 }
             } catch (IOException ex) {
                 try {
@@ -105,11 +104,23 @@ public class Handler extends Thread {
                     dataInputStream.close();
                     printStream.close();
                     clientsVector.remove(this);
-                    // x--;
-                    isRemoved = !isRemoved;
+                    avaliablePlayers.remove(clientIndex);
+                    onlinePlayers.remove(this);
+                    playerCount--;
+                    //int counter = 0;
+                    //for(String str: avaliablePlayers)
+                    //{
+                    //    updateOnlinePlayers.add(counter, str);
+                    //    System.out.println("string:" + str);
+                    //    counter++;
+                    //}
+                    System.out.println("online player from catch:"+ onlinePlayers);
+                    System.out.println("avaliable player from catch:"+ avaliablePlayers);
+                    //ShowAvaliablePlayers(updateOnlinePlayers);
+                    ShowAvaliablePlayers();
+
                     break;
                 } catch (IOException ex1) {
-                    //Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex1);
                     new Alert(Alert.AlertType.ERROR, "Error in read dataInputStream in run method server\n"
                             + ex1.getMessage()).show();
                 }
@@ -129,14 +140,16 @@ public class Handler extends Thread {
         handler.printStream.println(msg);
         System.out.println("clientsVector = " + clientsVector);
     }
+    //void ShowAvaliablePlayers(Vector players)
     void ShowAvaliablePlayers()
     {
-        for( Handler ch: clientsVector)
+        for( Handler ch: onlinePlayers)
             {
                 System.out.println("ch" + ch);
                 JSONObject playerList = new JSONObject();
                 playerList.put("key", "player list");
                 playerList.put("list", avaliablePlayers);
+                //playerList.put("list", players);
                 ch.printStream.println(playerList);
             }    
     }
@@ -152,19 +165,30 @@ public class Handler extends Thread {
             
             JSONObject jsono = new JSONObject();
             jsono.put("login", resualt);
-            jsono.put("username", DAO.retriveInformation(email).getUserName());
-            jsono.put("score", DAO.retriveInformation(email).getTootalScoore());
-            String reply = jsono.toString();
-            sendMessageToSender(reply);
             if (resualt)
             {
+                jsono.put("username", DAO.retriveInformation(email).getUserName());
+                jsono.put("score", DAO.retriveInformation(email).getTootalScoore());
+                String reply = jsono.toString();
+                sendMessageToSender(reply);
                 System.out.println("you are in condition");
                 Player player;
                 player = DAO.retriveInformation(email);
                 avaliablePlayers.add(playerCount, player.getUserName());
                 onlinePlayers.add(playerCount, clientsVector.get(x));
+                System.out.println("online player from login:"+ onlinePlayers);
+                System.out.println("avaliable player from login:"+ avaliablePlayers);
+                clientIndex = x;
                 playerCount++;
+                //ShowAvaliablePlayers(avaliablePlayers);
                 ShowAvaliablePlayers();
+            }
+            else
+            {
+                jsono.put("username", "null");
+                jsono.put("score", "null");
+                String reply = jsono.toString();
+                sendMessageToSender(reply);
             }
         } catch (SQLException ex) {
             Logger.getLogger(Handler.class.getName()).log(Level.SEVERE, null, ex);
