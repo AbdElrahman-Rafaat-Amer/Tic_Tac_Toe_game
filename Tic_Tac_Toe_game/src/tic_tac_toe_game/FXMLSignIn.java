@@ -47,6 +47,16 @@ public class FXMLSignIn extends AnchorPane {
         backButton = new Button();
         start = new Start(stage);
 
+        getStylesheets().add("/CssStyles/CssStyles.css");
+        getStyleClass().add("gameimage");
+        
+        backButton.getStylesheets().add("/CssStyles/CssStyles.css");
+        backButton.getStyleClass().add("btnback");
+        
+        textSignIn.getStyleClass().add("tittle");
+        
+        buttonConSingIn.getStylesheets().add("/CssStyles/CssStyles.css");
+        buttonConSingIn.getStyleClass().add("btn");
         //recieving data in signup page..
         reciveData();
 
@@ -80,7 +90,7 @@ public class FXMLSignIn extends AnchorPane {
         passwordSIgnIn.setPrefWidth(244.0);
         passwordSIgnIn.setPromptText("PASSWORD");
 
-        buttonConSingIn.setLayoutX(310.0);
+        buttonConSingIn.setLayoutX(191.0);
         buttonConSingIn.setLayoutY(258.0);
         buttonConSingIn.setMnemonicParsing(false);
         buttonConSingIn.setPrefHeight(31.0);

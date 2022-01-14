@@ -22,19 +22,33 @@ public class SelectPlayersNo extends AnchorPane {
         oneplayer = new Button();
         twoplayer = new Button();
         backButton = new Button();
+ //CSS 
+         
+        oneplayer.getStylesheets().add("/CssStyles/CssStyles.css");
+        oneplayer.getStyleClass().add("btn");
+        
+        twoplayer.getStylesheets().add("/CssStyles/CssStyles.css");
+        twoplayer.getStyleClass().add("btn");
+        
+        backButton.getStylesheets().add("/CssStyles/CssStyles.css");
+        backButton.getStyleClass().add("btnback");
+        
+        getStyleClass().add("image");
+        getStylesheets().add("/CssStyles/CssStyles.css");
+
 
         setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
 
-        oneplayer.setLayoutX(236.0);
-        oneplayer.setLayoutY(152.0);
+        oneplayer.setLayoutX(200.0);
+        oneplayer.setLayoutY(100.0);
         oneplayer.setMnemonicParsing(false);
         oneplayer.setPrefHeight(38.0);
         oneplayer.setPrefWidth(96.0);
         oneplayer.setText("One Player");
 
-        twoplayer.setLayoutX(236.0);
+        twoplayer.setLayoutX(200.0);
         twoplayer.setLayoutY(190.0);
         twoplayer.setMnemonicParsing(false);
         twoplayer.setPrefHeight(38.0);
@@ -49,7 +63,6 @@ public class SelectPlayersNo extends AnchorPane {
         getChildren().add(oneplayer);
         getChildren().add(twoplayer);
         getChildren().add(backButton);
-
         oneplayer.setOnAction((Action) -> {
             isSingle = true;
             Parent root2 = new LevelPage(stage);

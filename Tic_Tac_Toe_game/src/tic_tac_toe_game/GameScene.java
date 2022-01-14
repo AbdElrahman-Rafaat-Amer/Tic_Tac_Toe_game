@@ -11,10 +11,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.media.MediaPlayer;
+
 
 public class GameScene extends BorderPane {
 
@@ -122,6 +125,14 @@ public class GameScene extends BorderPane {
         labelPane9 = new Label();
         Label board[][] = {{labelPane1, labelPane2, labelPane3}, {labelPane4, labelPane5, labelPane6}, {labelPane7, labelPane8, labelPane9}};
 
+         // XNotationText.getStylesheets().add("/CssStyles/CssStyles.css");
+         XNotationText.getStyleClass().add("xo"); 
+         ONotationText.getStyleClass().add("xo");      
+         getStylesheets().add("/CssStyles/CssStyles.css");
+         getStyleClass().add("gameimage");
+        // menuList.getStylesheets().add("/CssStyles/CssStyles.css");
+        // menuList.getStyleClass.add("btn");
+       
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);

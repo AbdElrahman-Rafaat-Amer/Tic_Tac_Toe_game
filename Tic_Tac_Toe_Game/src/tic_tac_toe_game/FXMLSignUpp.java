@@ -49,12 +49,21 @@ public class FXMLSignUpp extends AnchorPane {
         confirmButton = new Button();
         backButton = new Button();
         textSignUp = new Text();
-
+getStylesheets().add("/CssStyles/CssStyles.css");
+        getStyleClass().add("gameimage");
+        
+        backButton.getStylesheets().add("/CssStyles/CssStyles.css");
+        backButton.getStyleClass().add("btnback");
+        
+        textSignUp.getStyleClass().add("tittle");
+        
+        confirmButton.getStylesheets().add("/CssStyles/CssStyles.css");
+        confirmButton.getStyleClass().add("btn");
         setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
 
-        pane1.setLayoutY(1.0);
+       pane1.setLayoutY(1.0);
         pane1.setPrefHeight(400.0);
         pane1.setPrefWidth(600.0);
 
@@ -77,8 +86,8 @@ public class FXMLSignUpp extends AnchorPane {
         confirmpassInput.setLayoutY(237.0);
         confirmpassInput.setPromptText("CONFIRM PASSWORD");
 
-        confirmButton.setLayoutX(320.0);
-        confirmButton.setLayoutY(312.0);
+        confirmButton.setLayoutX(190.0);
+        confirmButton.setLayoutY(305.0);
         confirmButton.setMnemonicParsing(false);
         confirmButton.setPrefHeight(31.0);
         confirmButton.setPrefWidth(106.0);
@@ -89,7 +98,7 @@ public class FXMLSignUpp extends AnchorPane {
         backButton.setMnemonicParsing(false);
         backButton.setText("BACK");
 
-        textSignUp.setLayoutX(227.0);
+        textSignUp.setLayoutX(200.0);
         textSignUp.setLayoutY(51.0);
         textSignUp.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         textSignUp.setStrokeWidth(0.0);

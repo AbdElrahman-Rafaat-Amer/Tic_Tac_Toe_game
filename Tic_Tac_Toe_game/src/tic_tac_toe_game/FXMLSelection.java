@@ -23,7 +23,18 @@ public class FXMLSelection extends AnchorPane {
         signInButton = new Button();
         signUpButton = new Button();
         text = new Text();
-
+getStylesheets().add("/CssStyles/CssStyles.css");
+        getStyleClass().add("gameimage");
+        signInButton.getStylesheets().add("/CssStyles/CssStyles.css");
+        signInButton.getStyleClass().add("btn");
+        signUpButton.getStylesheets().add("/CssStyles/CssStyles.css");
+        signUpButton.getStyleClass().add("btn");
+        signUpButton.getStylesheets().add("/CssStyles/CssStyles.css");
+        signUpButton.getStyleClass().add("btn");
+     
+        text.getStyleClass().add("tittle");
+        
+        
         setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
@@ -34,17 +45,17 @@ public class FXMLSelection extends AnchorPane {
         Pane2Selec.setPrefHeight(400.0);
         Pane2Selec.setPrefWidth(600.0);
 
-        signInButton.setLayoutX(270.0);
-        signInButton.setLayoutY(115.0);
+        signInButton.setLayoutX(200.0);
+        signInButton.setLayoutY(100.0);
         signInButton.setMnemonicParsing(false);
         signInButton.setText("SIGN IN");
 
-        signUpButton.setLayoutX(268.0);
-        signUpButton.setLayoutY(169.0);
+        signUpButton.setLayoutX(200.0);
+        signUpButton.setLayoutY(200.0);
         signUpButton.setMnemonicParsing(false);
         signUpButton.setText("SIGN UP");
 
-        text.setLayoutX(258.0);
+        text.setLayoutX(245.0);
         text.setLayoutY(57.0);
         text.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
         text.setStrokeWidth(0.0);

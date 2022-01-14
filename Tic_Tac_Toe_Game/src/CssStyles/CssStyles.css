@@ -1,0 +1,82 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 12, 2022, 9:48:52 PM
+    Author     : lenovo
+*/
+.btn{
+   -fx-background-color: #FFC900;
+    -fx-border: black;
+    -fx-padding: 20px 18px;
+    -fx-font-size: 14px;
+    -fx-pref-height: 8px;
+    -fx-pref-width: 200px;
+    
+  /* -fx-background-color: #ddd;
+    -fx-border: none;
+    -fx-color: black;
+    -fx-padding: 10px 20px;
+     -fx-text-align: center;
+    -fx-display: inline-block;
+   -fx-margin: 30px 20px;
+   -fx-cursor: pointer;
+   -fx-border-radius: 16px;
+   */
+}
+.angry{
+  -fx-background-image : url("../img/anger.jpg");
+}
+.chlevel{
+    -fx-prompt-text-color : fuchsia;   
+}
+.txtfield{
+    /*-fx-background-color: #fce473;
+    -fx-background-radius: 0 ;   #89CFF0 */
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
+    -fx-text-fill: black;
+    /*-fx-background-color: -fx-text-box-border, -fx-background ;*/
+    -fx-background-insets: 0, 0 0 1 0 ;
+    /*-fx-background-color: #93bcda;*/
+    -fx-background-color: #c3c3c3;
+    -fx-prompt-text-fill: white;
+}
+
+.txt{
+    -fx-font-size: 16px;
+    -fx-text-fill: black;
+    -fx-font-style: bold;
+    -fx-background-color: fuchsia;
+}
+
+
+
+.tittle{
+     -fx-font-size: 20px;
+    -fx-font-style: bold;
+    -fx-prompt-text-fill: black;
+
+}
+
+.xo{
+    -fx-font-size: 20px;
+    -fx-text-fill: black;
+    -fx-font-style: bold;
+    -fx-background-color: yellow;
+}
+.btnback{
+    -fx-background-color:#35858B;
+}
+
+.image{
+    -fx-background-image : url("../img/page.jpg");
+    max-width: auto;  
+    height: auto; 
+
+}
+.gameimage{
+    -fx-background-image : url("../img/white.jpg");
+}

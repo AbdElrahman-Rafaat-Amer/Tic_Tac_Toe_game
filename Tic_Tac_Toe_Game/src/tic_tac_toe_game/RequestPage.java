@@ -72,7 +72,20 @@ public class RequestPage extends BorderPane {
         listAvailablePlayers = new ListView();
         name = FXMLSignIn.playerName;
         score = FXMLSignIn.playerScore;
-
+      //CSS
+      getStylesheets().add("/CssStyles/CssStyles.css");
+        getStyleClass().add("image");
+        historyButton.getStylesheets().add("/CssStyles/CssStyles.css");
+        historyButton.getStyleClass().add("btnback");
+        homeButton.getStylesheets().add("/CssStyles/CssStyles.css");
+        homeButton.getStyleClass().add("btnback");
+        
+        playerNameLabel.getStylesheets().add("/CssStyles/CssStyles.css");
+        playerNameLabel.getStyleClass().add("txt");
+        scoreLabel.getStylesheets().add("/CssStyles/CssStyles.css");
+        scoreLabel.getStyleClass().add("txt");
+        
+        
         playerNameLabel.setText(name);
         scoreLabel.setText(String.valueOf(score));
         Vector<String> player = new Vector<String>();

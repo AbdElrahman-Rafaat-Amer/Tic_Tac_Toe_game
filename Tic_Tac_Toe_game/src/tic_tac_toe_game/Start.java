@@ -32,6 +32,7 @@ public class Start extends Pane {
     static Socket server;
     public static DataInputStream dataInputStream;
     public static PrintStream printStream;
+    protected final Pane pane1;
 
     //public Start() {
     //}
@@ -42,39 +43,7 @@ public class Start extends Pane {
         offline = new Button();
         exit = new Button();
         ipDialog = new TextInputDialog();
-
-        setMaxHeight(USE_PREF_SIZE);
-        setMaxWidth(USE_PREF_SIZE);
-        setMinHeight(USE_PREF_SIZE);
-        setMinWidth(USE_PREF_SIZE);
-        setPrefHeight(400.0);
-        setPrefWidth(600.0);
-
-        online.setLayoutX(230.0);
-        online.setLayoutY(132.0);
-        online.setMnemonicParsing(false);
-        online.setPrefHeight(38.0);
-        online.setPrefWidth(96.0);
-        online.setText("Online");
-
-        offline.setLayoutX(230.0);
-        offline.setLayoutY(170.0);
-        offline.setMnemonicParsing(false);
-        offline.setPrefHeight(38.0);
-        offline.setPrefWidth(96.0);
-        offline.setText("Offline");
-
-        exit.setLayoutX(230.0);
-        exit.setLayoutY(208.0);
-        exit.setMnemonicParsing(false);
-        exit.setPrefHeight(38.0);
-        exit.setPrefWidth(96.0);
-        exit.setText("Exit");
-
-        getChildren().add(online);
-        getChildren().add(offline);
-        getChildren().add(exit);
-        ipDialog.setHeaderText(message);
+        pane1 = new Pane();
 
         Button button = (Button) ipDialog.getDialogPane().lookupButton(ButtonType.OK);
 
