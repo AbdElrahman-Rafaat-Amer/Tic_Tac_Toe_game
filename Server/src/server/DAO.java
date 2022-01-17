@@ -91,26 +91,20 @@ public class DAO {
         return flag;
 
     }
-    
-    static int numberOfPlayers() throws SQLException{
-        int playerCount=0;
-            Statement statement;
 
-             statement = con.createStatement();
+    static int numberOfPlayers() throws SQLException {
+        int playerCount = 0;
+        Statement statement;
+        statement = con.createStatement();
 
-      String QueryString1 = new String("select count(id) from Player");
-       ResultSet resultSet1 = statement.executeQuery(QueryString1);
+        String QueryString1 = new String("select count(id) from Player");
+        ResultSet resultSet1 = statement.executeQuery(QueryString1);
         while (resultSet1.next()) {
-                 playerCount = resultSet1.getInt(1);
+            playerCount = resultSet1.getInt(1);
         }
         statement.close();
         return playerCount;
-      
 
     }
-    
 
 }
-
-
-

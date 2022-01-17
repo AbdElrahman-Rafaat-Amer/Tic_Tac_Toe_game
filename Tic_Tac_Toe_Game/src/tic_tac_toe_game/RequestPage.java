@@ -9,6 +9,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -36,6 +37,7 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.json.JSONObject;
+import static tic_tac_toe_game.Records.dirc;
 
 public class RequestPage extends BorderPane {
 
@@ -49,14 +51,17 @@ public class RequestPage extends BorderPane {
     protected final ListView listRequests;
     protected final ListView listAvailablePlayers;
     private final Stage stage;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer = null;
     private Scene currentScene;
     protected static String email;
     MediaView mediaView;
     String name = "Player";
-    int  score = -1;
+    int score = -1;
     JSONObject returnplayer;
-    
+    boolean isAccepted = false;
+    static int myIP = 1000;        // player1 key
+    static int VsPLayer = 10000;    // player2 key
+    private Stage s = new Stage();
 
     public RequestPage(Stage stage) {
 
@@ -72,116 +77,108 @@ public class RequestPage extends BorderPane {
         listAvailablePlayers = new ListView();
         name = FXMLSignIn.playerName;
         score = FXMLSignIn.playerScore;
-      //CSS
-      getStylesheets().add("/CssStyles/CssStyles.css");
-        getStyleClass().add("image");
-        historyButton.getStylesheets().add("/CssStyles/CssStyles.css");
-        historyButton.getStyleClass().add("btnback");
-        homeButton.getStylesheets().add("/CssStyles/CssStyles.css");
-        homeButton.getStyleClass().add("btnback");
-        
-        playerNameLabel.getStylesheets().add("/CssStyles/CssStyles.css");
-        playerNameLabel.getStyleClass().add("txt");
-        scoreLabel.getStylesheets().add("/CssStyles/CssStyles.css");
-        scoreLabel.getStyleClass().add("txt");
-        
-        
+
         playerNameLabel.setText(name);
         scoreLabel.setText(String.valueOf(score));
         Vector<String> player = new Vector<String>();
-        System.out.println("player list: "+FXMLSignIn.players.getJSONArray("list"));
-        for (int i =0 ; i< FXMLSignIn.players.getJSONArray("list").length() ; i++)
-        {
+        System.out.println("player list: " + FXMLSignIn.players.getJSONArray("list"));
+        for (int i = 0; i < FXMLSignIn.players.getJSONArray("list").length(); i++) {
             listRequests.getItems().add(FXMLSignIn.players.getJSONArray("list").get(i));
-            System.out.println("list element :"+FXMLSignIn.players.getJSONArray("list").get(i));
+            System.out.println("list element :" + FXMLSignIn.players.getJSONArray("list").get(i));
+            if (FXMLSignIn.players.getJSONArray("list").get(i) == name) {
+                myIP = i;
+                System.out.println("my ip = " + myIP);
+            }
         }
-        
-        //to continue checking for updates in list 
-        new Thread(new Runnable(){
-            public void run()
-            {
-                while(true)
-                {
-                    try {
-                        String returnPlayers = Start.dataInputStream.readLine();
-                        returnplayer = new JSONObject(returnPlayers);
-                        System.out.println("player IN 1 : "+returnplayer);
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    String key = returnplayer.getString("key");
-                                    switch(key)
-                                    {
-                                        case "player list":
-                                            listRequests.getItems().clear();
-                                            for (int i =0 ; i< returnplayer.getJSONArray("list").length() ; i++)
-                                            {
-                                            listRequests.getItems().add(returnplayer.getJSONArray("list").get(i));
-                                            }
-                                            System.out.println("player IN : "+returnplayer.getJSONArray("list"));
-                                            break;
-                                        case "play with me, please":
-                                            Alert request = new Alert(Alert.AlertType.CONFIRMATION,returnplayer.getString("player1 username").toString()+" requests to play with you");
-                                            Optional<ButtonType> result = request.showAndWait();
-                                            JSONObject replay = new JSONObject();
-                                            replay.put("key", "replay");
 
-                                            if(result.get() == ButtonType.OK)
-                                            //oke button is pressed
-                                            {
+        //to continue checking for updates in list 
+        new Thread(new Runnable() {
+            public void run() {
+                while (true) {
+                    try {
+                        System.out.println("-----------------------------------------------------------reveive data in request page ");
+                        String returnPlayers = Start.dataInputStream.readLine();
+                        System.out.println("-----------------------------------------------------------returnPlayers = " + returnPlayers);
+                        returnplayer = new JSONObject(returnPlayers);
+                        System.out.println("player IN 1 : " + returnplayer);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                String key = returnplayer.getString("key");
+                                switch (key) {
+                                    case "player list":
+                                        listRequests.getItems().clear();
+                                        for (int i = 0; i < returnplayer.getJSONArray("list").length(); i++) {
+                                            listRequests.getItems().add(returnplayer.getJSONArray("list").get(i));
+                                        }
+                                        System.out.println("player IN : " + returnplayer.getJSONArray("list"));
+                                        break;
+                                    case "play with me, please":
+                                        VsPLayer = returnplayer.getInt("player1 NO");
+                                        myIP = returnplayer.getInt("player2 NO");
+
+                                        Alert request = new Alert(Alert.AlertType.CONFIRMATION, returnplayer.getString("player1 username").toString() + " requests to play with you");
+                                        Optional<ButtonType> result = request.showAndWait();
+                                        JSONObject replay = new JSONObject();
+                                        replay.put("key", "replay");
+
+                                        if (result.get() == ButtonType.OK) //oke button is pressed
+                                        {
+                                            if (mediaPlayer != null) {
                                                 mediaPlayer.stop();
-                                                replay.put("request replay", "true");
-                                                replay.put("player1 NO", returnplayer.getString("player1 NO"));
-                                                replay.put("player2 NO", returnplayer.getString("player2 NO"));
-                                                Start.printStream.println(replay);
-                                                Platform.runLater(() -> {
+                                            }
+                                            isAccepted = true;
+                                            replay.put("request replay", "true");
+                                            replay.put("player1 NO", returnplayer.getString("player1 NO"));
+                                            replay.put("player2 NO", returnplayer.getString("player2 NO"));
+                                            Start.printStream.println(replay);
+                                            System.out.println("you are in ButtonType.OK");
+                                            Platform.runLater(() -> {
                                                 Parent root2 = new OnlineGame(stage);
                                                 Scene scene2 = new Scene(root2);
                                                 stage.setScene(scene2);
                                                 stage.show();
-                                                });
-                                            }
-                                            else
-                                                if(result.get() == ButtonType.CANCEL)
-                                                // cancel button is pressed
-                                                {
-                                                    mediaPlayer.stop();
-                                                    replay.put("request replay", "false");
-                                                    replay.put("player1 NO", returnplayer.getString("player1 NO"));
-                                                    replay.put("player2 NO", returnplayer.getString("player2 NO"));
-                                                    Start.printStream.println(replay);
-                                                    Platform.runLater(() -> {
-                                                    Parent root2 = new RequestPage(stage);
-                                                    Scene scene2 = new Scene(root2);
-                                                    stage.setScene(scene2);
-                                                    stage.show();
-                                                    });
-                                                }
-                                            break;
-                                            
-                                        case "Request Response":
-                                            String reply = returnplayer.getString("response");
-                                            if(reply.compareTo("true")==0)
-                                            {
-                                                Platform.runLater(() -> {
+                                            });
+                                            //   break;
+                                        } else if (result.get() == ButtonType.CANCEL) // cancel button is pressed
+                                        {
+                                            mediaPlayer.stop();
+                                            replay.put("request replay", "false");
+                                            replay.put("player1 NO", returnplayer.getString("player1 NO"));
+                                            replay.put("player2 NO", returnplayer.getString("player2 NO"));
+                                            System.out.println("you are in ButtonType.OK");
+                                            Start.printStream.println(replay);
+                                            Platform.runLater(() -> {
+                                                Parent root2 = new RequestPage(stage);
+                                                Scene scene2 = new Scene(root2);
+                                                stage.setScene(scene2);
+                                                stage.show();
+                                            });
+                                        }
+                                        break;
+
+                                    case "Request Response":
+                                        String reply = returnplayer.getString("response");
+                                        if (reply.compareTo("true") == 0) {
+                                            isAccepted = true;
+                                            Platform.runLater(() -> {
                                                 Parent root3 = new OnlineGame(stage);
                                                 Scene scene3 = new Scene(root3);
                                                 stage.setScene(scene3);
                                                 stage.show();
-                                                });
-                                            }
-                                            else
-                                            {
-                                                Platform.runLater(() -> {
+                                            });
+                                            break;
+                                        } else {
+                                            Platform.runLater(() -> {
                                                 Parent root3 = new RequestPage(stage);
                                                 Scene scene3 = new Scene(root3);
                                                 stage.setScene(scene3);
                                                 stage.show();
-                                                });
-                                            }
-                                    }
+                                            });
+                                        }
                                 }
-                            });
+                            }
+                        });
                     } catch (IOException ex) {
                         try {
                             Start.server.close();
@@ -196,9 +193,12 @@ public class RequestPage extends BorderPane {
                         System.out.println("-------------------------------Request in Error in recieve Data-------------------------------");
                         break;
                     }
+                    if (isAccepted) {
+                        break;
+                    }
                 }
-            }}).start();
-        
+            }
+        }).start();
 
         listRequests.setCellFactory((Callback<ListView<String>, ListCell<String>>) param -> {
             return new ListCell<String>() {
@@ -222,51 +222,44 @@ public class RequestPage extends BorderPane {
                             // Code to send invite   
                             JSONObject js = new JSONObject();
                             js.put("key", "request key");
-                            if(returnplayer == null)
-                            {
-                                for(int j=0; j<FXMLSignIn.players.getJSONArray("list").length();j++)
-                                {
+                            if (returnplayer == null) {
+                                for (int j = 0; j < FXMLSignIn.players.getJSONArray("list").length(); j++) {
                                     System.out.println("list item :" + FXMLSignIn.players.getJSONArray("list").get(j));
-                                    
-                                    if(FXMLSignIn.players.getJSONArray("list").get(j) == item )
-                                    {
-                                        System.out.println("PLayer2 key:"+j);
-                                        js.put("player2 key",String.valueOf(j));
+
+                                    if (FXMLSignIn.players.getJSONArray("list").get(j) == item) {
+                                        VsPLayer = j;
+                                        System.out.println("PLayer2 key:" + j);
+                                        js.put("player2 key", String.valueOf(j));
                                     }
                                 }
-                                for(int j=0; j<FXMLSignIn.players.getJSONArray("list").length();j++)
-                                {
-                                    System.out.println("name: "+name);
-                                    if(FXMLSignIn.players.getJSONArray("list").get(j).toString().compareTo(name)==0)
-                                    {
-                                        System.out.println("PLayer1 key:"+j);
-                                        js.put("player1 key",String.valueOf(j));
+                                for (int j = 0; j < FXMLSignIn.players.getJSONArray("list").length(); j++) {
+                                    System.out.println("name: " + name);
+                                    if (FXMLSignIn.players.getJSONArray("list").get(j).toString().compareTo(name) == 0) {
+                                        myIP = j;
+                                        System.out.println("PLayer1 key:" + j);
+                                        js.put("player1 key", String.valueOf(j));
                                     }
                                 }
-                            }
-                            else
-                            {
-                                for(int j=0; j<returnplayer.getJSONArray("list").length();j++)
-                                {
+                            } else {
+                                for (int j = 0; j < returnplayer.getJSONArray("list").length(); j++) {
                                     System.out.println("list item :" + returnplayer.getJSONArray("list").get(j));
-                                    if(returnplayer.getJSONArray("list").get(j) == item )
-                                    {
-                                        System.out.println("PLayer2 key:"+j);
-                                        js.put("player2 key",String.valueOf(j));
+                                    if (returnplayer.getJSONArray("list").get(j) == item) {
+                                        VsPLayer = j;
+                                        System.out.println("PLayer2 key:" + j);
+                                        js.put("player2 key", String.valueOf(j));
                                     }
                                 }
-                                for(int j=0; j<returnplayer.getJSONArray("list").length();j++)
-                                {
-                                    if(returnplayer.getString(String.valueOf(j)).compareTo(name)==0)
-                                    {
-                                        System.out.println("PLayer1 key:"+j);
-                                        js.put("player1 key",String.valueOf(j));
+                                for (int j = 0; j < returnplayer.getJSONArray("list").length(); j++) {
+                                    if (returnplayer.getString(String.valueOf(j)).compareTo(name) == 0) {
+                                        myIP = j;
+                                        System.out.println("PLayer1 key:" + j);
+                                        js.put("player1 key", String.valueOf(j));
                                     }
                                 }
-                                
+
                             }
                             Start.printStream.println(js);
-                            
+
                             //then play vedio until response
                             File mediaFile = new File("src\\vedios_media\\waiting vedio.mp4");
                             Media media = new Media(mediaFile.toURI().toString());
@@ -288,13 +281,12 @@ public class RequestPage extends BorderPane {
                             sendRequest.setDisable(true);
 
                             //if there is no response the vedio will play to the end
-                            mediaPlayer.setOnEndOfMedia(new Runnable() {
+                            /*    mediaPlayer.setOnEndOfMedia(new Runnable() {
                                 @Override
                                 public void run() {
                                     stage.setScene(currentScene);
                                 }
-                            });
-                            
+                            });*/
                         });
 
                         root.getChildren().addAll(sendRequest);
@@ -339,6 +331,35 @@ public class RequestPage extends BorderPane {
             @Override
             public void handle(ActionEvent event) {
                 // Code will open the file contain recordes 
+                File file = new File(dirc);
+                if (file.exists()) {
+                    File[] files = file.listFiles();
+                    ObservableList<File> fileList = FXCollections.observableArrayList(files);
+                    ObservableList<String> fileNamesList = FXCollections.observableArrayList();
+                    for (File string : files) {
+                        fileNamesList.add(string.getName());
+                    }
+                    ListView<String> listView = new ListView(fileNamesList);
+                    listView.getSelectionModel().selectedItemProperty().addListener(
+                            (ObservableValue<? extends String> ov, String old_val, String new_val) -> {
+                                int index = listView.getSelectionModel().getSelectedIndex();
+                                System.out.println("index = " + index);
+                                System.out.println("recoredList = " + fileList.get(index));
+                                //will open the game
+                                Parent game = new ReplayGame(stage, fileList.get(index));
+                                Scene scene2 = new Scene(game);
+                                stage.setScene(scene2);
+                                s.close();
+                                stage.show();
+                            });
+
+                    Scene scene = new Scene(listView, 595, 200);
+                    s.setTitle("History");
+                    s.setScene(scene);
+                    s.show();
+                } else {
+                    new Alert(Alert.AlertType.INFORMATION, "you have not any recordes yet").show();
+                }
             }
         });
 
@@ -393,7 +414,5 @@ public class RequestPage extends BorderPane {
         anchorPane.getChildren().add(listRequests);
         anchorPane.getChildren().add(listAvailablePlayers);
     }
-    
-   
 
 }

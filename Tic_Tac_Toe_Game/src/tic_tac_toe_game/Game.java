@@ -110,10 +110,9 @@ public class Game {
     static void goToWinnerPage(Stage stage) {
         Parent root2;
         try {
-            // winner = null;
-            // values = null;
-            save(GameTwoPlayersOffline.saved);
-//             RetriveRecords.open();
+            if (!SelectPlayersNo.isSingle) {
+                Records.save(GameTwoPlayersOffline.saved);
+            }
             root2 = new ResultScene(stage);
             Scene scene2 = new Scene(root2);
             stage.setScene(scene2);
@@ -121,28 +120,5 @@ public class Game {
         } catch (MalformedURLException ex) {
             Logger.getLogger(GameScene.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    private static void save(String saved) {
-
-        FileWriter writer = null;
-        try {
-
-            writer = new FileWriter(GameTwoPlayersOffline.firstPlayer + GameTwoPlayersOffline.secpndPlayer);
-            BufferedWriter buffer = new BufferedWriter(writer);
-            buffer.write(saved);
-
-            buffer.close();
-        } catch (IOException ex) {
-            Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                writer.close();
-            } catch (IOException ex) {
-                Logger.getLogger(GameTwoPlayersOffline.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-
     }
 }

@@ -143,22 +143,15 @@ public class GameTwoPlayersOffline extends BorderPane {
         labelPane9 = new Label();
         playerOne = XorOSelection.playerOne;
         playerTwo = XorOSelection.playerTwo;
-//        reply = RetriveRecords.open();
+
         obj = new JSONObject();
-//        obj1 = new  JSONObject(reply);
+
         Label board[] = {labelPane1, labelPane2, labelPane3, labelPane4, labelPane5, labelPane6, labelPane7, labelPane8, labelPane9};
 
-//         JSONArray array= (JSONArray) obj1.get("sequence");
+
         int n;
 
-        //JSON move = obj.get("moves");
-        /*  for(n=0;n<array.length();n++){
-            
-            // int x = array[n];
-            // board[x].settext(move[n]);
-             
-         }
-         */
+ 
          XNotationText.getStyleClass().add("xo"); 
         ONotationText.getStyleClass().add("xo");      
         getStylesheets().add("/CssStyles/CssStyles.css");
@@ -447,13 +440,7 @@ public class GameTwoPlayersOffline extends BorderPane {
             stage.show();
         });
 
-        //to set X and O fro each player
-        /* ONotationText.setText(XorOSelection.playerOne);
-        if (XorOSelection.playerOne == "X") {
-            XNotationText.setText("O");
-        } else {
-            ONotationText.setText("O");
-        }*/
+  
         System.err.println("playerOne = " + playerOne);
         System.err.println("playerTwo = " + playerTwo);
         ONotationText.setText(playerOne);
@@ -471,30 +458,14 @@ public class GameTwoPlayersOffline extends BorderPane {
         labelPane8.setAlignment(Pos.CENTER);
         labelPane9.setAlignment(Pos.CENTER);
 
-        //int sequenses[]=null;
-        //String moves[];
         int Label[];
 
-        //obj.put("sequence",sequenses);
-        // save(saved);
         pane1.setOnMouseClicked((MouseEvent) -> {
             //to make label text uneditable
             labelNumber = 0;
             if (values[labelNumber] == null) {
                 paneClicked(labelPane1);
-                /*swapXO();
-                labelPane1.setText(text);
-
-                i++;
-                values[labelNumber] = text;
-//                sequence[labelNumber]=i+"";
-                sequence.add(String.valueOf(labelNumber));
-                checkWinner(i);
-                if (winner != null) {
-                    obj.put("moves", values);
-                    saved = obj.toString();
-                    Game.goToWinnerPage(stage);
-                }*/
+    
             }
             System.err.println("i = " + i);
         });

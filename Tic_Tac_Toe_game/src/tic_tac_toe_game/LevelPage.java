@@ -1,36 +1,32 @@
 package tic_tac_toe_game;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import static javafx.scene.layout.Region.USE_PREF_SIZE;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+   
 
-public class LevelPage extends BorderPane {
+public  class LevelPage extends AnchorPane {
 
-    protected final FlowPane flowPane;
-    protected final Text text;
     protected final Button easyButton;
     protected final Button mediumButton;
     protected final Button hardButton;
+    protected final Text text;
     protected final Button backButton;
     protected static String level;
-
+   
     public LevelPage(Stage stage) {
 
-        flowPane = new FlowPane();
-        text = new Text();
         easyButton = new Button();
         mediumButton = new Button();
         hardButton = new Button();
+        text = new Text();
         backButton = new Button();
 
+        
         easyButton.getStylesheets().add("/CssStyles/CssStyles.css");
         easyButton.getStyleClass().add("btn");
         
@@ -99,6 +95,8 @@ public class LevelPage extends BorderPane {
         getChildren().add(hardButton);
         getChildren().add(text);
         getChildren().add(backButton);
+   
+        
         easyButton.setOnAction((Action) -> {
             level = "easy";
             Parent root2 = new GameScene(stage);
@@ -129,5 +127,6 @@ public class LevelPage extends BorderPane {
             stage.setScene(scene2);
             stage.show();
         });
+       
     }
 }

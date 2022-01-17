@@ -43,24 +43,23 @@ public class XorOSelection extends AnchorPane {
 
         continueButton.getStylesheets().add("/CssStyles/CssStyles.css");
         continueButton.getStyleClass().add("btn");
-        
+
         select.getStylesheets().add("/CssStyles/CssStyles.css");
         select.getStyleClass().add("btnback");
-        
+
         backButton.getStylesheets().add("/CssStyles/CssStyles.css");
         backButton.getStyleClass().add("btnback");
-       
+
         player2textfield.getStylesheets().add("/CssStyles/CssStyles.css");
         player2textfield.getStyleClass().add("txtfield");
-        
-      // player1.getStylesheets().add("/CssStyles/CssStyles.css");
-       player1.getStyleClass().add("txt");
-       player2.getStyleClass().add("txt");
+
+        // player1.getStylesheets().add("/CssStyles/CssStyles.css");
+        player1.getStyleClass().add("txt");
+        player2.getStyleClass().add("txt");
 
         getStylesheets().add("/CssStyles/CssStyles.css");
         getStyleClass().add("image");
 
-        
         setId("AnchorPane");
         setPrefHeight(400.0);
         setPrefWidth(600.0);
@@ -87,10 +86,10 @@ public class XorOSelection extends AnchorPane {
 
         player1.setLayoutX(144.0);
         player1.setLayoutY(143.0);
-       // player1.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
-       // player1.setStrokeWidth(0.0);
+        // player1.setStrokeType(javafx.scene.shape.StrokeType.OUTSIDE);
+        // player1.setStrokeWidth(0.0);
         player1.setText("Player 1");
-       // player1.setWrappingWidth(87.99999901652336);
+        // player1.setWrappingWidth(87.99999901652336);
 
         player2.setLayoutX(144.0);
         player2.setLayoutY(196.0);
@@ -154,7 +153,13 @@ public class XorOSelection extends AnchorPane {
                 stage.show();
             } else {
 
-                new Alert(AlertType.ERROR, "You Must Choose X or O ").show();
+                //new Alert(AlertType.ERROR, "You Must Choose X or O ").show();
+                // getStylesheets().add("/CssStyles/CssStyles.css");
+                //getStyleClass().add("angry");
+                Parent root2 = new angryBase(stage);
+                Scene scene2 = new Scene(root2);
+                stage.setScene(scene2);
+                stage.show();
             }
         });
     }

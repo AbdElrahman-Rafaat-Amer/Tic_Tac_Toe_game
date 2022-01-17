@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.stage.Stage;
 
 public class Start extends Pane {
@@ -24,6 +25,8 @@ public class Start extends Pane {
     protected final Button online;
     protected final Button offline;
     protected final Button exit;
+    protected final Pane pane1;
+
     private Stage mystage;
     static String IPAdress;
     private TextInputDialog ipDialog;
@@ -32,7 +35,6 @@ public class Start extends Pane {
     static Socket server;
     public static DataInputStream dataInputStream;
     public static PrintStream printStream;
-    protected final Pane pane1;
 
     //public Start() {
     //}
@@ -44,6 +46,60 @@ public class Start extends Pane {
         exit = new Button();
         ipDialog = new TextInputDialog();
         pane1 = new Pane();
+        
+       //css
+        online.getStylesheets().add("/CssStyles/CssStyles.css");
+        online.getStyleClass().add("btn");
+        
+        offline.getStylesheets().add("/CssStyles/CssStyles.css");
+        offline.getStyleClass().add("btn");
+        
+        exit.getStylesheets().add("/CssStyles/CssStyles.css");
+        exit.getStyleClass().add("btn");
+        
+       // pane1.getStylesheets().add("/img/page.jpg");
+        //pane1.getStyleClass().add("image");
+        
+        getStylesheets().add("/CssStyles/CssStyles.css");
+        getStyleClass().add("image");
+        
+        pane1.setPrefHeight(200.0);
+        pane1.setPrefWidth(600.0);
+        setMaxHeight(USE_PREF_SIZE);
+        setMaxWidth(USE_PREF_SIZE);
+        setMinHeight(USE_PREF_SIZE);
+        setMinWidth(USE_PREF_SIZE);
+        setPrefHeight(400.0);
+        setPrefWidth(600.0);
+
+        online.setLayoutX(200.0);
+        online.setLayoutY(100.0);
+        online.setMnemonicParsing(false);
+        online.setPrefHeight(38.0);
+        online.setPrefWidth(96.0);
+        online.setText("Online");
+    
+
+        offline.setLayoutX(200.0);
+        offline.setLayoutY(200.0);
+        offline.setMnemonicParsing(false);
+        offline.setPrefHeight(38.0);
+        offline.setPrefWidth(96.0);
+        offline.setText("Offline");
+
+        exit.setLayoutX(200.0);
+        exit.setLayoutY(300.0);
+        exit.setMnemonicParsing(false);
+        exit.setPrefHeight(38.0);
+        exit.setPrefWidth(96.0);
+        exit.setText("Exit");
+
+        getChildren().add(online);
+        getChildren().add(offline);
+        getChildren().add(exit);
+        ipDialog.setHeaderText(message);
+        
+        
 
         Button button = (Button) ipDialog.getDialogPane().lookupButton(ButtonType.OK);
 
@@ -60,6 +116,7 @@ public class Start extends Pane {
                         Parent root2 = new FXMLSelection(stage);
                         Scene scene2 = new Scene(root2);
                         stage.setScene(scene2);
+                        
                         stage.show();
                     } catch (IOException ex) {
                         new Alert(Alert.AlertType.ERROR, "There are erro in connection to server\nPlease ensure the server is running\n" + ex.getMessage()).show();

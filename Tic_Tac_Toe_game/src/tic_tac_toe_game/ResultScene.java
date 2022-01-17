@@ -23,6 +23,7 @@ public class ResultScene extends BorderPane {
     private MediaPlayer mediaPlayer;
     private Stage stage;
     protected static String winner;
+    private File mediaFile;
 
     public ResultScene(Stage stage) throws MalformedURLException {
         this.stage = stage;
@@ -30,7 +31,13 @@ public class ResultScene extends BorderPane {
         resultText = new Text();
         borderPane0 = new BorderPane();
         backToMenu = new Button();
-        File mediaFile = new File("src\\vedios_media\\waiting vedio.mp4");
+        System.out.println(winner);
+        if (winner.equals("Player 1 Wins") || winner.equals("Player 2 Wins") || winner.equals("YOU WIN")) {
+            mediaFile = new File("src\\vedios_media\\winnerVedio.mp4");
+        } else {
+            mediaFile = new File("src\\vedios_media\\loserVedio.mp4");
+        }
+
         Media media = new Media(mediaFile.toURI().toURL().toString());
         mediaPlayer = new MediaPlayer(media);
         videoView = new MediaView(mediaPlayer);

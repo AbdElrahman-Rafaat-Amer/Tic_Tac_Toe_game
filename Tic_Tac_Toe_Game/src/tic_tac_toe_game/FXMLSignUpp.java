@@ -167,6 +167,7 @@ getStylesheets().add("/CssStyles/CssStyles.css");
                 while (true) {
                     try {
                         String reply = Start.dataInputStream.readLine();
+                        System.out.println("reply = " + reply);
                         JSONObject object = new JSONObject(reply);
                         boolean rep = object.getBoolean("signup");
                         message = rep;
